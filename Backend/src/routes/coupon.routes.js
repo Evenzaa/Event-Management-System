@@ -24,6 +24,7 @@ router.use(
  *   post:
  *     tags: [Coupons]
  *     summary: Create a new coupon
+ *     description: Create a new discount coupon (Admin only).
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -54,11 +55,40 @@ router.use(
  *                 example: true
  *     responses:
  *       201:
- *         description: Coupon created successfully
+ *         description: Coupon created successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Coupon created successfully
+ *               coupon:
+ *                 _id: 6860d5f0a123456789abcd12
+ *                 code: SUMMER20
+ *                 discount: 20
+ *                 isActive: true
+ *       400:
+ *         description: Invalid coupon data.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Coupon code already exists
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
  *       403:
- *         description: Admin access required
+ *         description: Admin access required.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Access denied
+ *       500:
+ *         description: Internal server error.
  */
 router.post("/", createCoupon);
 
@@ -68,8 +98,32 @@ router.post("/", createCoupon);
  *   get:
  *     tags: [Coupons]
  *     summary: Get all coupons
+ *     description: Retrieve all available coupons (Admin only).
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Coupons retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               coupons:
+ *                 - _id: 6860d5f0a123456789abcd12
+ *                   code: SUMMER20
+ *                   discount: 20
+ *                   isActive: true
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
+ *       403:
+ *         description: Admin access required.
+ *       500:
+ *         description: Internal server error.
  */
 router.get("/", getCoupons);
 
@@ -79,6 +133,7 @@ router.get("/", getCoupons);
  *   delete:
  *     tags: [Coupons]
  *     summary: Delete coupon
+ *     description: Delete a coupon by its ID (Admin only).
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -87,6 +142,27 @@ router.get("/", getCoupons);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Coupon deleted successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Coupon deleted successfully
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Admin access required.
+ *       404:
+ *         description: Coupon not found.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Coupon not found
+ *       500:
+ *         description: Internal server error.
  */
 router.delete("/:id", deleteCoupon);
 
