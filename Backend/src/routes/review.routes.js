@@ -41,13 +41,53 @@ const router = express.Router();
  *                 example: Amazing event!
  *     responses:
  *       201:
- *         description: Review added successfully
+ *         description: Review created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Review added successfully
+ *                 review:
+ *                   type: object
+ *       400:
+ *         description: Invalid review data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Rating must be between 1 and 5
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal server error
  */
-router.post(
-  "/",
-  protect,
-  createReview
-);
+router.post("/", protect, createReview);
+
 /**
  * @swagger
  * /api/reviews/event/{eventId}:
@@ -63,11 +103,24 @@ router.post(
  *     responses:
  *       200:
  *         description: Reviews fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 reviews:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal server error
  */
-router.get(
-  "/event/:eventId",
-  getEventReviews
-);
+router.get("/event/:eventId", getEventReviews);
 
 /**
  * @swagger
@@ -101,12 +154,31 @@ router.get(
  *     responses:
  *       200:
  *         description: Review updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Review updated successfully
+ *                 review:
+ *                   type: object
+ *       400:
+ *         description: Invalid review data
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Review not found
+ *       500:
+ *         description: Internal server error
  */
-router.put(
-  "/:id",
-  protect,
-  updateReview
-);
+router.put("/:id", protect, updateReview);
 
 /**
  * @swagger
@@ -125,11 +197,26 @@ router.put(
  *     responses:
  *       200:
  *         description: Review deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Review deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Review not found
+ *       500:
+ *         description: Internal server error
  */
-router.delete(
-  "/:id",
-  protect,
-  deleteReview
-);
+router.delete("/:id", protect, deleteReview);
 
 export default router;
