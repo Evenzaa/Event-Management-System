@@ -31,71 +31,28 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - title
- *               - description
- *               - date
- *               - location
- *               - price
- *               - capacity
- *             properties:
- *               title:
- *                 type: string
- *                 example: Tech Conference 2026
- *               description:
- *                 type: string
- *                 example: Annual technology conference
- *               date:
- *                 type: string
- *                 format: date-time
- *                 example: "2026-12-01T10:00:00.000Z"
- *               location:
- *                 type: string
- *                 example: Cairo
- *               price:
- *                 type: number
- *                 example: 250
- *               capacity:
- *                 type: integer
- *                 example: 100
- *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example:
- *                   - https://example.com/image1.jpg
- *                   - https://example.com/image2.jpg
- *               category:
- *                 type: string
- *                 example: Technology
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example:
- *                   - tech
- *                   - conference
+ *             $ref: '#/components/schemas/Event'
  *     responses:
  *       201:
- *         description: Event created successfully.
+ *         description: Event created successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Event created successfully
- *               event:
- *                 _id: 6860d5f0a123456789abcd12
- *                 title: Tech Conference 2026
- *                 status: pending
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       400:
- *         description: Invalid request data.
+ *         description: Invalid request data
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Access denied.
+ *         description: Access denied
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.post(
   "/",
@@ -110,21 +67,91 @@ router.post(
  *   get:
  *     tags: [Events]
  *     summary: Get all events
- *     description: Retrieve all available events.
+ *     description: Retrieve all approved events with filtering and pagination.
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by event title
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filter by category
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Filter by location
+ *       - in: query
+ *         name: date
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Events after this date
+ *
+ *       - in: query
+ *         name: featured
+ *         schema:
+ *           type: boolean
+ *         description: Get featured events only
+ *
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, approved, ongoing, completed]
+ *         description: Filter by event status
+ *
+ *       - in: query
+ *         name: upcoming
+ *         schema:
+ *           type: boolean
+ *         description: Get upcoming events only
+ *
+ *       - in: query
+ *         name: lastMinute
+ *         schema:
+ *           type: boolean
+ *         description: Get last minute deals (within 7 days and available seats <= 20)
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
  *     responses:
  *       200:
- *         description: Events retrieved successfully.
+ *         description: Events retrieved successfully
+ *
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               events:
- *                 - _id: 6860d5f0a123456789abcd12
- *                   title: Tech Conference 2026
- *                   location: Cairo
- *                   price: 250
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 3
+ *                 totalEvents:
+ *                   type: integer
+ *                   example: 25
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.get("/", getEvents);
 
@@ -134,19 +161,27 @@ router.get("/", getEvents);
  *   get:
  *     tags: [Events]
  *     summary: Get featured events
- *     description: Retrieve all featured events.
+ *     description: Retrieve all featured events displayed in the Home UI.
  *     responses:
  *       200:
- *         description: Featured events retrieved successfully.
+ *         description: Featured events retrieved successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               events:
- *                 - title: AI Summit
- *                   featured: true
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 6
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.get("/featured", getFeaturedEvents);
 
@@ -156,7 +191,7 @@ router.get("/featured", getFeaturedEvents);
  *   get:
  *     tags: [Events]
  *     summary: Get event by ID
- *     description: Retrieve details of a specific event.
+ *     description: Retrieve complete event details.
  *     parameters:
  *       - in: path
  *         name: id
@@ -165,26 +200,23 @@ router.get("/featured", getFeaturedEvents);
  *           type: string
  *     responses:
  *       200:
- *         description: Event retrieved successfully.
+ *         description: Event retrieved successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               event:
- *                 _id: 6860d5f0a123456789abcd12
- *                 title: Tech Conference 2026
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       404:
- *         description: Event not found.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Event not found
+ *         description: Event not found
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.get("/:id", getEventById);
-
 /**
  * @swagger
  * /api/events/{id}/featured:
@@ -202,20 +234,28 @@ router.get("/:id", getEventById);
  *           type: string
  *     responses:
  *       200:
- *         description: Featured status updated successfully.
+ *         description: Featured status updated successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Featured status updated
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event featured successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Admin access required.
+ *         description: Admin access required
  *       404:
- *         description: Event not found.
+ *         description: Event not found
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.put(
   "/:id/featured",
@@ -244,47 +284,28 @@ router.put(
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               description:
- *                 type: string
- *               date:
- *                 type: string
- *                 format: date-time
- *               location:
- *                 type: string
- *               price:
- *                 type: number
- *               capacity:
- *                 type: integer
- *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *               category:
- *                 type: string
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
+ *             $ref: '#/components/schemas/Event'
  *     responses:
  *       200:
- *         description: Event updated successfully.
+ *         description: Event updated successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Event updated successfully
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Access denied.
+ *         description: Access denied
  *       404:
- *         description: Event not found.
+ *         description: Event not found
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.put(
   "/:id",
@@ -292,7 +313,6 @@ router.put(
   authorize("organizer", "admin"),
   updateEvent
 );
-
 /**
  * @swagger
  * /api/events/{id}:
@@ -310,20 +330,26 @@ router.put(
  *           type: string
  *     responses:
  *       200:
- *         description: Event deleted successfully.
+ *         description: Event deleted successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Event deleted successfully
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event deleted successfully
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Access denied.
+ *         description: Access denied
  *       404:
- *         description: Event not found.
+ *         description: Event not found
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  */
 router.delete(
   "/:id",
