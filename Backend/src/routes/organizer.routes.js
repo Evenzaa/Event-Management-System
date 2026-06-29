@@ -72,6 +72,58 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Event created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event created successfully
+ *                 event:
+ *                   type: object
+ *       400:
+ *         description: Validation failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Validation failed
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
+ *       403:
+ *         description: Organizer access required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Access denied
  */
 router.post(
   "/events",
@@ -88,6 +140,25 @@ router.post(
  *     summary: Get organizer events
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Events fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 events:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Organizer access required
  */
 router.get(
   "/events",
@@ -110,6 +181,23 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 event:
+ *                   type: object
+ *       404:
+ *         description: Event not found
+ *       401:
+ *         description: Unauthorized
  */
 router.get(
   "/events/:id",
@@ -165,8 +253,25 @@ router.get(
  *     responses:
  *       200:
  *         description: Event updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event updated successfully
+ *                 event:
+ *                   type: object
  *       404:
  *         description: Event not found
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Organizer access required
  */
 router.put(
   "/events/:id",
@@ -189,6 +294,26 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event deleted successfully
+ *       404:
+ *         description: Event not found
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Organizer access required
  */
 router.delete(
   "/events/:id",
