@@ -1,6 +1,4 @@
 import Event from "../models/Event.js";
-
-
 export const createEvent = async (req, res, next) => {
   try {
     const event = await Event.create({
@@ -8,6 +6,7 @@ export const createEvent = async (req, res, next) => {
       organizerId: req.user.id,
       availableSeats: req.body.capacity,
       status: "pending",
+
     });
 
     res.status(201).json({
@@ -18,7 +17,6 @@ export const createEvent = async (req, res, next) => {
     next(error);
   }
 };
-
 export const getEvents = async (req, res, next) => {
   try {
     const {
@@ -26,13 +24,17 @@ export const getEvents = async (req, res, next) => {
       category,
       location,
       date,
+      featured,
+      status,
+      upcoming,
+      lastMinute,
       page = 1,
       limit = 10,
     } = req.query;
 
-    const filter = {
-      status: "approved",
-    };
+    const filter = {};
+
+    filter.status = status || "approved";
 
     if (search) {
       filter.title = {
@@ -52,6 +54,29 @@ export const getEvents = async (req, res, next) => {
       };
     }
 
+    if (featured === "true") {
+      filter.featured = true;
+    }
+
+    if (upcoming === "true") {
+      filter.date = { $gte: new Date() };
+    }
+
+    if (lastMinute === "true") {
+      const now = new Date();
+      const after7Days = new Date();
+      after7Days.setDate(now.getDate() + 7);
+
+      filter.date = {
+        $gte: now,
+        $lte: after7Days,
+      };
+
+      filter.availableSeats = {
+        $lte: 20,
+      };
+    }
+
     if (date) {
       filter.date = {
         $gte: new Date(date),
@@ -59,7 +84,8 @@ export const getEvents = async (req, res, next) => {
     }
 
     const events = await Event.find(filter)
-      .skip((page - 1) * limit)
+      .sort({ date: 1 })
+      .skip((page - 1) * Number(limit))
       .limit(Number(limit));
 
     const total = await Event.countDocuments(filter);
@@ -75,7 +101,22 @@ export const getEvents = async (req, res, next) => {
     next(error);
   }
 };
+export const getFeaturedEvents = async (req, res, next) => {
+  try {
+    const events = await Event.find({
+      featured: true,
+      status: "approved",
+    }).sort({ date: 1 });
 
+    res.json({
+      success: true,
+      total: events.length,
+      data: events,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -99,8 +140,10 @@ export const updateEvent = async (req, res, next) => {
       throw new Error("Event not found");
     }
 
-   
-    if ( req.user.role !== "admin" && event.organizerId.toString() !== req.user.id) {
+    if (
+      req.user.role !== "admin" &&
+      event.organizerId.toString() !== req.user.id
+    ) {
       return res.status(403).json({
         success: false,
         message: "Access denied",
@@ -124,9 +167,6 @@ export const updateEvent = async (req, res, next) => {
     next(error);
   }
 };
-
-
-
 export const deleteEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -156,7 +196,6 @@ export const deleteEvent = async (req, res, next) => {
     next(error);
   }
 };
-
 export const approveEvent = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -173,25 +212,6 @@ export const approveEvent = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-export const getFeaturedEvents = async (req, res, next) => {
-  try {
-    const events = await Event.find({
-      featured: true,
-      status: "approved",
-    });
-
-    res.json({
-      success: true,
-      count: events.length,
-      data: events,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const toggleFeaturedEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -218,4 +238,3 @@ export const toggleFeaturedEvent = async (req, res, next) => {
     next(error);
   }
 };
-
