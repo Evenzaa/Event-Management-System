@@ -23,6 +23,7 @@ const router = express.Router();
  *   post:
  *     tags: [Events]
  *     summary: Create a new event
+ *     description: Create a new event (Organizer/Admin only).
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -77,11 +78,24 @@ const router = express.Router();
  *                   - conference
  *     responses:
  *       201:
- *         description: Event created successfully
+ *         description: Event created successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Event created successfully
+ *               event:
+ *                 _id: 6860d5f0a123456789abcd12
+ *                 title: Tech Conference 2026
+ *                 status: pending
+ *       400:
+ *         description: Invalid request data.
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
  *       403:
- *         description: Access denied
+ *         description: Access denied.
+ *       500:
+ *         description: Internal server error.
  */
 router.post(
   "/",
@@ -96,6 +110,21 @@ router.post(
  *   get:
  *     tags: [Events]
  *     summary: Get all events
+ *     description: Retrieve all available events.
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               events:
+ *                 - _id: 6860d5f0a123456789abcd12
+ *                   title: Tech Conference 2026
+ *                   location: Cairo
+ *                   price: 250
+ *       500:
+ *         description: Internal server error.
  */
 router.get("/", getEvents);
 
@@ -105,6 +134,19 @@ router.get("/", getEvents);
  *   get:
  *     tags: [Events]
  *     summary: Get featured events
+ *     description: Retrieve all featured events.
+ *     responses:
+ *       200:
+ *         description: Featured events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               events:
+ *                 - title: AI Summit
+ *                   featured: true
+ *       500:
+ *         description: Internal server error.
  */
 router.get("/featured", getFeaturedEvents);
 
@@ -114,12 +156,32 @@ router.get("/featured", getFeaturedEvents);
  *   get:
  *     tags: [Events]
  *     summary: Get event by ID
+ *     description: Retrieve details of a specific event.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               event:
+ *                 _id: 6860d5f0a123456789abcd12
+ *                 title: Tech Conference 2026
+ *       404:
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Event not found
+ *       500:
+ *         description: Internal server error.
  */
 router.get("/:id", getEventById);
 
@@ -129,6 +191,7 @@ router.get("/:id", getEventById);
  *   put:
  *     tags: [Events]
  *     summary: Toggle featured event
+ *     description: Mark or unmark an event as featured (Admin only).
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -137,6 +200,22 @@ router.get("/:id", getEventById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Featured status updated successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Featured status updated
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Admin access required.
+ *       404:
+ *         description: Event not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.put(
   "/:id/featured",
@@ -151,6 +230,7 @@ router.put(
  *   put:
  *     tags: [Events]
  *     summary: Update event
+ *     description: Update an existing event (Organizer/Admin only).
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -191,11 +271,20 @@ router.put(
  *                   type: string
  *     responses:
  *       200:
- *         description: Event updated successfully
+ *         description: Event updated successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Event updated successfully
+ *       401:
+ *         description: Unauthorized.
  *       403:
- *         description: Access denied
+ *         description: Access denied.
  *       404:
- *         description: Event not found
+ *         description: Event not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.put(
   "/:id",
@@ -210,6 +299,7 @@ router.put(
  *   delete:
  *     tags: [Events]
  *     summary: Delete event
+ *     description: Delete an event (Organizer/Admin only).
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -218,6 +308,22 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event deleted successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Event deleted successfully
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Access denied.
+ *       404:
+ *         description: Event not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.delete(
   "/:id",
