@@ -29,7 +29,7 @@ export const register = async (req, res) => {
       });
     }
 
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    
 
     const verificationToken =
       crypto.randomBytes(32).toString("hex");
@@ -38,7 +38,6 @@ export const register = async (req, res) => {
       name,
       email,
       password,
-      // password: hashedPassword,
       role: role || "user",
       isVerified: false,
       verificationToken,
