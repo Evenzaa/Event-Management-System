@@ -7,11 +7,19 @@ const eventSchema = new mongoose.Schema(
     date: Date,
     location: String,
     price: Number,
-    capacity: {
+     capacity: {
   type: Number,
   required: true,
 },
+discountPrice: {
+  type: Number,
+  default: null,
+},
 
+isLastMinute: {
+  type: Boolean,
+  default: false,
+},
 availableSeats: {
   type: Number,
   required: true,
@@ -30,7 +38,8 @@ availableSeats: {
       ref: "User",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
+ 
 );
 
 export default mongoose.model("Event", eventSchema);
