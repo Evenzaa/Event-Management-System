@@ -56,42 +56,101 @@ const options = {
           },
         },
 
-        Event: {
-          type: "object",
-          properties: {
-            _id: {
-              type: "string",
-            },
-            title: {
-              type: "string",
-            },
-            description: {
-              type: "string",
-            },
-            date: {
-              type: "string",
-              format: "date-time",
-            },
-            location: {
-              type: "string",
-            },
-            price: {
-              type: "number",
-            },
-            capacity: {
-              type: "integer",
-            },
-            category: {
-              type: "string",
-            },
-            images: {
-              type: "array",
-              items: {
-                type: "string",
-              },
-            },
-          },
-        },
+      Event: {
+  type: "object",
+  properties: {
+    _id: {
+      type: "string",
+      example: "685a7d4d0a123456789abcd1",
+    },
+
+    title: {
+      type: "string",
+      example: "Tech Conference 2026",
+    },
+
+    description: {
+      type: "string",
+      example: "Annual technology conference.",
+    },
+
+    date: {
+      type: "string",
+      format: "date-time",
+      example: "2026-12-01T10:00:00.000Z",
+    },
+
+    location: {
+      type: "string",
+      example: "Cairo",
+    },
+
+    price: {
+      type: "number",
+      example: 250,
+    },
+
+    capacity: {
+      type: "integer",
+      example: 100,
+    },
+
+    availableSeats: {
+      type: "integer",
+      example: 78,
+    },
+
+    images: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+      example: [
+        "https://example.com/event1.jpg",
+        "https://example.com/event2.jpg",
+      ],
+    },
+
+    category: {
+      type: "string",
+      example: "Technology",
+    },
+
+    tags: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+      example: ["tech", "conference"],
+    },
+
+    featured: {
+      type: "boolean",
+      example: true,
+    },
+
+    status: {
+      type: "string",
+      enum: ["pending", "approved", "ongoing", "completed"],
+      example: "approved",
+    },
+
+    organizerId: {
+      type: "string",
+      example: "685a6f3a1b123456789abcd2",
+    },
+
+    createdAt: {
+      type: "string",
+      format: "date-time",
+    },
+
+    updatedAt: {
+      type: "string",
+      format: "date-time",
+    },
+  },
+},
 
         Booking: {
           type: "object",
