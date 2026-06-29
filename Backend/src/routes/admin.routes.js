@@ -25,12 +25,34 @@ router.use(
  * /api/admin/users:
  *   get:
  *     summary: Get all users
- *     tags: [Admin]
+ *     description: Returns a list of all registered users. Admin access only.
+ *     tags:
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of users
+ *         description: Users retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               users:
+ *                 - _id: "68801b4c..."
+ *                   name: "Hiam Mostafa"
+ *                   email: "hiam@gmail.com"
+ *                   role: "user"
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Unauthorized"
+ *       403:
+ *         description: Forbidden. Admin only.
+ *       500:
+ *         description: Internal server error.
  */
 router.get("/users", getAllUsers);
 
@@ -39,7 +61,9 @@ router.get("/users", getAllUsers);
  * /api/admin/users/{id}/role:
  *   put:
  *     summary: Update user role
- *     tags: [Admin]
+ *     description: Change a user's role to user or organizer.
+ *     tags:
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -48,6 +72,7 @@ router.get("/users", getAllUsers);
  *         required: true
  *         schema:
  *           type: string
+ *         description: User ID
  *     requestBody:
  *       required: true
  *       content:
@@ -59,18 +84,26 @@ router.get("/users", getAllUsers);
  *             properties:
  *               role:
  *                 type: string
- *                 enum:
- *                   - user
- *                   - organizer
- *                   - admin
+ *                 enum: [user, organizer]
  *                 example: organizer
  *     responses:
  *       200:
- *         description: User role updated successfully
- *       404:
- *         description: User not found
+ *         description: User role updated successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "User role updated successfully"
+ *       400:
+ *         description: Invalid role.
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.put(
   "/users/:id/role",
@@ -82,7 +115,9 @@ router.put(
  * /api/admin/users/{id}:
  *   delete:
  *     summary: Delete user
- *     tags: [Admin]
+ *     description: Permanently delete a user by ID.
+ *     tags:
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,9 +126,23 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
+ *         description: User ID
  *     responses:
  *       200:
- *         description: User deleted successfully
+ *         description: User deleted successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "User deleted successfully"
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.delete(
   "/users/:id",
@@ -105,7 +154,9 @@ router.delete(
  * /api/admin/events/{id}/approve:
  *   put:
  *     summary: Approve event
- *     tags: [Admin]
+ *     description: Approve a pending event.
+ *     tags:
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -114,9 +165,23 @@ router.delete(
  *         required: true
  *         schema:
  *           type: string
+ *         description: Event ID
  *     responses:
  *       200:
- *         description: Event approved successfully
+ *         description: Event approved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Event approved successfully"
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: Event not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.put(
   "/events/:id/approve",
@@ -130,7 +195,9 @@ router.put(
  * /api/admin/events/{id}/reject:
  *   put:
  *     summary: Reject event
- *     tags: [Admin]
+ *     description: Reject a pending event.
+ *     tags:
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -139,9 +206,23 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
+ *         description: Event ID
  *     responses:
  *       200:
- *         description: Event rejected successfully
+ *         description: Event rejected successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Event rejected successfully"
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: Event not found.
+ *       500:
+ *         description: Internal server error.
  */
 router.put(
   "/events/:id/reject",

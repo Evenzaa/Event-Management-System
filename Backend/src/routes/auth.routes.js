@@ -17,6 +17,7 @@ const router = express.Router();
  * /api/auth/register:
  *   post:
  *     summary: Register a new user
+ *     description: Create a new user account and send a verification email.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -37,7 +38,7 @@ const router = express.Router();
  *                 example: hiam@gmail.com
  *               password:
  *                 type: string
- *                 example: 123456
+ *                 example: Password123
  *               role:
  *                 type: string
  *                 enum:
@@ -46,11 +47,33 @@ const router = express.Router();
  *                 example: user
  *     responses:
  *       201:
- *         description: Registration successful. Please verify your email.
+ *         description: Registration successful.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Registration successful. Please verify your email.
  *       400:
- *         description: Invalid data or email already exists
+ *         description: Invalid data or email already exists.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Email already exists
  *       403:
- *         description: Cannot register as admin
+ *         description: Cannot register as admin.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Cannot register as admin
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Internal server error
  */
 router.post(
   "/register",
@@ -63,6 +86,7 @@ router.post(
  * /api/auth/verify/{token}:
  *   get:
  *     summary: Verify user email
+ *     description: Verify a user's email using the verification token.
  *     tags: [Auth]
  *     parameters:
  *       - in: path
@@ -72,9 +96,19 @@ router.post(
  *           type: string
  *     responses:
  *       200:
- *         description: Email verified successfully
+ *         description: Email verified successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Email verified successfully
  *       400:
- *         description: Invalid token
+ *         description: Invalid verification token.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Invalid token
  */
 router.get(
   "/verify/:token",
@@ -82,33 +116,32 @@ router.get(
 );
 /**
  * @swagger
- * /api/auth/login:
- *   post:
- *     summary: Login user
+ * /api/auth/verify/{token}:
+ *   get:
+ *     summary: Verify user email
+ *     description: Verify a user's email using the verification token.
  *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: hiam@gmail.com
- *               password:
- *                 type: string
- *                 example: 123456
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Login successful
- *       401:
- *         description: Invalid credentials or email not verified
- *       404:
- *         description: User not found
+ *         description: Email verified successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Email verified successfully
+ *       400:
+ *         description: Invalid verification token.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Invalid token
  */
 router.post("/login", login);
 
@@ -117,10 +150,11 @@ router.post("/login", login);
  * /api/auth/google:
  *   get:
  *     summary: Login with Google
+ *     description: Redirect the user to Google OAuth authentication.
  *     tags: [Auth]
  *     responses:
  *       302:
- *         description: Redirect to Google authentication
+ *         description: Redirect to Google authentication.
  */
 router.get(
   "/google",
@@ -134,10 +168,23 @@ router.get(
  * /api/auth/google/callback:
  *   get:
  *     summary: Google OAuth callback
+ *     description: Handle Google's callback and return the authenticated user with a JWT token.
  *     tags: [Auth]
  *     responses:
  *       200:
- *         description: Google login successful
+ *         description: Google login successful.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               token: jwt_token_here
+ *               user:
+ *                 _id: 6860c0c2d7d5d56f9a123456
+ *                 name: Hiam Mostafa
+ *                 email: hiam@gmail.com
+ *                 role: user
+ *       401:
+ *         description: Authentication failed.
  */
 router.get(
   "/google/callback",
@@ -152,6 +199,7 @@ router.get(
  * /api/auth/forgot-password:
  *   post:
  *     summary: Send password reset email
+ *     description: Generate a reset token and send a password reset email.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -167,9 +215,21 @@ router.get(
  *                 example: hiam@gmail.com
  *     responses:
  *       200:
- *         description: Password reset email sent
+ *         description: Password reset email sent successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Password reset email sent
  *       404:
- *         description: User not found
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: User not found
+ *       500:
+ *         description: Internal server error.
  */
 router.post("/forgot-password", forgotPassword);
 
@@ -178,6 +238,7 @@ router.post("/forgot-password", forgotPassword);
  * /api/auth/reset-password/{token}:
  *   post:
  *     summary: Reset password
+ *     description: Reset the user's password using the reset token.
  *     tags: [Auth]
  *     parameters:
  *       - in: path
@@ -199,9 +260,21 @@ router.post("/forgot-password", forgotPassword);
  *                 example: NewPassword123
  *     responses:
  *       200:
- *         description: Password reset successful
+ *         description: Password reset successful.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Password reset successful
  *       400:
- *         description: Invalid or expired token
+ *         description: Invalid or expired token.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Invalid or expired token
+ *       500:
+ *         description: Internal server error.
  */
 router.post("/reset-password/:token", resetPassword);
 

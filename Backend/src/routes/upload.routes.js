@@ -13,6 +13,7 @@ const upload = multer({ dest: "uploads/" });
  *   post:
  *     tags: [Upload]
  *     summary: Upload image to Cloudinary
+ *     description: Upload an image and return its Cloudinary URL.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -35,13 +36,54 @@ const upload = multer({ dest: "uploads/" });
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Image uploaded successfully
  *                 url:
  *                   type: string
  *                   example: https://res.cloudinary.com/demo/image/upload/sample.jpg
+ *       400:
+ *         description: No image uploaded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Please upload an image
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
  *       500:
- *         description: Server error
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
  */
 router.post(
   "/",
