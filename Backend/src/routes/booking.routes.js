@@ -18,6 +18,7 @@ const router = express.Router();
  *   post:
  *     tags: [Bookings]
  *     summary: Create a new booking
+ *     description: Create a booking for an event with optional coupon and payment method.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -34,7 +35,7 @@ const router = express.Router();
  *                 type: string
  *                 example: 685a7d4d0a123456789abcd1
  *               quantity:
- *                 type: number
+ *                 type: integer
  *                 example: 2
  *               couponCode:
  *                 type: string
@@ -44,13 +45,40 @@ const router = express.Router();
  *                 example: card
  *     responses:
  *       201:
- *         description: Booking created successfully
+ *         description: Booking created successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Booking created successfully
+ *               booking:
+ *                 _id: 6860d5f0a123456789abcd12
+ *                 quantity: 2
+ *                 totalPrice: 500
+ *                 status: confirmed
  *       400:
- *         description: Invalid coupon or not enough available seats
+ *         description: Invalid coupon or not enough available seats.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not enough available seats
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
  *       404:
- *         description: Event not found
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Event not found
+ *       500:
+ *         description: Internal server error.
  */
 router.post(
   "/",
@@ -65,8 +93,29 @@ router.post(
  *   get:
  *     tags: [Bookings]
  *     summary: Get current user bookings
+ *     description: Retrieve all bookings for the authenticated user.
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Bookings retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               bookings:
+ *                 - _id: 6860d5f0a123456789abcd12
+ *                   quantity: 2
+ *                   status: confirmed
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
+ *       500:
+ *         description: Internal server error.
  */
 router.get(
   "/my",
@@ -80,6 +129,7 @@ router.get(
  *   delete:
  *     tags: [Bookings]
  *     summary: Cancel booking
+ *     description: Cancel an existing booking by its ID.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -88,6 +138,30 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Booking cancelled successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Booking cancelled successfully
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
+ *       404:
+ *         description: Booking not found.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Booking not found
+ *       500:
+ *         description: Internal server error.
  */
 router.delete(
   "/:id",
