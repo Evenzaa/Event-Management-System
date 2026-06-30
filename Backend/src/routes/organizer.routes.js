@@ -11,13 +11,13 @@ import { protect } from "../middlewares/auth.middleware.js";
 import { authorize } from "../middlewares/role.middleware.js";
 
 const router = express.Router();
-
 /**
  * @swagger
  * /api/events/events:
  *   post:
  *     tags: [Organizer Events]
- *     summary: Create event (Organizer only)
+ *     summary: Create a new event
+ *     description: Organizer creates a new event. Newly created events remain pending until approved by the admin.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -25,53 +25,10 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - title
- *               - description
- *               - date
- *               - location
- *               - price
- *               - capacity
- *             properties:
- *               title:
- *                 type: string
- *                 example: Tech Conference 2026
- *               description:
- *                 type: string
- *                 example: Annual technology conference
- *               date:
- *                 type: string
- *                 format: date-time
- *                 example: "2026-12-01T10:00:00.000Z"
- *               location:
- *                 type: string
- *                 example: Cairo
- *               price:
- *                 type: number
- *                 example: 250
- *               capacity:
- *                 type: integer
- *                 example: 100
- *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example:
- *                   - https://example.com/image1.jpg
- *               category:
- *                 type: string
- *                 example: Technology
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example:
- *                   - tech
- *                   - conference
+ *             $ref: '#/components/schemas/Event'
  *     responses:
  *       201:
- *         description: Event created successfully
+ *         description: Event created successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -83,47 +40,26 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: Event created successfully
- *                 event:
- *                   type: object
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       400:
- *         description: Validation failed
+ *         description: Validation error.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Validation failed
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Unauthorized
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Organizer access required
+ *         description: Organizer access required.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Access denied
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post(
   "/events",
@@ -138,11 +74,12 @@ router.post(
  *   get:
  *     tags: [Organizer Events]
  *     summary: Get organizer events
+ *     description: Returns all events created by the authenticated organizer.
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Events fetched successfully
+ *         description: Events retrieved successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -151,14 +88,25 @@ router.post(
  *                 success:
  *                   type: boolean
  *                   example: true
- *                 events:
+ *                 count:
+ *                   type: integer
+ *                   example: 2
+ *                 data:
  *                   type: array
  *                   items:
- *                     type: object
+ *                     $ref: '#/components/schemas/Event'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Organizer access required
+ *         description: Organizer access required.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get(
   "/events",
@@ -181,9 +129,10 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
+ *         example: 685a7d4d0a123456789abcd1
  *     responses:
  *       200:
- *         description: Event fetched successfully
+ *         description: Event retrieved successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -192,12 +141,20 @@ router.get(
  *                 success:
  *                   type: boolean
  *                   example: true
- *                 event:
- *                   type: object
- *       404:
- *         description: Event not found
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get(
   "/events/:id",
@@ -220,39 +177,16 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
+ *         example: 685a7d4d0a123456789abcd1
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               description:
- *                 type: string
- *               date:
- *                 type: string
- *                 format: date-time
- *               location:
- *                 type: string
- *               price:
- *                 type: number
- *               capacity:
- *                 type: integer
- *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *               category:
- *                 type: string
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
+ *             $ref: '#/components/schemas/Event'
  *     responses:
  *       200:
- *         description: Event updated successfully
+ *         description: Event updated successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -264,14 +198,26 @@ router.get(
  *                 message:
  *                   type: string
  *                   example: Event updated successfully
- *                 event:
- *                   type: object
- *       404:
- *         description: Event not found
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Organizer access required
+ *         description: Organizer access required.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put(
   "/events/:id",
@@ -294,26 +240,32 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
+ *         example: 685a7d4d0a123456789abcd1
  *     responses:
  *       200:
- *         description: Event deleted successfully
+ *         description: Event deleted successfully.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Event deleted successfully
- *       404:
- *         description: Event not found
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Organizer access required
+ *         description: Organizer access required.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.delete(
   "/events/:id",
