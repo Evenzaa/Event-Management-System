@@ -5,8 +5,8 @@ import LandingPage from '../pages/public/LandingPage';
 // import EventListing from '../pages/public/EventListing';
 // import EventDetails from '../pages/public/EventDetails';
 
-// // Auth
-// import Login from '../pages/auth/Login';
+// Auth
+import Login from '../pages/auth/Login';
 // import Signup from '../pages/auth/Signup';
 // import ForgetPassword from '../pages/auth/ForgetPassword';
 
