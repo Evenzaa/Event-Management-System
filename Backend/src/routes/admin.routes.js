@@ -26,8 +26,7 @@ router.use(
  *   get:
  *     summary: Get all users
  *     description: Returns a list of all registered users. Admin access only.
- *     tags:
- *       - Admin
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -35,25 +34,28 @@ router.use(
  *         description: Users retrieved successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               users:
- *                 - _id: "68801b4c..."
- *                   name: "Hiam Mostafa"
- *                   email: "hiam@gmail.com"
- *                   role: "user"
+ *             schema:
+ *               $ref: '#/components/schemas/UsersResponse'
  *       401:
  *         description: Unauthorized.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: "Unauthorized"
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
  *         description: Forbidden. Admin only.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
+ 
 router.get("/users", getAllUsers);
 
 /**
@@ -62,8 +64,7 @@ router.get("/users", getAllUsers);
  *   put:
  *     summary: Update user role
  *     description: Change a user's role to user or organizer.
- *     tags:
- *       - Admin
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -78,46 +79,56 @@ router.get("/users", getAllUsers);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - role
- *             properties:
- *               role:
- *                 type: string
- *                 enum: [user, organizer]
- *                 example: organizer
+ *             $ref: '#/components/schemas/UpdateRoleRequest'
  *     responses:
  *       200:
  *         description: User role updated successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: "User role updated successfully"
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       400:
  *         description: Invalid role.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
  *         description: Forbidden.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put(
   "/users/:id/role",
   updateUserRole
 );
-
 /**
  * @swagger
  * /api/admin/users/{id}:
  *   delete:
  *     summary: Delete user
  *     description: Permanently delete a user by ID.
- *     tags:
- *       - Admin
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -132,17 +143,32 @@ router.put(
  *         description: User deleted successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: "User deleted successfully"
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
  *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
  *         description: Forbidden.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.delete(
   "/users/:id",
@@ -155,8 +181,7 @@ router.delete(
  *   put:
  *     summary: Approve event
  *     description: Approve a pending event.
- *     tags:
- *       - Admin
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -171,17 +196,32 @@ router.delete(
  *         description: Event approved successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: "Event approved successfully"
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
  *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
  *         description: Forbidden.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put(
   "/events/:id/approve",
@@ -196,8 +236,7 @@ router.put(
  *   put:
  *     summary: Reject event
  *     description: Reject a pending event.
- *     tags:
- *       - Admin
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -212,17 +251,32 @@ router.put(
  *         description: Event rejected successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: "Event rejected successfully"
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
  *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
  *         description: Forbidden.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put(
   "/events/:id/reject",
