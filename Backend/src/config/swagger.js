@@ -1,3 +1,5 @@
+// Part 1
+
 import swaggerJsdoc from "swagger-jsdoc";
 
 const options = {
@@ -44,10 +46,12 @@ const options = {
             },
             role: {
               type: "string",
+              enum: ["user", "organizer"],
               example: "user",
             },
             profileImage: {
               type: "string",
+              example: "https://example.com/profile.jpg",
             },
             isVerified: {
               type: "boolean",
@@ -56,116 +60,110 @@ const options = {
           },
         },
 
-      Event: {
-  type: "object",
-  properties: {
-    _id: {
-      type: "string",
-      example: "685a7d4d0a123456789abcd1",
-    },
-
-    title: {
-      type: "string",
-      example: "Tech Conference 2026",
-    },
-
-    description: {
-      type: "string",
-      example: "Annual technology conference.",
-    },
-
-    date: {
-      type: "string",
-      format: "date-time",
-      example: "2026-12-01T10:00:00.000Z",
-    },
-
-    location: {
-      type: "string",
-      example: "Cairo",
-    },
-
-    price: {
-      type: "number",
-      example: 250,
-    },
-
-    capacity: {
-      type: "integer",
-      example: 100,
-    },
-
-    availableSeats: {
-      type: "integer",
-      example: 78,
-    },
-
-    images: {
-      type: "array",
-      items: {
-        type: "string",
-      },
-      example: [
-        "https://example.com/event1.jpg",
-        "https://example.com/event2.jpg",
-      ],
-    },
-
-    category: {
-      type: "string",
-      example: "Technology",
-    },
-
-    tags: {
-      type: "array",
-      items: {
-        type: "string",
-      },
-      example: ["tech", "conference"],
-    },
-
-    featured: {
-      type: "boolean",
-      example: true,
-    },
-
-    status: {
-      type: "string",
-      enum: ["pending", "approved", "ongoing", "completed"],
-      example: "approved",
-    },
-
-    organizerId: {
-      type: "string",
-      example: "685a6f3a1b123456789abcd2",
-    },
-
-    createdAt: {
-      type: "string",
-      format: "date-time",
-    },
-
-    updatedAt: {
-      type: "string",
-      format: "date-time",
-    },
-  },
-},
+        Event: {
+          type: "object",
+          properties: {
+            _id: {
+              type: "string",
+              example: "685a7d4d0a123456789abcd1",
+            },
+            title: {
+              type: "string",
+              example: "Tech Conference 2026",
+            },
+            description: {
+              type: "string",
+              example: "Annual technology conference.",
+            },
+            date: {
+              type: "string",
+              format: "date-time",
+              example: "2026-12-01T10:00:00.000Z",
+            },
+            location: {
+              type: "string",
+              example: "Cairo",
+            },
+            price: {
+              type: "number",
+              example: 250,
+            },
+            capacity: {
+              type: "integer",
+              example: 100,
+            },
+            availableSeats: {
+              type: "integer",
+              example: 78,
+            },
+            images: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+              example: [
+                "https://example.com/event1.jpg",
+                "https://example.com/event2.jpg",
+              ],
+            },
+            category: {
+              type: "string",
+              example: "Technology",
+            },
+            tags: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+              example: ["tech", "conference"],
+            },
+            featured: {
+              type: "boolean",
+              example: true,
+            },
+            status: {
+              type: "string",
+              enum: [
+                "pending",
+                "approved",
+                "ongoing",
+                "completed",
+              ],
+              example: "approved",
+            },
+            organizerId: {
+              type: "string",
+              example: "685a6f3a1b123456789abcd2",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+            },
+          },
+        },
 
         Booking: {
           type: "object",
           properties: {
             _id: {
               type: "string",
+              example: "685b11112222333344445555",
             },
             quantity: {
               type: "integer",
+              example: 2,
             },
             totalPrice: {
               type: "number",
+              example: 500,
             },
             status: {
               type: "string",
+              example: "confirmed",
             },
           },
         },
@@ -175,12 +173,15 @@ const options = {
           properties: {
             _id: {
               type: "string",
+              example: "685c11112222333344445555",
             },
             rating: {
               type: "number",
+              example: 5,
             },
             comment: {
               type: "string",
+              example: "Amazing event!",
             },
           },
         },
@@ -190,18 +191,36 @@ const options = {
           properties: {
             code: {
               type: "string",
+              example: "SUMMER25",
             },
             discount: {
               type: "number",
+              example: 25,
             },
             expiresAt: {
               type: "string",
               format: "date-time",
+              example: "2026-12-31T23:59:59.000Z",
+            },
+          },
+        },
+        // Part 2
+
+        MessageResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            message: {
+              type: "string",
+              example: "Operation completed successfully",
             },
           },
         },
 
-        Error: {
+        ErrorResponse: {
           type: "object",
           properties: {
             success: {
@@ -214,6 +233,121 @@ const options = {
             },
           },
         },
+
+        RegisterRequest: {
+          type: "object",
+          required: ["name", "email", "password"],
+          properties: {
+            name: {
+              type: "string",
+              example: "Ahmed Mohamed",
+            },
+            email: {
+              type: "string",
+              format: "email",
+              example: "ahmed@gmail.com",
+            },
+            password: {
+              type: "string",
+              format: "password",
+              example: "Password123",
+            },
+            role: {
+              type: "string",
+              enum: ["user", "organizer"],
+              example: "user",
+            },
+          },
+        },
+
+        LoginRequest: {
+          type: "object",
+          required: ["email", "password"],
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              example: "ahmed@gmail.com",
+            },
+            password: {
+              type: "string",
+              format: "password",
+              example: "Password123",
+            },
+          },
+        },
+
+        LoginResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            token: {
+              type: "string",
+              example:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx.xxxxx",
+            },
+            user: {
+              $ref: "#/components/schemas/User",
+            },
+          },
+        },
+
+        ForgotPasswordRequest: {
+          type: "object",
+          required: ["email"],
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              example: "ahmed@gmail.com",
+            },
+          },
+        },
+
+        ResetPasswordRequest: {
+          type: "object",
+          required: ["password"],
+          properties: {
+            password: {
+              type: "string",
+              format: "password",
+              example: "NewPassword123",
+            },
+          },
+        },
+
+        UpdateRoleRequest: {
+          type: "object",
+          required: ["role"],
+          properties: {
+            role: {
+              type: "string",
+              enum: ["user", "organizer"],
+              example: "organizer",
+            },
+          },
+        },
+
+        UsersResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            users: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/User",
+              },
+            },
+          },
+        },
+        // Part 3
+
       },
     },
 
