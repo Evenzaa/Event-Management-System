@@ -168,23 +168,131 @@ const options = {
           },
         },
 
-        Review: {
-          type: "object",
-          properties: {
-            _id: {
-              type: "string",
-              example: "685c11112222333344445555",
-            },
-            rating: {
-              type: "number",
-              example: 5,
-            },
-            comment: {
-              type: "string",
-              example: "Amazing event!",
-            },
-          },
-        },
+  
+
+Review: {
+  type: "object",
+  properties: {
+    _id: {
+      type: "string",
+      example: "685c11112222333344445555",
+    },
+    userId: {
+      $ref: "#/components/schemas/User",
+    },
+    eventId: {
+      type: "string",
+      example: "685a7d4d0a123456789abcd1",
+    },
+    rating: {
+      type: "number",
+      minimum: 1,
+      maximum: 5,
+      example: 5,
+    },
+    comment: {
+      type: "string",
+      example: "Amazing event!",
+    },
+    createdAt: {
+      type: "string",
+      format: "date-time",
+      example: "2026-06-30T18:30:00.000Z",
+    },
+    updatedAt: {
+      type: "string",
+      format: "date-time",
+      example: "2026-06-30T18:30:00.000Z",
+    },
+  },
+},
+
+ReviewInput: {
+  type: "object",
+  required: ["eventId", "rating"],
+  properties: {
+    eventId: {
+      type: "string",
+      example: "685a7d4d0a123456789abcd1",
+    },
+    rating: {
+      type: "number",
+      minimum: 1,
+      maximum: 5,
+      example: 5,
+    },
+    comment: {
+      type: "string",
+      example: "Amazing event!",
+    },
+  },
+  example: {
+    eventId: "685a7d4d0a123456789abcd1",
+    rating: 5,
+    comment: "Amazing event!",
+  },
+},
+
+UpdateReviewInput: {
+  type: "object",
+  properties: {
+    rating: {
+      type: "number",
+      minimum: 1,
+      maximum: 5,
+      example: 4,
+    },
+    comment: {
+      type: "string",
+      example: "Updated review comment",
+    },
+  },
+  example: {
+    rating: 4,
+    comment: "Updated review comment",
+  },
+},
+
+ReviewResponse: {
+  type: "object",
+  properties: {
+    success: {
+      type: "boolean",
+      example: true,
+    },
+    message: {
+      type: "string",
+      example: "Review added successfully",
+    },
+    data: {
+      $ref: "#/components/schemas/Review",
+    },
+  },
+},
+
+ReviewsResponse: {
+  type: "object",
+  properties: {
+    success: {
+      type: "boolean",
+      example: true,
+    },
+    count: {
+      type: "integer",
+      example: 2,
+    },
+    averageRating: {
+      type: "number",
+      example: 4.5,
+    },
+    data: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/Review",
+      },
+    },
+  },
+},
 
         Coupon: {
           type: "object",
