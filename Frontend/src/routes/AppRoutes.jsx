@@ -7,11 +7,12 @@ import LandingPage from '../pages/public/LandingPage';
 
 // Auth
 import Login from '../pages/auth/Login';
-// import Signup from '../pages/auth/Signup';
-// import ForgetPassword from '../pages/auth/ForgetPassword';
-
+import Signup from '../pages/auth/Signup';
+import ForgotPassword from '../pages/auth/ForgotPassword';
+import VerifyEmail from "../pages/auth/VerifyEmail";
+import ResetPassword from "../pages/auth/ResetPassword";
 // // User
-// import EditProfile from '../pages/user/EditProfile';
+import EditProfile from '../pages/user/EditProfile';
 // import MyBookings from '../pages/user/MyBookings';
 // import Favorites from '../pages/user/Favorites';
 
@@ -33,19 +34,23 @@ import Login from '../pages/auth/Login';
 export default function AppRoutes() {
   return (
     <Routes>
-
+      <Route path="/reset-password/:token"element={<ResetPassword />}
+/>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/profile" element={<EditProfile />} />
+      <Route path="/verify/:token"element={<VerifyEmail />}
+      
+/>
       {/* 
       <Route path="/events" element={<EventListing />} />
       <Route path="/events/:id" element={<EventDetails />} />
 
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/forgot-password" element={<ForgetPassword />} />
 
 
-      <Route path="/profile" element={<EditProfile />} />
       <Route path="/my-bookings" element={<MyBookings />} />
       <Route path="/favorites" element={<Favorites />} />
 
