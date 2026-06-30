@@ -17,76 +17,52 @@ const router = express.Router();
  * /api/auth/register:
  *   post:
  *     summary: Register a new user
- *     description: Create a new user account and send a verification email.
+ *     description: Creates a new user account and sends a verification email.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - password
- *             properties:
- *               name:
- *                 type: string
- *                 example: Hiam Mostafa
- *               email:
- *                 type: string
- *                 example: hiam@gmail.com
- *               password:
- *                 type: string
- *                 example: Password123
- *               role:
- *                 type: string
- *                 enum:
- *                   - user
- *                   - organizer
- *                 example: user
+ *             $ref: '#/components/schemas/RegisterRequest'
  *     responses:
  *       201:
- *         description: Registration successful.
+ *         description: Registration completed successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Registration successful. Please verify your email.
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       400:
- *         description: Invalid data or email already exists.
+ *         description: Invalid input or email already exists.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: Email already exists
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Cannot register as admin.
+ *         description: Admin registration is not allowed.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: Cannot register as admin
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       422:
+ *         description: Validation error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: Internal server error
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post(
-  "/register",
-  registerValidation,
-  validate,
-  register
-);
+router.post("/register", registerValidation, validate, register);
 /**
  * @swagger
  * /api/auth/verify/{token}:
  *   get:
  *     summary: Verify user email
- *     description: Verify a user's email using the verification token.
  *     tags: [Auth]
  *     parameters:
  *       - in: path
@@ -99,49 +75,59 @@ router.post(
  *         description: Email verified successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Email verified successfully
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       400:
  *         description: Invalid verification token.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: Invalid token
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get(
-  "/verify/:token",
-  verifyEmail
-);
+router.get("/verify/:token", verifyEmail);
 /**
  * @swagger
- * /api/auth/verify/{token}:
- *   get:
- *     summary: Verify user email
- *     description: Verify a user's email using the verification token.
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user
  *     tags: [Auth]
- *     parameters:
- *       - in: path
- *         name: token
- *         required: true
- *         schema:
- *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
  *     responses:
  *       200:
- *         description: Email verified successfully.
+ *         description: Login successful.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Email verified successfully
- *       400:
- *         description: Invalid verification token.
+ *             schema:
+ *               $ref: '#/components/schemas/LoginResponse'
+ *       401:
+ *         description: Invalid credentials or email not verified.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: Invalid token
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/login", login);
 
@@ -150,17 +136,16 @@ router.post("/login", login);
  * /api/auth/google:
  *   get:
  *     summary: Login with Google
- *     description: Redirect the user to Google OAuth authentication.
  *     tags: [Auth]
  *     responses:
  *       302:
- *         description: Redirect to Google authentication.
+ *         description: Redirects to Google OAuth page.
  */
 router.get(
   "/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
-  })
+  }),
 );
 
 /**
@@ -168,30 +153,27 @@ router.get(
  * /api/auth/google/callback:
  *   get:
  *     summary: Google OAuth callback
- *     description: Handle Google's callback and return the authenticated user with a JWT token.
  *     tags: [Auth]
  *     responses:
  *       200:
  *         description: Google login successful.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               token: jwt_token_here
- *               user:
- *                 _id: 6860c0c2d7d5d56f9a123456
- *                 name: Hiam Mostafa
- *                 email: hiam@gmail.com
- *                 role: user
+ *             schema:
+ *               $ref: '#/components/schemas/LoginResponse'
  *       401:
  *         description: Authentication failed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
   }),
-  googleCallback
+  googleCallback,
 );
 
 /**
@@ -199,46 +181,41 @@ router.get(
  * /api/auth/forgot-password:
  *   post:
  *     summary: Send password reset email
- *     description: Generate a reset token and send a password reset email.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 example: hiam@gmail.com
+ *             $ref: '#/components/schemas/ForgotPasswordRequest'
  *     responses:
  *       200:
- *         description: Password reset email sent successfully.
+ *         description: Password reset email sent.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Password reset email sent
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       404:
  *         description: User not found.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: User not found
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/forgot-password", forgotPassword);
+
 
 /**
  * @swagger
  * /api/auth/reset-password/{token}:
  *   post:
  *     summary: Reset password
- *     description: Reset the user's password using the reset token.
  *     tags: [Auth]
  *     parameters:
  *       - in: path
@@ -251,30 +228,26 @@ router.post("/forgot-password", forgotPassword);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - password
- *             properties:
- *               password:
- *                 type: string
- *                 example: NewPassword123
+ *             $ref: '#/components/schemas/ResetPasswordRequest'
  *     responses:
  *       200:
- *         description: Password reset successful.
+ *         description: Password reset successfully.
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               message: Password reset successful
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       400:
- *         description: Invalid or expired token.
+ *         description: Invalid or expired reset token.
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               message: Invalid or expired token
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/reset-password/:token", resetPassword);
 
