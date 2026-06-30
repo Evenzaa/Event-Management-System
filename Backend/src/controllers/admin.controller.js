@@ -1,30 +1,6 @@
 import User from "../models/User.js";
 import Event from "../models/Event.js";
 
-export const approveEvent = async (req, res, next) => {
-  try {
-    const event = await Event.findById(req.params.id);
-
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: "Event not found",
-      });
-    }
-
-    event.status = "approved";
-
-    await event.save();
-
-    res.json({
-      success: true,
-      message: "Event approved successfully",
-      data: event,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("-password");
@@ -88,7 +64,30 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
+export const approveEvent = async (req, res, next) => {
+  try {
+    const event = await Event.findById(req.params.id);
 
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    event.status = "approved";
+
+    await event.save();
+
+    res.json({
+      success: true,
+      message: "Event approved successfully",
+      data: event,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const rejectEvent = async (req, res, next) => {
   try {
