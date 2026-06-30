@@ -16,6 +16,7 @@ const router = express.Router();
  *   post:
  *     tags: [Reviews]
  *     summary: Create a review
+ *     description: Add a review for an event.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -23,68 +24,32 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - eventId
- *               - rating
- *             properties:
- *               eventId:
- *                 type: string
- *                 example: 685a7b3d4e2c8f0012ab3456
- *               rating:
- *                 type: number
- *                 minimum: 1
- *                 maximum: 5
- *                 example: 5
- *               comment:
- *                 type: string
- *                 example: Amazing event!
+ *             $ref: '#/components/schemas/ReviewInput'
  *     responses:
  *       201:
- *         description: Review created successfully
+ *         description: Review created successfully.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Review added successfully
- *                 review:
- *                   type: object
+ *               $ref: '#/components/schemas/ReviewResponse'
  *       400:
- *         description: Invalid review data
+ *         description: Invalid request.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Rating must be between 1 and 5
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Unauthorized
- *       404:
- *         description: Event not found
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/", protect, createReview);
 
@@ -93,32 +58,34 @@ router.post("/", protect, createReview);
  * /api/reviews/event/{eventId}:
  *   get:
  *     tags: [Reviews]
- *     summary: Get reviews for an event
+ *     summary: Get event reviews
+ *     description: Retrieve all reviews for a specific event.
  *     parameters:
  *       - in: path
  *         name: eventId
  *         required: true
  *         schema:
  *           type: string
+ *         example: "685a7d4d0a123456789abcd1"
  *     responses:
  *       200:
- *         description: Reviews fetched successfully
+ *         description: Reviews retrieved successfully.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 reviews:
- *                   type: array
- *                   items:
- *                     type: object
+ *               $ref: '#/components/schemas/ReviewsResponse'
  *       404:
- *         description: Event not found
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/event/:eventId", getEventReviews);
 
@@ -128,6 +95,7 @@ router.get("/event/:eventId", getEventReviews);
  *   put:
  *     tags: [Reviews]
  *     summary: Update review
+ *     description: Update your review.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -136,47 +104,50 @@ router.get("/event/:eventId", getEventReviews);
  *         required: true
  *         schema:
  *           type: string
+ *         example: "685c11112222333344445555"
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               rating:
- *                 type: number
- *                 minimum: 1
- *                 maximum: 5
- *                 example: 4
- *               comment:
- *                 type: string
- *                 example: Updated review comment
+ *             $ref: '#/components/schemas/UpdateReviewInput'
  *     responses:
  *       200:
- *         description: Review updated successfully
+ *         description: Review updated successfully.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Review updated successfully
- *                 review:
- *                   type: object
+ *               $ref: '#/components/schemas/ReviewResponse'
  *       400:
- *         description: Invalid review data
+ *         description: Invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Access denied
+ *         description: Access denied.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: Review not found
+ *         description: Review not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put("/:id", protect, updateReview);
 
@@ -186,6 +157,7 @@ router.put("/:id", protect, updateReview);
  *   delete:
  *     tags: [Reviews]
  *     summary: Delete review
+ *     description: Delete your review.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -194,28 +166,38 @@ router.put("/:id", protect, updateReview);
  *         required: true
  *         schema:
  *           type: string
+ *         example: "685c11112222333344445555"
  *     responses:
  *       200:
- *         description: Review deleted successfully
+ *         description: Review deleted successfully.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Review deleted successfully
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: Access denied
+ *         description: Access denied.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: Review not found
+ *         description: Review not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.delete("/:id", protect, deleteReview);
 
