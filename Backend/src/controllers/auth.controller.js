@@ -29,7 +29,6 @@ export const register = async (req, res) => {
       });
     }
 
-    
 
     const verificationToken =
       crypto.randomBytes(32).toString("hex");
@@ -100,19 +99,30 @@ export const login = async (req, res) => {
 
     const token = generateToken(user);
 
-    res.json({
+    const safeUser = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      profileImage: user.profileImage,
+      isVerified: user.isVerified,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return res.status(200).json({
       success: true,
-      user,
+      message: "Login successful",
       token,
+      user: safeUser,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
-
 export const verifyEmail = async (req, res) => {
   const user = await User.findOne({
     verificationToken: req.params.token,
@@ -138,12 +148,27 @@ export const verifyEmail = async (req, res) => {
 
 export const googleCallback = async (req, res) => {
   const token = generateToken(req.user);
+  const safeUser = {
+  _id: req.user._id,
+  name: req.user.name,
+  email: req.user.email,
+  role: req.user.role,
+  profileImage: req.user.profileImage,
+  isVerified: req.user.isVerified,
+};
 
+return res.status(200).json({
+  success: true,
+  message: "Google login successful",
+  token,
+  user: safeUser,
+});
   res.json({
     success: true,
     user: req.user,
     token,
   });
+
 };
 export const forgotPassword = async (req, res, next) => {
   try {
