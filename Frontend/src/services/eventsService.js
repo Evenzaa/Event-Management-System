@@ -1,46 +1,80 @@
-import {
-  CATEGORIES,
-  STATS,
-  FEATURED_EVENTS,
-  UPCOMING_EVENTS,
-  LAST_MINUTE_DEALS,
-} from '../data/mockEvents';
+import { CATEGORIES, STATS } from '../data/mockEvents';
+import { normalizeEvent } from '../utils/formatters';
 
 
-const MOCK_DELAY_MS = 300;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-function mockResolve(data) {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(data), MOCK_DELAY_MS);
-  });
+/** Core fetch wrapper — throws on non-OK responses with a clean message */
+async function apiFetch(path) {
+  const res = await fetch(`${BASE_URL}${path}`);
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || `API error ${res.status}: ${path}`);
+  }
+
+  const json = await res.json();
+
+  if (json.success === false) {
+    throw new Error(json.message || `API returned success=false for ${path}`);
+  }
+
+  return json;
 }
 
+// ---------------------------------------------------------------------------
+// CATEGORIES & STATS — hardcoded until backend has endpoints for these
+// --------------------------------------------------------------------------
+
 export async function getCategories() {
-  return mockResolve(CATEGORIES);
+  return CATEGORIES;
 }
 
 export async function getStats() {
-  return mockResolve(STATS);
+  return STATS;
 }
+
 
 export async function getFeaturedEvents() {
-  return mockResolve(FEATURED_EVENTS);
+  const json = await apiFetch('/events/featured');
+  return json.data.map(normalizeEvent).slice(0, 3);
 }
+
 
 export async function getUpcomingEvents() {
-  return mockResolve(UPCOMING_EVENTS);
+  const json = await apiFetch('/events');
+  const normalized = json.data.map(normalizeEvent);
+
+  // Sort by date ascending and return the 4 soonest events
+  return normalized
+    .sort((a, b) => new Date(a.rawDate) - new Date(b.rawDate))
+    .slice(0, 4);
 }
+
 
 export async function getLastMinuteDeals() {
-  return mockResolve(LAST_MINUTE_DEALS);
+  const json = await apiFetch('/events');
+  const normalized = json.data.map(normalizeEvent);
+
+  return normalized.filter((evt) => evt.isLastMinute).slice(0, 3);
 }
 
+
 export async function searchEvents({ query = '', category = 'all' } = {}) {
-  const all = [...FEATURED_EVENTS, ...UPCOMING_EVENTS];
-  const filtered = all.filter((evt) => {
-    const matchesQuery = evt.title.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory = category === 'all' || evt.category === category;
+  const json = await apiFetch('/events');
+  const normalized = json.data.map(normalizeEvent);
+
+  return normalized.filter((evt) => {
+    const matchesQuery =
+      !query || evt.title.toLowerCase().includes(query.toLowerCase());
+    const matchesCategory =
+      category === 'all' || evt.category === category;
     return matchesQuery && matchesCategory;
   });
-  return mockResolve(filtered);
+}
+
+
+export async function getEventById(id) {
+  const json = await apiFetch(`/events/${id}`);
+  return normalizeEvent(json.data);
 }
