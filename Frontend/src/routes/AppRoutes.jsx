@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 
 // Public
 import LandingPage from '../pages/public/LandingPage';
-// import EventListing from '../pages/public/EventListing';
+import EventListing from '../pages/public/EventListing';
 // import EventDetails from '../pages/public/EventDetails';
 
 // Auth
@@ -11,6 +11,7 @@ import Signup from '../pages/auth/Signup';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import ResetPassword from "../pages/auth/ResetPassword";
+
 // // User
 import EditProfile from '../pages/user/EditProfile';
 // import MyBookings from '../pages/user/MyBookings';
@@ -34,11 +35,13 @@ import EditProfile from '../pages/user/EditProfile';
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/reset-password/:token"element={<ResetPassword />}
-/>
+      {/* Public */}
       <Route path="/" element={<LandingPage />} />
+      <Route path="/event-listing" element={<EventListing />} />
+      {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/reset-password/:token"element={<ResetPassword />}/>
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/profile" element={<EditProfile />} />
       <Route path="/verify/:token"element={<VerifyEmail />}
