@@ -12,21 +12,22 @@ async function request(path, options = {}) {
     },
   });
 
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.message || `Request failed: ${response.status}`);
-  }
-
-  // Handle 204 No Content gracefully
+  // 204 No Content — return null before trying to parse JSON
   if (response.status === 204) return null;
 
-  return response.json();
+  const body = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(body.message || `Request failed: ${response.status}`);
+  }
+
+  return body;
 }
 
 export const apiClient = {
-  get: (path) => request(path, { method: 'GET' }),
-  post: (path, body) => request(path, { method: 'POST', body: JSON.stringify(body) }),
-  put: (path, body) => request(path, { method: 'PUT', body: JSON.stringify(body) }),
-  patch: (path, body) => request(path, { method: 'PATCH', body: JSON.stringify(body) }),
-  delete: (path) => request(path, { method: 'DELETE' }),
+  get:    (path)        => request(path, { method: 'GET' }),
+  post:   (path, body)  => request(path, { method: 'POST',   body: JSON.stringify(body) }),
+  put:    (path, body)  => request(path, { method: 'PUT',    body: JSON.stringify(body) }),
+  patch:  (path, body)  => request(path, { method: 'PATCH',  body: JSON.stringify(body) }),
+  delete: (path)        => request(path, { method: 'DELETE' }),
 };
