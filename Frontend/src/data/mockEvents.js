@@ -9,8 +9,6 @@ export const CATEGORIES = [
   { id: 'more',       label: 'More',               icon: 'MoreHorizontal' },
 ];
 
-// NOTE: these will eventually come from a GET /api/stats endpoint.
-// When that's ready, move them to eventsService.getStats() like the others.
 export const STATS = [
   { id: 'events',       value: '50K+', label: 'Events Listed' },
   { id: 'attendees',    value: '2M+',  label: 'Happy Attendees' },
