@@ -18,7 +18,7 @@ export default function Navbar() {
       <Container className="flex h-16 items-center justify-between">
         <a href="/" className="flex items-center gap-2 font-bold text-slate-900">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-blue-500" />
-          <span className="text-lg">EventPass</span>
+          <span className="text-lg">Evenzaa</span>
         </a>
 
         <nav className="hidden items-center gap-8 md:flex">

@@ -56,8 +56,8 @@ export default function ResetPassword() {
     }
   };
     return (
-    <AuthLayout>
-      <div className="w-full max-w-md rounded-[32px] border border-gray-100 bg-white p-10 shadow-2xl">
+    <AuthLayout variant="plain">
+      <div className="w-full">
 
         <h1 className="text-4xl font-bold text-gray-900">
           Reset Password
@@ -97,7 +97,7 @@ export default function ResetPassword() {
               onChange={handleChange}
               placeholder="Enter your new password"
               required
-              className="w-full rounded-2xl border border-gray-300 px-4 py-3 outline-none transition-all focus:border-violet-600 focus:ring-2 focus:ring-violet-100"
+              className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100"
             />
 
           </div>
@@ -115,7 +115,7 @@ export default function ResetPassword() {
               onChange={handleChange}
               placeholder="Confirm your password"
               required
-              className="w-full rounded-2xl border border-gray-300 px-4 py-3 outline-none transition-all focus:border-violet-600 focus:ring-2 focus:ring-violet-100"
+              className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100"
             />
 
           </div>
