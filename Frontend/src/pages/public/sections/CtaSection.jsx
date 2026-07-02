@@ -10,7 +10,7 @@ export default function CtaSection() {
           Ready to Experience Something Amazing?
         </h2>
         <p className="mt-3 max-w-xl text-slate-500">
-          Join over 2 million event-goers who trust EventPass. Find your next
+          Join over 2 million event-goers who trust Evenzaa. Find your next
           unforgettable moment.
         </p>
 

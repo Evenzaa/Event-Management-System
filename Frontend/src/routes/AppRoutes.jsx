@@ -11,6 +11,8 @@ import Signup from '../pages/auth/Signup';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import ResetPassword from "../pages/auth/ResetPassword";
+import CheckEmail     from '../pages/auth/CheckEmail';
+import GoogleCallback from '../pages/auth/GoogleCallback';
 
 // // User
 import EditProfile from '../pages/user/EditProfile';
@@ -38,15 +40,19 @@ export default function AppRoutes() {
       {/* Public */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/event-listing" element={<EventListing />} />
+      
       {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/reset-password/:token"element={<ResetPassword />}/>
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/profile" element={<EditProfile />} />
-      <Route path="/verify/:token"element={<VerifyEmail />}
+      <Route path="/reset-password/:token" element={<ResetPassword />}/>
+      <Route path="/verify/:token" element={<VerifyEmail />}/>
+      <Route path="/check-email" element={<CheckEmail />} />
+      <Route path="/auth/google/callback" element={<GoogleCallback />} />
       
-/>
+      {/* User */}
+      <Route path="/profile" element={<EditProfile />} />
+
       {/* 
       <Route path="/events" element={<EventListing />} />
       <Route path="/events/:id" element={<EventDetails />} />
