@@ -1,10 +1,9 @@
-
 import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import cors from "cors"; 
 import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
 import passport from "./config/passport.js";
 
 import authRoutes from "./routes/auth.routes.js";
@@ -26,28 +25,16 @@ import {
 
 const app = express();
 
+// CORS
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(passport.initialize());
-
-// const options = {
-//   definition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "Event Booking API",
-//       version: "1.0.0",
-//       description: "DEPI Project API",
-//     },
-//     servers: [
-//       {
-//         url: "http://localhost:5000",
-//       },
-//     ],
-//   },
-//   apis: ["./src/routes/*.js"],
-// };
-
-// const specs = swaggerJsdoc(options);
 
 app.use(
   "/api-docs",
@@ -55,11 +42,9 @@ app.use(
   swaggerUi.setup(swaggerSpec)
 );
 
-
 app.get("/", (req, res) => {
   res.send("API Running...");
 });
-
 
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
