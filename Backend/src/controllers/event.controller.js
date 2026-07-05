@@ -119,7 +119,8 @@ export const getFeaturedEvents = async (req, res, next) => {
 };
 export const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+     const event = await Event.findById(req.params.id)
+  .populate("organizerId", "name");
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
