@@ -1,12 +1,15 @@
-@import "tailwindcss";
-
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
-html {
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
+/* Simple reset to avoid conflicts with Bootstrap and App.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f8fafc;
 }
 
-@theme {
-
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
 }
