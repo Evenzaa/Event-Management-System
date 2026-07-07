@@ -91,7 +91,7 @@ const BASE_URL = "http://localhost:5000/api";
 
 // Get all favorite events
 export const getFavorites = async () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   const response = await fetch(`${BASE_URL}/favorites`, {
     method: "GET",
@@ -110,7 +110,7 @@ export const getFavorites = async () => {
 
 // Remove an event from favorites
 export const removeFavorite = async (eventId) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   const response = await fetch(`${BASE_URL}/favorites/${eventId}`, {
     method: "DELETE",
