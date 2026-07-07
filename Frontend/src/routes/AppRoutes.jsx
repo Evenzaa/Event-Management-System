@@ -25,7 +25,14 @@ import EditProfile from '../pages/user/EditProfile';
 // import PaymentConfirmation from '../pages/checkout/PaymentConfirmation';
 
 // // Organizer
-// import OrganizerDashboard from '../pages/organizer/OrganizerDashboard';
+import Dashboard from '../pages/organizer/dashboard';
+import DashHome from '../pages/organizer/dashHome';
+import Events from '../pages/organizer/events/events';
+
+// // ErrorPage
+import ErrorPage from '../pages/errorpage';
+
+
 // import CreateEvent from '../pages/organizer/CreateEvent';
 // import MyEvents from '../pages/organizer/MyEvents';
 
@@ -53,6 +60,17 @@ export default function AppRoutes() {
       {/* User */}
       <Route path="/profile" element={<EditProfile />} />
 
+      {/* organizer */}
+  
+        <Route path="/organizer-dashboard" element={<Dashboard />}>
+          <Route index element={<DashHome />} />
+
+          <Route path="events" element={<Events />} />
+        </Route>
+
+      {/* error-page */}
+      <Route path="*" element={<ErrorPage/>} />
+
       {/* 
       <Route path="/events" element={<EventListing />} />
       <Route path="/events/:id" element={<EventDetails />} />
@@ -77,6 +95,7 @@ export default function AppRoutes() {
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/approvals" element={<AdminEventApproval />} /> 
       */}
+
     </Routes>
   );
 }
