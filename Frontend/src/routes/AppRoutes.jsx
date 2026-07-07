@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 // Public
 import LandingPage from '../pages/public/LandingPage';
 import EventListing from '../pages/public/EventListing';
-// import EventDetails from '../pages/public/EventDetails';
+import EventDetails from '../pages/public/EventDetails';
 
 // Auth
 import Login from '../pages/auth/Login';
@@ -16,8 +16,8 @@ import GoogleCallback from '../pages/auth/GoogleCallback';
 
 // // User
 import EditProfile from '../pages/user/EditProfile';
+import Favorites from '../pages/user/Favorites';
 // import MyBookings from '../pages/user/MyBookings';
-// import Favorites from '../pages/user/Favorites';
 
 // // Checkout Flow
 // import SeatSelection from '../pages/checkout/SeatSelection';
@@ -25,7 +25,14 @@ import EditProfile from '../pages/user/EditProfile';
 // import PaymentConfirmation from '../pages/checkout/PaymentConfirmation';
 
 // // Organizer
-// import OrganizerDashboard from '../pages/organizer/OrganizerDashboard';
+import Dashboard from '../pages/organizer/dashboard';
+import DashHome from '../pages/organizer/dashHome';
+import Events from '../pages/organizer/events/events';
+
+// // ErrorPage
+import ErrorPage from '../pages/shared/errorpage';
+
+
 // import CreateEvent from '../pages/organizer/CreateEvent';
 // import MyEvents from '../pages/organizer/MyEvents';
 
@@ -40,6 +47,7 @@ export default function AppRoutes() {
       {/* Public */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/event-listing" element={<EventListing />} />
+      <Route path="/events/:id" element={<EventDetails />} />
       
       {/* Auth */}
       <Route path="/login" element={<Login />} />
@@ -52,16 +60,25 @@ export default function AppRoutes() {
       
       {/* User */}
       <Route path="/profile" element={<EditProfile />} />
+      <Route path="/favorites" element={<Favorites />} />
+
+      {/* organizer */}
+  
+        <Route path="/organizer-dashboard" element={<Dashboard />}>
+          <Route index element={<DashHome />} />
+
+          <Route path="events" element={<Events />} />
+        </Route>
+
+      {/* error-page */}
+      <Route path="*" element={<ErrorPage/>} />
 
       {/* 
-      <Route path="/events" element={<EventListing />} />
-      <Route path="/events/:id" element={<EventDetails />} />
 
 
 
 
       <Route path="/my-bookings" element={<MyBookings />} />
-      <Route path="/favorites" element={<Favorites />} />
 
 
       <Route path="/book/:eventId/seats" element={<SeatSelection />} />
@@ -77,6 +94,7 @@ export default function AppRoutes() {
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/approvals" element={<AdminEventApproval />} /> 
       */}
+
     </Routes>
   );
 }
