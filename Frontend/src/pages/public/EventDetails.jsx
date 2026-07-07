@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import './style/EventDetails.css';
 
 import { fetchEventDetails } from '../../services/api';
