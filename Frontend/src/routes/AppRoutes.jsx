@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 // Public
 import LandingPage from '../pages/public/LandingPage';
 import EventListing from '../pages/public/EventListing';
-// import EventDetails from '../pages/public/EventDetails';
+import EventDetails from '../pages/public/EventDetails';
 
 // Auth
 import Login from '../pages/auth/Login';
@@ -47,6 +47,7 @@ export default function AppRoutes() {
       {/* Public */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/event-listing" element={<EventListing />} />
+      <Route path="/events/:id" element={<EventDetails />} />
       
       {/* Auth */}
       <Route path="/login" element={<Login />} />
@@ -73,7 +74,6 @@ export default function AppRoutes() {
       <Route path="*" element={<ErrorPage/>} />
 
       {/* 
-      <Route path="/events/:id" element={<EventDetails />} />
 
 
 
