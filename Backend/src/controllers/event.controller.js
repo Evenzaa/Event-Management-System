@@ -101,6 +101,43 @@ export const getEvents = async (req, res, next) => {
     next(error);
   }
 };
+export const getOrganizerEvents = async (req, res, next) => {
+  try {
+    const events = await Event.find({
+      organizerId: req.user.id,
+    });
+
+    res.json({
+      success: true,
+      count: events.length,
+      data: events,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const getOrganizerEventById = async (req, res, next) => {
+  try {
+    const event = await Event.findOne({
+      _id: req.params.id,
+      organizerId: req.user.id,
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: event,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const getFeaturedEvents = async (req, res, next) => {
   try {
     const events = await Event.find({
@@ -131,7 +168,6 @@ export const getEventById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 export const updateEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
