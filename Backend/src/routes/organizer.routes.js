@@ -2,6 +2,8 @@ import express from "express";
 import {
   createEvent,
   getEvents,
+  getOrganizerEvents,
+  getOrganizerEventById,
   getEventById,
   updateEvent,
   deleteEvent,
@@ -13,7 +15,7 @@ import { authorize } from "../middlewares/role.middleware.js";
 const router = express.Router();
 /**
  * @swagger
- * /api/events/events:
+ * /api/organizer-events:
  *   post:
  *     tags: [Organizer Events]
  *     summary: Create a new event
@@ -61,16 +63,12 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post(
-  "/events",
-  protect,
-  authorize("organizer"),
-  createEvent
-);
+router.post("/", protect, authorize("organizer"), createEvent);
+
 
 /**
  * @swagger
- * /api/events/events:
+ * /api/organizer-events:
  *   get:
  *     tags: [Organizer Events]
  *     summary: Get organizer events
@@ -108,16 +106,11 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get(
-  "/events",
-  protect,
-  authorize("organizer"),
-  getEvents
-);
+router.get("/", protect, authorize("organizer"), getOrganizerEvents);
 
 /**
  * @swagger
- * /api/events/events/{id}:
+ * /api/organizer-events/{id}:
  *   get:
  *     tags: [Organizer Events]
  *     summary: Get event by ID
@@ -156,16 +149,11 @@ router.get(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get(
-  "/events/:id",
-  protect,
-  authorize("organizer"),
-  getEventById
-);
+router.get("/:id", protect, authorize("organizer"), getOrganizerEventById);
 
 /**
  * @swagger
- * /api/events/events/{id}:
+ * /api/organizer-events/{id}:
  *   put:
  *     tags: [Organizer Events]
  *     summary: Update event
@@ -219,16 +207,12 @@ router.get(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put(
-  "/events/:id",
-  protect,
-  authorize("organizer"),
-  updateEvent
-);
+router.put("/:id", protect, authorize("organizer"), updateEvent);
+
 
 /**
  * @swagger
- * /api/events/events/{id}:
+ * /api/organizer-events/{id}:
  *   delete:
  *     tags: [Organizer Events]
  *     summary: Delete event
@@ -267,11 +251,7 @@ router.put(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete(
-  "/events/:id",
-  protect,
-  authorize("organizer"),
-  deleteEvent
-);
+router.delete("/:id", protect, authorize("organizer"), deleteEvent);
+
 
 export default router;
