@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors"; 
 import swaggerUi from "swagger-ui-express";
 import passport from "./config/passport.js";
+import organizerRoutes from "./routes/organizer.routes.js";
 
 import authRoutes from "./routes/auth.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
@@ -55,7 +56,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/events", eventRoutes);
-
+app.use("/api/organizer-events", organizerRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
