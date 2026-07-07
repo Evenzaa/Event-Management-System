@@ -1,8 +1,7 @@
-import React from 'react';
 import { Heart } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
-export default function EventCard({
+export default function FavoriteCards({
   eventId,
   image,
   gradient,
