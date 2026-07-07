@@ -8,6 +8,10 @@ export default function TableEvent({children}){
         {id:5, content:"Available Seats"},
         {id:6, content:"Status"},
         {id:7, content:"Actions"},
+        {id:7, content:"Actions"},
+        {id:7, content:"Actions"},
+        {id:7, content:"Actions"},
+
     ]
 
     return(

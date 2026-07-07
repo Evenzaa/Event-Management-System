@@ -1,7 +1,6 @@
 import { RightOutlined } from "@ant-design/icons";
 import MainTitle from "./maintitle";
-import TableEvent from "./tableevent";
-import { useGetEventsQuery } from "../../services/organizerEventApi";
+import TableRecentEvent from "./tablerecentevent";
 
 export default function EventContainer(){
     // const { data,error,isLoading,isError,isSuccess,} = useGetEventsQuery();
@@ -29,7 +28,7 @@ export default function EventContainer(){
                     </nav>
                 </div>
                 <div className="w-full md:overflow-visible overflow-x-auto">
-                    <TableEvent />
+                    <TableRecentEvent />
                 </div>
                 
 

@@ -13,13 +13,13 @@ export default function DashAction (){
                     <ButtonDash
                         icon={ <PlusOutlined style={{marginRight:"7px"}}/>}
                         content={"Add New Property"}  
-                        ui={"bg-gradient-to-r from-[#793EED] to-[#3E7FF6] text-white"}  
+                        ui={"bg-gradient-to-r from-[#793EED] to-[#3E7FF6] text-white "}  
                     >
                     </ButtonDash>
                     <ButtonDash
                         icon={ <ScheduleOutlined style={{marginRight:"7px"}} />}
                         content={"View All Booking"}
-                        ui={"text-base text-[#0F0A1E] border border-[#E5E7EB]"}
+                        ui={"text-base text-[#0F0A1E] border border-[#E5E7EB] "}
                       
                     >   
                     </ButtonDash>
