@@ -16,8 +16,8 @@ import GoogleCallback from '../pages/auth/GoogleCallback';
 
 // // User
 import EditProfile from '../pages/user/EditProfile';
+import Favorites from '../pages/user/Favorites';
 // import MyBookings from '../pages/user/MyBookings';
-// import Favorites from '../pages/user/Favorites';
 
 // // Checkout Flow
 // import SeatSelection from '../pages/checkout/SeatSelection';
@@ -30,7 +30,7 @@ import DashHome from '../pages/organizer/dashHome';
 import Events from '../pages/organizer/events/events';
 
 // // ErrorPage
-import ErrorPage from '../pages/errorpage';
+import ErrorPage from '../pages/shared/errorpage';
 
 
 // import CreateEvent from '../pages/organizer/CreateEvent';
@@ -59,6 +59,7 @@ export default function AppRoutes() {
       
       {/* User */}
       <Route path="/profile" element={<EditProfile />} />
+      <Route path="/favorites" element={<Favorites />} />
 
       {/* organizer */}
   
@@ -72,14 +73,12 @@ export default function AppRoutes() {
       <Route path="*" element={<ErrorPage/>} />
 
       {/* 
-      <Route path="/events" element={<EventListing />} />
       <Route path="/events/:id" element={<EventDetails />} />
 
 
 
 
       <Route path="/my-bookings" element={<MyBookings />} />
-      <Route path="/favorites" element={<Favorites />} />
 
 
       <Route path="/book/:eventId/seats" element={<SeatSelection />} />
