@@ -5,7 +5,7 @@ import ButtonDash from "./button";
 export default function DashAction (){
     return(
         <>
-            <div className="w-full bg-white border border-[#E5E7EB] rounded-xl pt-4 pb-4 pl-6 pr-6  shadow-sm hover:shadow-md transition mt-7">
+            <div className="w-full bg-white border border-[#E5E7EB] rounded-xl pt-4 pb-4 pl-6 pr-6  shadow-xs  transition mt-7">
                 <MainTitle>
                     <span className="text-[18px] font-bold">Quick Actions</span>
                 </MainTitle>

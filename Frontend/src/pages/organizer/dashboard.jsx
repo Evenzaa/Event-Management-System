@@ -10,14 +10,13 @@ export default function Dashboard(){
     return(
         <>
             <NavOrganizerDash/>
-             <Container className=" flex flex-col lg:flex-row gap-6 mt-8 mb-8">
+             <Container className=" flex flex-col lg:flex-row gap-5 mt-8 mb-8 ">
                 <Aside/>
                 <DashContent/>
              </Container>
                
     
             
-            <Footer/>
         </>
     )
 }
