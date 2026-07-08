@@ -6,12 +6,12 @@ export default function TableEvent({children}){
         {id:3, content:"Date"},
         {id:4, content:"Price"},
         {id:5, content:"Available Seats"},
-        {id:6, content:"Status"},
-        {id:7, content:"Actions"},
-        {id:7, content:"Actions"},
-        {id:7, content:"Actions"},
-        {id:7, content:"Actions"},
-
+        {id:6, content:"Location"},
+        {id:7, content:"Capacity"},
+        {id:8, content:"Available"},
+        {id:9, content:"Featured"},
+        {id:10, content:"Actions"},
+        {id:11, content:"Status"},
     ]
 
     return(
@@ -21,7 +21,7 @@ export default function TableEvent({children}){
                     w-full
                     border-collapse
                     border
-                    border-zinc-300"
+                    border-[#E5E7EB]"
             >
                 <thead>
                     <tr>
@@ -31,11 +31,11 @@ export default function TableEvent({children}){
                                     key={th.id}
                                     className="
                                     border 
-                                    border-zinc-300 
+                                    border-[#E5E7EB] 
                                     p-3 
                                     bg-[#F8F7FF]
                                     text-left
-                                    text-md font-semibold text-[#0F0A1E]                   
+                                    text-xs font-semibold text-[#0F0A1E]                   
                                      whitespace-nowrap
                                     "
                                 >

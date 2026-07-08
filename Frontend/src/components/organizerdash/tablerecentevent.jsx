@@ -17,7 +17,7 @@ export default function TableRecentEvent({children}){
                     w-full
                     border-collapse
                     border
-                    border-zinc-300"
+                    border-[#E5E7EB]"
             >
                 <thead>
                     <tr>
@@ -27,11 +27,11 @@ export default function TableRecentEvent({children}){
                                     key={th.id}
                                     className="
                                     border 
-                                    border-zinc-300 
+                                    border-[#E5E7EB]
                                     p-3 
                                     bg-[#F8F7FF]
                                     text-left
-                                    text-md font-semibold text-[#0F0A1E]                   
+                                    text-xs font-semibold text-[#0F0A1E]                   
                                      whitespace-nowrap
                                     "
                                 >

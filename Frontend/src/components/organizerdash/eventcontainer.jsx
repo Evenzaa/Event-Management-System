@@ -15,7 +15,7 @@ export default function EventContainer(){
     
     return(
         <>
-           <div className="bg-white border border-[#E5E7EB] rounded-xl shadow-sm hover:shadow-md transition mt-7 w-full overflow-hidden">
+           <div className="bg-white border border-[#E5E7EB] rounded-xl shadow-xs transition mt-7 w-full overflow-hidden">
                 <div className="flex items-center justify-between  p-5 ">
                     <MainTitle>
                         <span className="text-[18px] font-bold">Recent Events</span>
