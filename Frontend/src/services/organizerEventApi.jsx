@@ -18,7 +18,7 @@ export const OrganizerEventApi=createApi(
         endpoints:(builder)=>(
             {
                getEvents:builder.query({
-                    query:()=>"/events/events"
+                    query:()=>"/organizer-events"
                })
             }
         )

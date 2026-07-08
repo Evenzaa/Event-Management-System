@@ -12,7 +12,7 @@ export default function DashAction (){
                 <div className="mt-2 flex flex-col sm:flex-row gap-4">
                     <ButtonDash
                         icon={ <PlusOutlined style={{marginRight:"7px"}}/>}
-                        content={"Add New Property"}  
+                        content={"Add New Event"}  
                         ui={"bg-gradient-to-r from-[#793EED] to-[#3E7FF6] text-white "}  
                     >
                     </ButtonDash>
