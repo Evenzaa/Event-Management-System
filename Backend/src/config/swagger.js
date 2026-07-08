@@ -63,10 +63,6 @@ const options = {
         Event: {
           type: "object",
           properties: {
-            _id: {
-              type: "string",
-              example: "685a7d4d0a123456789abcd1",
-            },
             title: {
               type: "string",
               example: "Tech Conference 2026",
@@ -117,32 +113,7 @@ const options = {
               },
               example: ["tech", "conference"],
             },
-            featured: {
-              type: "boolean",
-              example: true,
-            },
-            status: {
-              type: "string",
-              enum: [
-                "pending",
-                "approved",
-                "ongoing",
-                "completed",
-              ],
-              example: "approved",
-            },
-            organizerId: {
-              type: "string",
-              example: "685a6f3a1b123456789abcd2",
-            },
-            createdAt: {
-              type: "string",
-              format: "date-time",
-            },
-            updatedAt: {
-              type: "string",
-              format: "date-time",
-            },
+           
           },
         },
 
