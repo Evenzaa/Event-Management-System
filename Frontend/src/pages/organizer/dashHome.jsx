@@ -4,7 +4,7 @@ import Widget from "../../components/organizerdash/widget";
 import Aside from "../../layouts/organizerdash/aside";
 import DashContent from "../../layouts/organizerdash/dashcontent";
 import { useDashboardQuery } from "../../services/organizerDashApi";
-import { Alert,Spin } from 'antd';
+import { Alert,Skeleton,Spin } from 'antd';
 import DashAction from "../../components/organizerdash/dashaction";
 import EventContainer from "../../components/organizerdash/eventcontainer";
 
@@ -18,6 +18,9 @@ export default function DashHome(){
         if (isSuccess) {
         console.log(data.totalBookings);
         }
+
+        
+       
 
     return(
         <>
@@ -56,12 +59,12 @@ export default function DashHome(){
                      {
                         isError&&
                         <div>
-                            error handling dashboard
+                            error loading dashboard
                         </div>
                     }
                      {
                         isLoading&&
-                        <div className="fixed w-full h-full flex items-center top-0 backdrop-blur-sm z-50">
+                        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
                             <Spin description="Loading..." size="large" style={{margin:"0 auto"}}>
                         </Spin>
 

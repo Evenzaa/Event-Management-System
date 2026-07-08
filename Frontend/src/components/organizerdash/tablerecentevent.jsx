@@ -14,10 +14,12 @@ export default function TableRecentEvent({children}){
         <div className="w-full overflow-x-auto">
             <table
                 className="
-                    w-full
+                    min-w-max w-full
                     border-collapse
                     border
-                    border-[#E5E7EB]"
+                    border-[#E5E7EB]
+                   
+                    "
             >
                 <thead>
                     <tr>
@@ -26,16 +28,17 @@ export default function TableRecentEvent({children}){
                                 <th
                                     key={th.id}
                                     className="
-                                    border 
-                                    border-[#E5E7EB]
-                                    p-3 
+                                   
+                                    p-5 
                                     bg-[#F8F7FF]
                                     text-left
-                                    text-xs font-semibold text-[#0F0A1E]                   
+                                    text-sm font-medium text-[#0F0A1E]                   
                                      whitespace-nowrap
+                                     text-[#1A1033]
+                                    
                                     "
                                 >
-                                    {th.content}
+                                   {th.content}
                                 </th>
                             ))
                         }
@@ -43,11 +46,8 @@ export default function TableRecentEvent({children}){
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td className="p-3">
-                            kkkkkkkkkkkkkkkkk
-                        </td>
-                    </tr>
+                    {children}
+                    
                 </tbody>
 
             </table>
