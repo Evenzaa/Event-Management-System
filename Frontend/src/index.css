@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+
+/* tags in create event */
+.event-tags .ant-select-selection-item {
+  background-color: #F3E8FF !important ;  
+  color: #793EED !important;       
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 4px 10px !important;
+  font-weight: 500;
+  
+}
+.event-tags .ant-select-selection-item-remove {
+  color: #793EED !important;
+}
+.custom-select .ant-select-placeholder ,.event-tags .ant-select-placeholder{
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
