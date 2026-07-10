@@ -66,21 +66,21 @@ export default function EventContainer(){
                         <TableRecentEvent>
                            {
                                 data?.data?.length > 0 ? (
-                                data.data.slice(0, 5).map((td) => (
+                                data.data.slice(0, 4).map((td) => (
                             
                                 <tr key={td._id} className="text-center">
                                     <Cell ui={"p-4"}>
-                                        <div className="flex  items-center">
+                                        <div className="flex  items-center ">
                                            <img
                                                 src={td.images[0]}
                                                 alt={td.title}
-                                                className="w-16 h-16 rounded-lg object-cover mr-3"
+                                                className="w-16 h-16 rounded-lg object-cover mr-4 "
                                                 onError={(e) => {
                                                     e.currentTarget.src = img;
                                                 }}
                                             />
-                                            <div className="flex flex-col">
-                                                <span className="text-sm font-semibold mb-0.5  whitespace-nowrap max-w-[180px] truncate"> {td.title}</span>
+                                            <div className="flex flex-col ">
+                                                <span className="text-sm font-semibold mb-0.5 whitespace-nowrap max-w-[180px]  truncate"> {td.title}</span>
                                                 <span className="text-xs ml-3 text-[#6b7280]  whitespace-nowrap max-w-[180px] truncate"> {td.description}</span>
                                             </div>
                                            

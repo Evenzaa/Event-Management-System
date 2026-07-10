@@ -4,9 +4,9 @@ export default function TableEvent({children}){
         {id:1, content:"event"},
         {id:2, content:"Category"},
         {id:3, content:"Date"},
-        {id:4, content:"Available Seats"},
+        {id:4, content:"Location"},
         {id:5, content:"Capacity"},
-        {id:6, content:"Featured"},
+        {id:6, content:"Available Seats"},
         {id:7, content:"Status"},
         {id:8, content:"Actions"},
     ]

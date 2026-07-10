@@ -1,17 +1,75 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined, InboxOutlined, PlusOutlined, StarFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EnvironmentOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, PlusOutlined, StarFilled } from "@ant-design/icons";
 import ButtonDash from "../../../components/organizerdash/button";
 import MainTitle from "../../../components/organizerdash/maintitle";
 import TableEvent from "../../../components/organizerdash/tableevents";
-import { useGetEventsQuery } from "../../../services/organizerEventApi";
+import { useDeleteEventMutation, useGetEventsQuery } from "../../../services/organizerEventApi";
 import Cell from "../../../components/organizerdash/cell";
 import img from"../../../assets/culinary_expo_banner.jpg"
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
+import { useState } from "react";
+import AddEditPage from "../../../layouts/organizerdash/addeditpage";
+
+import { useContext } from "react";
+import UserContext from "../../../store/context";
 
 export default function Events(){
-    const { data,isLoading,isError,isSuccess,} =useGetEventsQuery();
+    const {
+  showModal,
+  setShowModal,
+  modeModal,
+  setModeModal,
+  editId,
+  setEditId,
+} = useContext(UserContext);
+
+    // const[editId,setEditId]=useState(null)
+    const[deleteEvent]=useDeleteEventMutation()
+
+    const { data,isLoading,isError,isSuccess,refetch} =useGetEventsQuery();
 
     console.log(data);
     console.log(data?.data);
+
+    // const[showModal,setShowModal]=useState(false)
+    const changeShow=()=>setShowModal(false)
+    // const[modeModal,setModeMoal]=useState("create")
+
+    // const editEvent=(_id)=>{
+    //     setShowModal(true)
+    //     setModeMoal('Edit')
+    //     setEditId(_id)
+    //     console.log(_id)
+    // }
+    const editEvent = (_id) => {
+    setShowModal(true);
+    setModeModal("Edit");
+    setEditId(_id);
+    };
+    const { confirm } = Modal;
+
+    const delEvent = (_id) => {
+    confirm({
+        title: "Are you sure you want to delete this event?",
+        icon: <ExclamationCircleFilled />,
+        content: "This action cannot be undone.",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+
+        async onOk() {
+        try {
+            await deleteEvent({ id: _id }).unwrap();
+            refetch();
+        } catch (e) {
+            console.log(e);
+        }
+        },
+
+        onCancel() {
+        console.log("Cancel");
+        },
+    });
+    };
 
     const getStatus = (status) => {
         switch (status.toLowerCase()) {
@@ -40,6 +98,8 @@ export default function Events(){
             };
         }
         };
+       
+       
 
     return(
         <>
@@ -55,6 +115,10 @@ export default function Events(){
                     <ButtonDash
                         icon={<PlusOutlined style={{ marginRight: "7px" }} />}
                         content="Create Event"
+                        onClick={
+                            ()=>{setShowModal(true);
+                                setModeMoal("create")}
+                        }
                         ui="bg-[#1A1033] text-white hover:bg-[#0F0A1E] w-full md:w-auto justify-center"
                     />
                 </div>
@@ -66,7 +130,7 @@ export default function Events(){
                         <TableEvent>
                            {
                                data?.data?.length > 0 ? (
-                                 data.data.slice(0, 5).map((td) => (
+                                 data.data.map((td) => (
 
                                 <tr key={td._id} className="text-center bg-white">
                                     <Cell ui={"p-2"}>
@@ -79,11 +143,7 @@ export default function Events(){
                                                     e.currentTarget.src = img;
                                                 }}
                                             />
-                                            {/* <div className="flex flex-col"> */}
-                                                <span className="text-sm font-medium mb-0.5 whitespace-nowrap max-w-[180px] truncate"> {td.title}</span>
-                                                {/* <span className="text-xs ml-3 text-[#6b7280]"> {td.description}</span> */}
-                                            {/* </div> */}
-                                           
+                                            <span className="text-sm font-medium mb-0.5 whitespace-nowrap max-w-[180px] truncate"> {td.title}</span>
                                         </div>
                                     </Cell>
                                      <Cell ui={"p-2"}>
@@ -100,20 +160,9 @@ export default function Events(){
                                             </span>
                                             </div>                                                                
                                     </Cell>
-                                    <Cell><span className="font-medium whitespace-nowrap">{td.availableSeats}</span></Cell>
+                                    <Cell> <EnvironmentOutlined style={{color:"#6b7280",fontSize:"15px"}} /> <span className="text-sm font-medium text-[#6b7280] whitespace-nowrap">{td.location}</span></Cell>
                                     <Cell><span className="font-medium whitespace-nowrap">{td.capacity}</span></Cell>
-                                    <Cell>
-                                        <span className="font-medium whitespace-nowrap">
-                                            {td.featured ? <>
-                                                <StarFilled style={{color:"oklch(90.5% 0.182 98.111)",marginRight:"7px"}} />
-                                                    Yes
-                                                </> 
-                                                : "No"
-                                            }
-                                        </span>
-                                    </Cell>
-
-                                    
+                                    <Cell><span className="font-medium whitespace-nowrap">{td.availableSeats}</span></Cell>
                                     <Cell>
                                         <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatus(td.status).className} whitespace-nowrap`}
@@ -122,12 +171,16 @@ export default function Events(){
                                         </span>
                                     </Cell>
                                     <Cell>
-                                        <EyeOutlined  style={{marginRight:"4px", color:"#3E7FF6", cursor:"pointer"}}/>
-                                        <EditOutlined style={{marginRight:"4px", color:"#10B981", cursor:"pointer"}} />
-                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}/>
+                                        <EyeOutlined  style={{marginRight:"4px", color:"#3E7FF6", cursor:"pointer"}}
+                                         
+                                        />
+                                        <EditOutlined style={{marginRight:"4px", color:"#10B981", cursor:"pointer"}}
+                                            onClick={()=>editEvent(td._id)} 
+                                            
+                                         />
+                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}
+                                        onClick={()=>delEvent(td._id)}/>
                                     </Cell> 
-
-
                                 </tr>
                             ))): (
                                 <tr>
@@ -161,6 +214,16 @@ export default function Events(){
                         error loading events
                     </div>
                 }
+
+                <AddEditPage
+                    show={showModal}
+                    changeShow={changeShow}
+                    mode={modeModal}
+                    eventId={editId}
+                    refetch={refetch}
+                >
+
+                </AddEditPage>
                     
 
             </div>

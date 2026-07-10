@@ -14,6 +14,7 @@ export const store=configureStore(
                 getDefaultMiddleware().concat(
                     OrganizerDashApiSlice.middleware,
                     OrganizerEventApi.middleware
+
                 )
     }
     

@@ -1,8 +1,14 @@
 import { PlusOutlined, ScheduleOutlined } from "@ant-design/icons";
 import MainTitle from "./maintitle";
 import ButtonDash from "./button";
+import { useContext } from "react";
+import UserContext from "../../store/context";
 
 export default function DashAction (){
+    const {
+    setShowModal,
+    setModeModal,
+    } = useContext(UserContext);
     return(
         <>
             <div className="w-full bg-white border border-[#E5E7EB] rounded-xl pt-4 pb-4 pl-6 pr-6  shadow-xs  transition mt-7">
@@ -12,7 +18,12 @@ export default function DashAction (){
                 <div className="mt-2 flex flex-col sm:flex-row gap-4">
                     <ButtonDash
                         icon={ <PlusOutlined style={{marginRight:"7px"}}/>}
-                        content={"Add New Event"}  
+                        content={"Add New Event"} 
+                        onClick={() => {
+                            setShowModal(true);
+                            setModeModal("create");
+                        }}
+                        
                         ui={"bg-gradient-to-r from-[#793EED] to-[#3E7FF6] text-white "}  
                     >
                     </ButtonDash>
