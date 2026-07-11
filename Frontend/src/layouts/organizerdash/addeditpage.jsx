@@ -13,7 +13,7 @@ function getBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
-export default function AddEditPage({show,changeShow,mode,eventId,refetch}){
+export default function AddEditPage({show,changeShow,mode,eventId}){
 
     const [form] = Form.useForm();
     const [getEventsbyId]=useLazyGetEventsbyIdQuery()
@@ -21,7 +21,7 @@ export default function AddEditPage({show,changeShow,mode,eventId,refetch}){
     const[editEvent]=useUpdateEventsMutation()
     useEffect(()=>{
         const eventinfo=async()=>{
-            if(mode==='Edit'){
+            if(mode==='edit'){
                 try{
                     const res=await getEventsbyId(eventId).unwrap()
                     console.log(res)
@@ -42,23 +42,14 @@ export default function AddEditPage({show,changeShow,mode,eventId,refetch}){
                     console.log(error)
                 }
         }
-        else{
-             form.setFieldsValue({
-                        title:"",
-                        description:"",
-                        date: "",
-                        location:"",
-                        price:"",
-                        capacity:"",
-                        availableSeats:"",
-                        images:[],
-                        category:"",
-                        tags:[],
-                    })
-        }
+        else {
+                form.resetFields();
+                setFileList([]);
+                setCurrentStep(0);
+            }
     }
         eventinfo()
-    },[eventId,mode,getEventsbyId,form])
+    },[show, mode, eventId])
 
     const [currentStep, setCurrentStep] = useState(0);
     const steps = [
@@ -119,7 +110,7 @@ export default function AddEditPage({show,changeShow,mode,eventId,refetch}){
              const onFinish = async (values) => {
 
                 console.log("tags:", values.tags);
-console.log("form:", form.getFieldsValue());
+                console.log("form:", form.getFieldsValue());
 
                     console.log(values);
 
@@ -143,8 +134,11 @@ console.log("form:", form.getFieldsValue());
                         const res = await createEvent(data).unwrap();
                         console.log(res);
                         
-                        refetch()
-                        changeShow()
+                        // refetch()
+                        form.resetFields();
+                        setFileList([]);
+                        setCurrentStep(0);
+                        changeShow();
                     } else {
                         const res = await editEvent({
                             id: eventId,
@@ -153,8 +147,12 @@ console.log("form:", form.getFieldsValue());
 
                         console.log(res);
                         
-                        refetch()
-                        changeShow()
+                        // refetch()
+                        form.resetFields();
+                        setFileList([]);
+                        setCurrentStep(0);
+                        changeShow();
+
                     }
                 } catch (e) {
                     console.log(e);
