@@ -98,8 +98,8 @@ const options = {
                 type: "string",
               },
               example: [
-                "https://example.com/event1.jpg",
-                "https://example.com/event2.jpg",
+                 "https://images.unsplash.com/photo-1540575467063-178a50c2df87",
+                "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
               ],
             },
             category: {
