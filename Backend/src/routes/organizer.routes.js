@@ -110,6 +110,57 @@ router.get("/", protect, authorize("organizer"), getOrganizerEvents);
 
 /**
  * @swagger
+ * /api/organizer-events/search:
+ *   get:
+ *     tags: [Organizer Events]
+ *     summary: Search organizer events
+ *     description: Search and filter the authenticated organizer's events by title, status, or category.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by event title
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, approved, ongoing, completed]
+ *         description: Filter by event status
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filter by category
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Organizer access required.
+ */
+router.get(
+  "/search",
+  protect,
+  authorize("organizer"),
+  searchOrganizerEvents
+);
+
+/**
+ * @swagger
  * /api/organizer-events/{id}:
  *   get:
  *     tags: [Organizer Events]
