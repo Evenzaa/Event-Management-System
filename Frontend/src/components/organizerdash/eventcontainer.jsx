@@ -1,13 +1,17 @@
-import { DeleteOutlined, EyeOutlined, InboxOutlined, RightOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, RightOutlined } from "@ant-design/icons";
 import MainTitle from "./maintitle";
 import TableRecentEvent from "./tablerecentevent";
-import { useGetEventsQuery } from "../../services/organizerEventApi";
+import { useDeleteEventMutation, useGetEventsQuery } from "../../services/organizerEventApi";
 import img from"../../assets/culinary_expo_banner.jpg"
 import Cell from "./cell";
 import {  useNavigate } from "react-router-dom";
+import { Modal } from "antd";
 
 export default function EventContainer(){
       const navigate = useNavigate();
+    const[deleteEvent]=useDeleteEventMutation()
+    const { confirm } = Modal;
+
     const { data,isSuccess,} =useGetEventsQuery();
    
 
@@ -28,21 +32,54 @@ export default function EventContainer(){
                 className: "bg-yellow-100 text-yellow-700",
             };
 
-            case "rejected":
+            case "ongoing":
             return {
-                text: "Rejected",
-                className: "bg-red-100 text-red-700",
+                text: "Ongoing",
+                className: "bg-blue-100 text-blue-700",
+            };
+            case "completed":
+            return {
+                text: "Completed",
+                className: "bg-gray-100 text-gray-700",
             };
 
             default:
             return {
                 text: status,
-                className: "bg-gray-100 text-gray-700",
+                className: "bg-red-100 text-red-700",
             };
         }
         };
 
-       
+       const recentEvents = data?.data
+        ? [...data.data]
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, 4)
+        : [];
+
+         const delEvent = (_id) => {
+        confirm({
+            title: "Are you sure you want to delete this event?",
+            icon: <ExclamationCircleFilled />,
+            content: "This action cannot be undone.",
+            okText: "Yes",
+            okType: "danger",
+            cancelText: "No",
+
+            async onOk() {
+            try {
+                await deleteEvent({ id: _id }).unwrap();
+                // refetch();
+            } catch (e) {
+                console.log(e);
+            }
+            },
+
+            onCancel() {
+            console.log("Cancel");
+            },
+        });
+        };
     
     return(
         <>
@@ -65,11 +102,11 @@ export default function EventContainer(){
 
                         <TableRecentEvent>
                            {
-                                data?.data?.length > 0 ? (
-                                data.data.slice(0, 4).map((td) => (
+                                recentEvents.length > 0 ? (
+                                 recentEvents.map((td) => (
                             
                                 <tr key={td._id} className="text-center">
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-3"}>
                                         <div className="flex  items-center ">
                                            <img
                                                 src={td.images[0]}
@@ -112,12 +149,13 @@ export default function EventContainer(){
                                     </Cell>
                                     <Cell ui={"p-4"}>
                                         <EyeOutlined  style={{marginRight:"7px", color:"#3E7FF6", cursor:"pointer"}}/>
-                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}/>
+                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}
+                                        onClick={()=>delEvent(td._id)}/>
                                     </Cell>
 
 
                                 </tr>
-                            )
+                                )
                             )): (
                                     <tr>
                                         <td colSpan={7} className="py-12">
@@ -135,9 +173,9 @@ export default function EventContainer(){
                         </TableRecentEvent>
                     </div>
 
-                }
                 
                 
+              }
 
             </div>
             

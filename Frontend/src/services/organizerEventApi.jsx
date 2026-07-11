@@ -15,36 +15,51 @@ export const OrganizerEventApi=createApi(
                 return headers
             }
         }),
+         tagTypes: ["Events"],
         endpoints:(builder)=>(
             {
                 getEvents:builder.query({
-                    query:()=>"/organizer-events"
+                    query:()=>"/organizer-events",
+                    providesTags: ["Events"],
                }),
                getEventsbyId:builder.query({
                     query:(id)=>`/organizer-events/${id}`,     
                }),
+               getEventSearch: builder.query({
+                    query: ({ search = "", status = "" }) => ({
+                        url: "/events",
+                        params: {
+                        search,
+                        status,
+                        },
+                    }),
+                }),
                 createEvents:builder.mutation({
                     query:(payload)=>({
                         url:"/organizer-events",
                         method:"Post",
                         body:payload
-                    })
+                    }),
+                    invalidatesTags: ["Events"],
                 }),
                 updateEvents:builder.mutation({
                     query:({payload,id})=>({
                         url:`/organizer-events/${id}`,
                         method:"PUT",
                         body:payload
-                    })
+                    }),
+                    invalidatesTags: ["Events"],
                 }),
                 deleteEvent:builder.mutation({
                     query:({payload,id})=>({
                         url:`/organizer-events/${id}`,
                         method:"DELETE",
                         body:payload
-                    })
+                    }),
+                    invalidatesTags: ["Events"],
                 }),
-            })
+            }
+        )
             
     }
 )
@@ -54,5 +69,7 @@ export const {
     useUpdateEventsMutation,
     useCreateEventsMutation,
     useDeleteEventMutation,
+    useGetEventSearchQuery,
+    useLazyGetEventSearchQuery
 
 }=OrganizerEventApi

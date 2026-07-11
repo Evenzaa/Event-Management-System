@@ -1,7 +1,7 @@
 export default function TableEvent({children}){
 
     const thlist=[
-        {id:1, content:"event"},
+        {id:1, content:"Event"},
         {id:2, content:"Category"},
         {id:3, content:"Date"},
         {id:4, content:"Location"},

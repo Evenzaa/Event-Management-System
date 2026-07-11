@@ -18,3 +18,14 @@
   font-size: 14px !important;
   font-weight: 600 !important;
 }
+
+
+
+/* event search */
+
+.event-search .ant-input::placeholder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94979e;
+  font-family: "Urbanist", sans-serif;
+}

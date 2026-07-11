@@ -2,15 +2,16 @@ import { DeleteOutlined, EditOutlined, EnvironmentOutlined, ExclamationCircleFil
 import ButtonDash from "../../../components/organizerdash/button";
 import MainTitle from "../../../components/organizerdash/maintitle";
 import TableEvent from "../../../components/organizerdash/tableevents";
-import { useDeleteEventMutation, useGetEventsQuery } from "../../../services/organizerEventApi";
+import { useDeleteEventMutation, useGetEventsQuery, useLazyGetEventSearchQuery } from "../../../services/organizerEventApi";
 import Cell from "../../../components/organizerdash/cell";
 import img from"../../../assets/culinary_expo_banner.jpg"
 import { Modal, Spin } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddEditPage from "../../../layouts/organizerdash/addeditpage";
 
 import { useContext } from "react";
 import UserContext from "../../../store/context";
+import SearchEvent from "../../../components/organizerdash/eventsearch";
 
 export default function Events(){
     const {
@@ -22,27 +23,25 @@ export default function Events(){
   setEditId,
 } = useContext(UserContext);
 
-    // const[editId,setEditId]=useState(null)
     const[deleteEvent]=useDeleteEventMutation()
+     const[displayData,setDisplayData]=useState(null)
+        const[getsearchdata]=useLazyGetEventSearchQuery()
+        const [filters, setFilters] = useState({
+            search: "",
+            status: "",
+        });
 
     const { data,isLoading,isError,isSuccess,refetch} =useGetEventsQuery();
 
     console.log(data);
     console.log(data?.data);
 
-    // const[showModal,setShowModal]=useState(false)
     const changeShow=()=>setShowModal(false)
-    // const[modeModal,setModeMoal]=useState("create")
-
-    // const editEvent=(_id)=>{
-    //     setShowModal(true)
-    //     setModeMoal('Edit')
-    //     setEditId(_id)
-    //     console.log(_id)
-    // }
+    
+   
     const editEvent = (_id) => {
     setShowModal(true);
-    setModeModal("Edit");
+    setModeModal("edit");
     setEditId(_id);
     };
     const { confirm } = Modal;
@@ -99,7 +98,38 @@ export default function Events(){
         }
         };
        
+        const recentEvents = displayData?.data
+        ? [...displayData.data]
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            
+        : [];
+
        
+
+        useEffect(()=>{
+            const setdata=()=>{
+                if(isSuccess){
+                    setDisplayData(data)
+                }
+            }
+            setdata()
+        },[isSuccess,data])
+
+       const doSearch = async (newFilters) => {
+            const updatedFilters = {
+                ...filters,
+                ...newFilters,
+            };
+
+            setFilters(updatedFilters);
+
+            try {
+                const res = await getsearchdata(updatedFilters).unwrap();
+                setDisplayData(res);
+            } catch (e) {
+                console.log(e);
+            }
+        };
 
     return(
         <>
@@ -116,12 +146,19 @@ export default function Events(){
                         icon={<PlusOutlined style={{ marginRight: "7px" }} />}
                         content="Create Event"
                         onClick={
-                            ()=>{setShowModal(true);
-                                setModeMoal("create")}
+                            ()=>{
+                                setEditId(null);
+                                setShowModal(true);
+                                setModeModal("create")}
                         }
                         ui="bg-[#1A1033] text-white hover:bg-[#0F0A1E] w-full md:w-auto justify-center"
                     />
                 </div>
+
+                <SearchEvent
+                    runsearch={(value) => doSearch({ search: value })}
+                    runStatus={(value) => doSearch({ status: value })}
+                />
 
                 {
                     isSuccess&&
@@ -129,11 +166,11 @@ export default function Events(){
 
                         <TableEvent>
                            {
-                               data?.data?.length > 0 ? (
-                                 data.data.map((td) => (
+                               recentEvents.length > 0 ? (
+                                 recentEvents.map((td) => (
 
                                 <tr key={td._id} className="text-center bg-white">
-                                    <Cell ui={"p-2"}>
+                                    <Cell ui={"p-1.5"}>
                                         <div className="flex  items-center">
                                            <img
                                                 src={td.images[0]}
@@ -215,15 +252,6 @@ export default function Events(){
                     </div>
                 }
 
-                <AddEditPage
-                    show={showModal}
-                    changeShow={changeShow}
-                    mode={modeModal}
-                    eventId={editId}
-                    refetch={refetch}
-                >
-
-                </AddEditPage>
                     
 
             </div>

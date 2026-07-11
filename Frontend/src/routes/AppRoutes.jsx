@@ -66,7 +66,6 @@ export default function AppRoutes() {
   
         <Route path="/organizer-dashboard" element={<Dashboard />}>
           <Route index element={<DashHome />} />
-
           <Route path="events" element={<Events />} />
         </Route>
 

@@ -6,9 +6,13 @@ import UserContext from "../../store/context";
 
 export default function DashAction (){
     const {
+        showModal,
     setShowModal,
     setModeModal,
+    setEditId,
     } = useContext(UserContext);
+
+    console.log(showModal);
     return(
         <>
             <div className="w-full bg-white border border-[#E5E7EB] rounded-xl pt-4 pb-4 pl-6 pr-6  shadow-xs  transition mt-7">
@@ -20,6 +24,7 @@ export default function DashAction (){
                         icon={ <PlusOutlined style={{marginRight:"7px"}}/>}
                         content={"Add New Event"} 
                         onClick={() => {
+                            setEditId(null);
                             setShowModal(true);
                             setModeModal("create");
                         }}
