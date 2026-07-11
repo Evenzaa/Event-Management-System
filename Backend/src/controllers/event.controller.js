@@ -275,3 +275,51 @@ export const toggleFeaturedEvent = async (req, res, next) => {
     next(error);
   }
 };
+
+export const searchOrganizerEvents = async (req, res, next) => {
+  try {
+    const {
+      search,
+      status,
+      category,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {
+      organizerId: req.user.id,
+    };
+
+    if (search) {
+      filter.title = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    if (status) {
+      filter.status = status;
+    }
+
+    if (category) {
+      filter.category = category;
+    }
+
+    const events = await Event.find(filter)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * Number(limit))
+      .limit(Number(limit));
+
+    const total = await Event.countDocuments(filter);
+
+    res.json({
+      success: true,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+      totalEvents: total,
+      data: events,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
