@@ -3,6 +3,7 @@ import {
   createEvent,
   getEvents,
   getOrganizerEvents,
+  searchOrganizerEvents,
   getOrganizerEventById,
   getEventById,
   updateEvent,
