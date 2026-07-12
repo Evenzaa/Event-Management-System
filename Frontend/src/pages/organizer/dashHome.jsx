@@ -39,18 +39,21 @@ export default function DashHome(){
                             <Widget
                                 icon={<CalendarOutlined  />}
                                 ui={"text-[#793EED] bg-[#F3EDFF]"}
+                                pui={"bg-white"}
                                 title="Total Events"
                                 count={data?.totalEvents}
                             />
                             <Widget
                                 icon={<ScheduleOutlined />}
                                 ui={"bg-[#DBEAFE] text-[#3E7FF6] "}
+                                pui={"bg-white"}
                                 title="Total Bookings"
                                 count={data?.totalBookings}
                             />
                             <Widget
                                 icon={<DollarOutlined />}
                                 ui={"text-[#10B981] bg-[#D1FAE5]"}
+                                pui={"bg-white"}
                                 title="Total Revenue"
                                 count={data?.totalRevenue}
                             />

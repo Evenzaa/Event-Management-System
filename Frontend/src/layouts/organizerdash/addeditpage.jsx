@@ -76,13 +76,6 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
         ["price", "capacity", "availableSeats", "date"],
         ["location", "images"],
     ];
-    const categories = [
-        { value: "Technology", label: "Technology" },
-        { value: "Business", label: "Business" },
-        { value: "Sports", label: "Sports" },
-        { value: "Music", label: "Music" },
-        { value: "Education", label: "Education" },
-    ];
     const next = async () => {
         try {
             await form.validateFields(stepFields[currentStep]);
@@ -282,19 +275,16 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                         <div style={{ display: currentStep === 1 ? "block" : "none" }}>
                             
                                 <>
-                                    <span className="block mb-2 font-medium">Category</span>
+                                    <span className="block mb-2 text-[15px] font-semibold">Category</span>
 
                                     <Form.Item
                                         name="category"
-                                        rules={[{ required: true, message: "Please select a category" }]}
+                                        rules={[{ required: true, message: "Please enter a category" }]}
                                     >
-                                        <Select
-                                            size="large"
-                                            placeholder="Select category"
-                                            options={categories}
-                                            rootClassName="custom-select"
-
-                                        />
+                                        <Input
+                                                placeholder="e.g., Technology"
+                                                className="!h-11 !rounded-xl placeholder:font-semibold"
+                                            />
                                     </Form.Item>
 
                                     <span className="block mb-2 font-medium">Tags</span>

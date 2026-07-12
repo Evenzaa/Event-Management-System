@@ -28,7 +28,7 @@ export default function TableEvent({children}){
                                     p-5 
                                     bg-[#F8F7FF]
                                     text-left
-                                    text-sm font-semibold text-[#0F0A1E]                   
+                                    text-sm font-semibold                    
                                      whitespace-nowrap
                                      text-[#1A1033]
                                     "
