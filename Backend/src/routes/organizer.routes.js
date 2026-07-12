@@ -4,6 +4,7 @@ import {
   getEvents,
   getOrganizerEvents,
   searchOrganizerEvents,
+  getEventBookings,
   getOrganizerEventById,
   getEventById,
   updateEvent,
@@ -109,6 +110,8 @@ router.post("/", protect, authorize("organizer"), createEvent);
  */
 router.get("/", protect, authorize("organizer"), getOrganizerEvents);
 
+
+
 /**
  * @swagger
  * /api/organizer-events/search:
@@ -158,6 +161,67 @@ router.get(
   protect,
   authorize("organizer"),
   searchOrganizerEvents
+);
+
+/**
+ * @swagger
+ * /api/organizer-events/{eventId}/bookings:
+ *   get:
+ *     tags: [Organizer Events]
+ *     summary: Get bookings for an event
+ *     description: Retrieve all bookings for a specific event owned by the authenticated organizer.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Event ID
+ *         example: 685a7d4d0a123456789abcd1
+ *     responses:
+ *       200:
+ *         description: Bookings retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 totalBookings:
+ *                   type: integer
+ *                   example: 3
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Booking'
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       403:
+ *         description: Organizer access required.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get(
+  "/:eventId/bookings",
+  protect,
+  authorize("organizer"),
+  getEventBookings
 );
 
 /**
