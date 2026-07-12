@@ -4,6 +4,7 @@ import { Modal, Form, Input, Steps, Button,Select, Upload,Image, message,DatePic
 import { useEffect, useState } from "react";
 import { useCreateEventsMutation, useLazyGetEventsbyIdQuery, useUpdateEventsMutation } from "../../services/organizerEventApi";
 import dayjs from "dayjs";
+import { useUploadImgMutation } from "../../services/organizerImgApi";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -19,6 +20,9 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
     const [getEventsbyId]=useLazyGetEventsbyIdQuery()
     const[createEvent]=useCreateEventsMutation()
     const[editEvent]=useUpdateEventsMutation()
+    const [uploadImg] = useUploadImgMutation();
+    const domainname=import.meta.env.VITE_API_BASE_URL
+    console.log(domainname);
     useEffect(()=>{
         const eventinfo=async()=>{
             if(mode==='edit'){
@@ -37,6 +41,14 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                         category:res.data.category,
                         tags:res.data.tags,
                     })
+                    setFileList(
+                        res.data.images.map((url, index) => ({
+                            uid: `-${index}`,
+                            name: `image-${index}.png`,
+                            status: "done",
+                            url,
+                        }))
+                    );
                 }
                 catch(error){
                     console.log(error)
@@ -111,12 +123,13 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
 
                 console.log("tags:", values.tags);
                 console.log("form:", form.getFieldsValue());
+           console.log("fileList",fileList);
 
                     console.log(values);
 
                     const data = {
                         ...values,
-                       images: fileList.map(file => file.response?.url || file.url),
+                        images: fileList.map(file => file.response?.url || file.url),
                     };
 
                     if (data.date) {
@@ -374,12 +387,24 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                                         // rules={[{ required: true , message: "Please upload at least one img"}]}
                                         >
                                         <Upload
-                                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                                             listType="picture-card"
                                             fileList={fileList}
                                             onPreview={handlePreview}
                                             onChange={handleChange}
-                                        >
+                                            customRequest={async ({ file, onSuccess, onError }) => {
+                                                try {
+                                                    const formData = new FormData();
+                                                    formData.append("image", file);
+
+                                                    const res = await uploadImg({ payload: formData }).unwrap();
+
+                                                    onSuccess(res);
+                                                } catch (err) {
+                                                    console.error(err);
+                                                    onError(err);
+                                                }
+                                            }}
+                                            >
                                             {fileList.length >= 8 ? null : uploadButton}
                                         </Upload>
                                         {previewImage && (

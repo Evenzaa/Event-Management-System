@@ -28,13 +28,11 @@ import Favorites from '../pages/user/Favorites';
 import Dashboard from '../pages/organizer/dashboard';
 import DashHome from '../pages/organizer/dashHome';
 import Events from '../pages/organizer/events/events';
+import Review from '../pages/organizer/review/review';
 
 // // ErrorPage
 import ErrorPage from '../pages/shared/errorpage';
 
-
-// import CreateEvent from '../pages/organizer/CreateEvent';
-// import MyEvents from '../pages/organizer/MyEvents';
 
 // // Admin
 // import AdminDashboard from '../pages/admin/AdminDashboard';
@@ -67,6 +65,8 @@ export default function AppRoutes() {
         <Route path="/organizer-dashboard" element={<Dashboard />}>
           <Route index element={<DashHome />} />
           <Route path="events" element={<Events />} />
+          <Route path="review" element={<Review />} />
+
         </Route>
 
       {/* error-page */}

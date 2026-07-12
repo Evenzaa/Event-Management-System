@@ -16,13 +16,13 @@ export const AsideLinks=[
     },
      {
         id:3,
-        to:"mm",
+        to:"kk",
         icon:<ScheduleOutlined style={{marginRight:"13px"}}/>,
         label:"Bookings"
     },
      {
         id:4,
-        to:"mm",
+        to:"review",
         icon:<StarOutlined style={{marginRight:"13px"}}/>,
         label:"Reviews"
     },

@@ -106,12 +106,12 @@ export default function EventContainer(){
                                  recentEvents.map((td) => (
                             
                                 <tr key={td._id} className="text-center">
-                                    <Cell ui={"p-3"}>
+                                    <Cell ui={"p-4"}>
                                         <div className="flex  items-center ">
                                            <img
                                                 src={td.images[0]}
                                                 alt={td.title}
-                                                className="w-16 h-16 rounded-lg object-cover mr-4 "
+                                                className="w-12 h-12 rounded-lg object-cover mr-4 "
                                                 onError={(e) => {
                                                     e.currentTarget.src = img;
                                                 }}

@@ -170,7 +170,7 @@ export default function Events(){
                                  recentEvents.map((td) => (
 
                                 <tr key={td._id} className="text-center bg-white">
-                                    <Cell ui={"p-1.5"}>
+                                    <Cell ui={"p-2"}>
                                         <div className="flex  items-center">
                                            <img
                                                 src={td.images[0]}
