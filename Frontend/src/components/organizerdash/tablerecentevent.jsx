@@ -32,7 +32,7 @@ export default function TableRecentEvent({children}){
                                     p-5 
                                     bg-[#F8F7FF]
                                     text-left
-                                    text-sm font-medium text-[#0F0A1E]                   
+                                    text-sm font-medium                   
                                      whitespace-nowrap
                                      text-[#1A1033]
                                     
