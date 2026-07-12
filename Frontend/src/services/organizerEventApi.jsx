@@ -27,7 +27,7 @@ export const OrganizerEventApi=createApi(
                }),
                getEventSearch: builder.query({
                     query: ({ search = "", status = "" }) => ({
-                        url: "/events",
+                        url: "/organizer-events/search",
                         params: {
                         search,
                         status,
