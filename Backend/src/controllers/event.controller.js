@@ -1,4 +1,5 @@
 import Event from "../models/Event.js";
+import Booking from "../models/Booking.js";
 export const createEvent = async (req, res, next) => {
   try {
     const event = await Event.create({
@@ -276,6 +277,7 @@ export const toggleFeaturedEvent = async (req, res, next) => {
   }
 };
 
+
 export const searchOrganizerEvents = async (req, res, next) => {
   try {
     const {
@@ -318,6 +320,35 @@ export const searchOrganizerEvents = async (req, res, next) => {
       totalPages: Math.ceil(total / limit),
       totalEvents: total,
       data: events,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getEventBookings = async (req, res, next) => {
+  try {
+    const { eventId } = req.params;
+    const event = await Event.findOne({
+      _id: eventId,
+      organizerId: req.user.id,
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    const bookings = await Booking.find({ eventId })
+      .populate("userId", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      totalBookings: bookings.length,
+      data: bookings,
     });
   } catch (error) {
     next(error);
