@@ -6,7 +6,7 @@ import {
 import Navbar from "../../layouts/Navbar";
 import Footer from "../../layouts/Footer";
 import Container from "../../components/common/Container";
-import UserSidebar from "../../layouts/userdash/UserSidebar";
+// import UserSidebar from "../../layouts/userdash/UserSidebar";
 import BookingCard from "../../components/user/BookingCard";
 
 const TABS = [
@@ -60,7 +60,7 @@ export default function MyBookings() {
       <Navbar />
 
       <Container className="flex flex-col gap-6 py-10 lg:flex-row">
-        <UserSidebar />
+        {/* <UserSidebar /> */}
 
         <main className="flex-1">
           <div className="mb-6 flex items-center justify-between">

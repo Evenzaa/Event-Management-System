@@ -17,7 +17,7 @@ function userMenuItems(role) {
   const base = [
     { label: 'Edit Profile',  to: '/profile',    icon: User },
     { label: 'Favourites',    to: '/favorites',  icon: Heart },
-    // { label: 'My Bookings', to: '/my-bookings', icon: Ticket },
+    { label: 'My Bookings', to: '/my-bookings', icon: Ticket },
   ];
   if (role === 'organizer') {
     base.push({ label: 'Organizer Dashboard', to: '/organizer-dashboard', icon: LayoutDashboard });
