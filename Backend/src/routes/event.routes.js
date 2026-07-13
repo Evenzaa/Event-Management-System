@@ -5,6 +5,7 @@ import {
   getEvents,
   getEventById,
   getFeaturedEvents,
+  getLastMinuteDeals,
   toggleFeaturedEvent,
   updateEvent,
   deleteEvent,
@@ -184,6 +185,35 @@ router.get("/", getEvents);
  *         description: Internal server error
  */
 router.get("/featured", getFeaturedEvents);
+/**
+ * @swagger
+ * /api/events/last-minute-deals:
+ *   get:
+ *     tags: [Events]
+ *     summary: Get last minute deals
+ *     description: Retrieve approved events starting within the next 48 hours and still having available seats.
+ *     responses:
+ *       200:
+ *         description: Last minute deals retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 3
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/last-minute-deals", getLastMinuteDeals);
 
 /**
  * @swagger
