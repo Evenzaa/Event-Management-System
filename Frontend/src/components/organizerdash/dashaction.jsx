@@ -3,8 +3,11 @@ import MainTitle from "./maintitle";
 import ButtonDash from "./button";
 import { useContext } from "react";
 import UserContext from "../../store/context";
+import { useNavigate } from "react-router-dom";
 
 export default function DashAction (){
+    const navigate=useNavigate()
+    
     const {
         showModal,
     setShowModal,
@@ -35,6 +38,9 @@ export default function DashAction (){
                     <ButtonDash
                         icon={ <ScheduleOutlined style={{marginRight:"7px"}} />}
                         content={"View All Booking"}
+                        onClick={() => {
+                           navigate("booking")
+                        }}
                         ui={"text-base text-[#0F0A1E] border border-[#E5E7EB] "}
                       
                     >   
