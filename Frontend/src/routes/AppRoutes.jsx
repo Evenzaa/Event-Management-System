@@ -17,7 +17,7 @@ import GoogleCallback from '../pages/auth/GoogleCallback';
 // // User
 import EditProfile from '../pages/user/EditProfile';
 import Favorites from '../pages/user/Favorites';
-// import MyBookings from '../pages/user/MyBookings';
+import MyBookings from '../pages/user/MyBookings';
 
 // // Checkout Flow
 // import SeatSelection from '../pages/checkout/SeatSelection';
@@ -59,6 +59,7 @@ export default function AppRoutes() {
       {/* User */}
       <Route path="/profile" element={<EditProfile />} />
       <Route path="/favorites" element={<Favorites />} />
+      <Route path="/my-bookings" element={<MyBookings />} />
 
       {/* organizer */}
   
@@ -74,10 +75,6 @@ export default function AppRoutes() {
 
       {/* 
 
-
-
-
-      <Route path="/my-bookings" element={<MyBookings />} />
 
 
       <Route path="/book/:eventId/seats" element={<SeatSelection />} />
