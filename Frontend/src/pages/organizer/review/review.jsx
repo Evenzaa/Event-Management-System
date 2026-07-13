@@ -5,7 +5,7 @@ import { CalendarOutlined, FileTextOutlined, StarOutlined } from "@ant-design/ic
 import Widget from "../../../components/organizerdash/widget";
 import { useGetReviewByIdQuery } from "../../../services/organizerReviewApi";
 import { useState } from "react";
-import ReviewComponent from "../../../components/organizerdash/reviewcomponent";
+
 
 const onSearch = value => {
   console.log('search:', value);

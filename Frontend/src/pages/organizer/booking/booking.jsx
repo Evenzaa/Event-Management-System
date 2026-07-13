@@ -1,11 +1,9 @@
 import MainTitle from "../../../components/organizerdash/maintitle";
 import { Avatar, Rate, Select, Spin } from 'antd';
 import { useGetEventsQuery } from "../../../services/organizerEventApi";
-import { CalendarOutlined, FileTextOutlined, StarOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import { CalendarOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import Widget from "../../../components/organizerdash/widget";
-import { useGetReviewByIdQuery } from "../../../services/organizerReviewApi";
 import { useState } from "react";
-import ReviewComponent from "../../../components/organizerdash/reviewcomponent";
 import { useGetBookingByIdQuery } from "../../../services/organizerBookingApi";
 import BookingContainer from "../../../components/organizerdash/bookingcontainer";
 
