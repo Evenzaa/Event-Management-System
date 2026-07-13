@@ -7,13 +7,9 @@ import StatBlock from '../../../components/event/StatBlock';
 export default function HeroSection({ categories, stats, onSearch, isSearching }) {
   return (
     <section className="relative overflow-hidden bg-slate-950 py-20">
-      {/* Background image + gradient overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-90"
-        style={{
-          backgroundImage:
-            "url('/hero.jpg')",
-        }}
+        style={{ backgroundImage: "url('/hero.jpg')" }}
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/80 to-slate-950" aria-hidden="true" />
@@ -32,10 +28,11 @@ export default function HeroSection({ categories, stats, onSearch, isSearching }
         </h1>
 
         <p className="mt-6 max-w-xl italic text-fuchsia-200 opacity-70">
-          Discover concerts, festivals, conferences, and more — all in one
-          place. Secure your seat in seconds.
+          Discover concerts, festivals, conferences, and more — all in one place.
+          Secure your seat in seconds.
         </p>
 
+        {/* Search bar — navigates to /event-listing with params */}
         <div className="mt-8 w-full max-w-2xl">
           <HeroSearchBar
             categories={categories}
