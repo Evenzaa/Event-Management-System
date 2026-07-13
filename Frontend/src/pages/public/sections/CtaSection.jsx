@@ -1,8 +1,22 @@
+import { Link } from 'react-router-dom';
 import Container from '../../../components/common/Container';
 import Button from '../../../components/common/Button';
+import { useAuth } from '../../../hooks/useAuth';
 
 
 export default function CtaSection() {
+  const { isLoggedIn, user } = useAuth();
+
+  const listEventTo =
+    isLoggedIn && user?.role === 'organizer'
+      ? '/organizer-dashboard'
+      : '/signup';
+
+  const listEventLabel =
+    isLoggedIn && user?.role === 'organizer'
+      ? 'Go to Dashboard'
+      : 'List Your Event';
+
   return (
     <section className="bg-white py-20">
       <Container className="flex flex-col items-center text-center">
@@ -15,11 +29,11 @@ export default function CtaSection() {
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button as="a" href="/explore" size="lg">
+          <Button as={Link} to="/event-listing" size="lg">
             Explore All Events
           </Button>
-          <Button as="a" href="/organizer/create" variant="outline" size="lg">
-            List Your Event
+          <Button as={Link} to={listEventTo} variant="outline" size="lg">
+            {listEventLabel}
           </Button>
         </div>
       </Container>

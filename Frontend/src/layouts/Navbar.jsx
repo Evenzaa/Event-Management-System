@@ -1,77 +1,205 @@
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, ChevronDown, User, Heart, LayoutDashboard, LogOut, Ticket } from 'lucide-react';
 import Container from '../components/common/Container';
 import Button from '../components/common/Button';
+import { useAuth } from '../hooks/useAuth';
 
 const NAV_LINKS = [
-  { label: 'Explore', href: '/explore' },
-  { label: 'Categories', href: '/categories' },
-  { label: 'Organizers', href: '/organizers' },
-  { label: 'Pricing', href: '/pricing' },
+  { label: 'Explore',     to: '/event-listing' },
+  { label: 'Categories',  to: '/event-listing' },
+  { label: 'Organizers',  to: '/organizers' },
+  { label: 'Pricing',     to: '/pricing' },
 ];
 
+/** Menu items differ by role */
+function userMenuItems(role) {
+  const base = [
+    { label: 'Edit Profile',  to: '/profile',    icon: User },
+    { label: 'Favourites',    to: '/favorites',  icon: Heart },
+    // { label: 'My Bookings', to: '/my-bookings', icon: Ticket },
+  ];
+  if (role === 'organizer') {
+    base.push({ label: 'Organizer Dashboard', to: '/organizer-dashboard', icon: LayoutDashboard });
+  }
+  return base;
+}
+
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClick(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const menuItems = userMenuItems(user?.role);
+
+  // Avatar initials from name
+  const initials = user?.name
+    ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+    : '?';
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white">
       <Container className="flex h-16 items-center justify-between">
-        <a href="/" className="flex items-center gap-2 font-bold text-slate-900">
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 font-bold text-slate-900">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-blue-500" />
           <span className="text-lg">Evenzaa</span>
-        </a>
+        </Link>
 
+        {/* Desktop nav links */}
         <nav className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-slate-600 hover:text-slate-900"
-            >
+            <Link key={link.label} to={link.to}
+              className="text-sm font-medium text-slate-600 hover:text-slate-900">
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <a href="/login" className="text-sm font-semibold text-violet-600 hover:text-violet-700">
-            Log In
-          </a>
-          <Button as="a" href="/signup" size="md">
-            Get Started
-          </Button>
+        {/* Desktop right side */}
+        <div className="hidden items-center gap-4 md:flex">
+          {isLoggedIn ? (
+            /* ── User avatar + dropdown ── */
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen((o) => !o)}
+                className="flex items-center gap-2 rounded-full border border-slate-200 bg-white py-1.5 pl-1.5 pr-3 text-sm font-medium text-slate-700 transition hover:border-violet-300 hover:bg-violet-50 cursor-pointer"
+              >
+                {/* Avatar circle */}
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500 text-xs font-bold text-white">
+                  {initials}
+                </span>
+                <span className="max-w-[100px] truncate">{user?.name?.split(' ')[0]}</span>
+                <ChevronDown size={14} className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-52 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-xl">
+                  {/* User info header */}
+                  <div className="border-b border-slate-100 px-4 py-3">
+                    <p className="text-sm font-semibold text-slate-800 truncate">{user?.name}</p>
+                    <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                    {user?.role === 'organizer' && (
+                      <span className="mt-1 inline-block rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+                        Organizer
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Menu items */}
+                  <ul className="py-1">
+                    {menuItems.map((item) => (
+                      <li key={item.to}>
+                        <Link
+                          to={item.to}
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                        >
+                          <item.icon size={15} className="text-slate-400" />
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Logout */}
+                  <div className="border-t border-slate-100 py-1">
+                    <button
+                      type="button"
+                      onClick={logout}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 cursor-pointer"
+                    >
+                      <LogOut size={15} />
+                      Log Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* ── Guest buttons ── */
+            <>
+              <Link to="/login" className="text-sm font-semibold text-violet-600 hover:text-violet-700">
+                Log In
+              </Link>
+              <Button as={Link} to="/signup" size="md">
+                Get Started
+              </Button>
+            </>
+          )}
         </div>
 
-        <button
-          type="button"
-          className="cursor-pointer p-2 md:hidden"
-          onClick={() => setIsMobileMenuOpen((open) => !open)}
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        {/* Mobile hamburger */}
+        <button type="button" className="cursor-pointer p-2 md:hidden"
+          onClick={() => setIsMobileOpen((o) => !o)} aria-label="Toggle menu">
+          {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </Container>
 
-      {isMobileMenuOpen && (
+      {/* Mobile menu */}
+      {isMobileOpen && (
         <div className="border-t border-slate-100 bg-white md:hidden">
-          <Container className="flex flex-col gap-4 py-4">
+          <Container className="flex flex-col gap-1 py-4">
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-slate-600 hover:text-slate-900"
-              >
+              <Link key={link.label} to={link.to}
+                onClick={() => setIsMobileOpen(false)}
+                className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <div className="flex items-center gap-4 pt-2">
-              <a href="/login" className="text-sm font-semibold text-violet-600">
-                Log In
-              </a>
-              <Button as="a" href="/signup" size="sm">
-                Get Started
-              </Button>
+
+            <div className="mt-2 border-t border-slate-100 pt-3">
+              {isLoggedIn ? (
+                <>
+                  {/* Mobile user info */}
+                  <div className="mb-2 flex items-center gap-3 px-3 py-2">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500 text-sm font-bold text-white">
+                      {initials}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">{user?.name}</p>
+                      <p className="text-xs text-slate-400">{user?.role}</p>
+                    </div>
+                  </div>
+
+                  {menuItems.map((item) => (
+                    <Link key={item.to} to={item.to}
+                      onClick={() => setIsMobileOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50">
+                      <item.icon size={15} className="text-slate-400" />
+                      {item.label}
+                    </Link>
+                  ))}
+
+                  <button type="button" onClick={logout}
+                    className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 cursor-pointer">
+                    <LogOut size={15} />
+                    Log Out
+                  </button>
+                </>
+              ) : (
+                <div className="flex items-center gap-3 px-3">
+                  <Link to="/login" className="text-sm font-semibold text-violet-600">Log In</Link>
+                  <Button as={Link} to="/signup" size="sm">Get Started</Button>
+                </div>
+              )}
             </div>
           </Container>
         </div>

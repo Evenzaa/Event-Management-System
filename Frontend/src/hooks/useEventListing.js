@@ -11,21 +11,24 @@ const DEFAULT_FILTERS = {
   sort:       'popular',
 };
 
+export function useEventListing({ initialQuery = '', initialCategory = 'all' } = {}) {
+  const initial = {
+    ...DEFAULT_FILTERS,
+    query:    initialQuery,
+    category: initialCategory,
+  };
 
-export function useEventListing() {
-  const [filters, setFilters]           = useState(DEFAULT_FILTERS);
-  // pendingFilters = what the sidebar shows before "Apply Filters" is clicked
-  const [pendingFilters, setPendingFilters] = useState(DEFAULT_FILTERS);
-  const [page, setPage]                 = useState(1);
+  const [filters, setFilters]               = useState(initial);
+  const [pendingFilters, setPendingFilters]  = useState(initial);
+  const [page, setPage]                     = useState(1);
 
-  const [events, setEvents]             = useState([]);
-  const [total, setTotal]               = useState(0);
-  const [totalPages, setTotalPages]     = useState(1);
+  const [events, setEvents]                 = useState([]);
+  const [total, setTotal]                   = useState(0);
+  const [totalPages, setTotalPages]         = useState(1);
   const [categoryCounts, setCategoryCounts] = useState({});
-  const [isLoading, setIsLoading]       = useState(true);
-  const [error, setError]               = useState(null);
+  const [isLoading, setIsLoading]           = useState(true);
+  const [error, setError]                   = useState(null);
 
-  // Fetch results whenever committed filters or page change
   useEffect(() => {
     let isMounted = true;
     async function load() {
@@ -47,12 +50,10 @@ export function useEventListing() {
     return () => { isMounted = false; };
   }, [filters, page]);
 
-  // Load category counts once on mount
   useEffect(() => {
     getCategoryCounts().then(setCategoryCounts).catch(() => {});
   }, []);
 
-  // Search bar + sort change immediately (no "Apply" needed)
   const setQuery = useCallback((query) => {
     setFilters((f) => ({ ...f, query }));
     setPage(1);
@@ -63,12 +64,10 @@ export function useEventListing() {
     setPage(1);
   }, []);
 
-  // Sidebar pending filter changes
   const updatePendingFilter = useCallback((key, value) => {
     setPendingFilters((f) => ({ ...f, [key]: value }));
   }, []);
 
-  // "Apply Filters" button — commits pending → active
   const applyFilters = useCallback(() => {
     setFilters(pendingFilters);
     setPage(1);
@@ -86,24 +85,13 @@ export function useEventListing() {
   }, []);
 
   return {
-    // Data
-    events,
-    total,
-    totalPages,
-    page,
+    events, total, totalPages, page,
     categoryCounts,
-    isLoading,
-    error,
-    // Committed filters (read-only for display)
-    filters,
-    // Pending sidebar filters
-    pendingFilters,
-    // Actions
-    setQuery,
-    setSort,
+    isLoading, error,
+    filters, pendingFilters,
+    setQuery, setSort,
     updatePendingFilter,
-    applyFilters,
-    resetFilters,
+    applyFilters, resetFilters,
     goToPage,
   };
 }

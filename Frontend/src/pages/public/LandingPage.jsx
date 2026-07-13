@@ -1,40 +1,37 @@
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../layouts/Navbar';
 import Footer from '../../layouts/Footer';
 import PageLoadingState from '../../components/common/PageLoadingState';
 import { useLandingPageData } from '../../hooks/useLandingPageData';
-import { useEventSearch } from '../../hooks/useEventSearch';
 
-import HeroSection from './sections/HeroSection';
-import CategorySection from './sections/CategorySection';
+import HeroSection          from './sections/HeroSection';
+import CategorySection      from './sections/CategorySection';
 import FeaturedEventsSection from './sections/FeaturedEventsSection';
 import UpcomingEventsSection from './sections/UpcomingEventsSection';
 import LastMinuteDealsSection from './sections/LastMinuteDealsSection';
-import CtaSection from './sections/CtaSection';
-
+import CtaSection           from './sections/CtaSection';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
   const {
-    categories,
-    stats,
-    featuredEvents,
-    upcomingEvents,
-    deals,
-    isLoading,
-    error,
+    categories, stats, featuredEvents, upcomingEvents, deals,
+    isLoading, error,
   } = useLandingPageData();
 
-  const { search, isSearching } = useEventSearch();
-
   function handleSearch({ query, category }) {
-    search({ query, category });
+    const params = new URLSearchParams();
+    if (query)                params.set('q', query);
+    if (category && category !== 'all') params.set('category', category);
+    navigate(`/event-listing?${params.toString()}`);
   }
 
   function handleCategorySelect(category) {
-    console.log('Category selected:', category.id);
+    // 
   }
 
   function handleBookNow(event) {
-    console.log('Book now:', event.id);
+    navigate(`/events/${event.id}`);
   }
 
   if (isLoading) {
@@ -64,32 +61,25 @@ export default function LandingPage() {
   return (
     <div>
       <Navbar />
-
       <main>
         <HeroSection
           categories={categories}
           stats={stats}
           onSearch={handleSearch}
-          isSearching={isSearching}
+          isSearching={false}
         />
-
         <CategorySection
           categories={categories}
           onCategorySelect={handleCategorySelect}
         />
-
         <FeaturedEventsSection
           events={featuredEvents}
           onBookNow={handleBookNow}
         />
-
         <UpcomingEventsSection events={upcomingEvents} />
-
         <LastMinuteDealsSection deals={deals} />
-
         <CtaSection />
       </main>
-
       <Footer />
     </div>
   );
