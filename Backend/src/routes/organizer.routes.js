@@ -224,6 +224,7 @@ router.get(
   getEventBookings
 );
 
+
 /**
  * @swagger
  * /api/organizer-events/{id}:

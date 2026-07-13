@@ -276,8 +276,6 @@ export const toggleFeaturedEvent = async (req, res, next) => {
     next(error);
   }
 };
-
-
 export const searchOrganizerEvents = async (req, res, next) => {
   try {
     const {
@@ -349,6 +347,35 @@ export const getEventBookings = async (req, res, next) => {
       success: true,
       totalBookings: bookings.length,
       data: bookings,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const getLastMinuteDeals = async (req, res, next) => {
+  try {
+    const now = new Date();
+
+    const next48Hours = new Date();
+    next48Hours.setHours(next48Hours.getHours() + 48);
+
+    const events = await Event.find({
+      status: "approved",
+      date: {
+        $gte: now,
+        $lte: next48Hours,
+      },
+      availableSeats: { $gt: 0 },
+    })
+      .sort({ date: 1 })
+      .select(
+        "title description date location price availableSeats images category tags"
+      );
+
+    res.status(200).json({
+      success: true,
+      count: events.length,
+      data: events,
     });
   } catch (error) {
     next(error);
