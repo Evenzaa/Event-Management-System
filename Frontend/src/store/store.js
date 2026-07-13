@@ -4,6 +4,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { OrganizerEventApi } from "../services/organizerEventApi";
 import { OrganizerImgApi } from "../services/organizerImgApi";
 import { OrganizerReviewApi } from "../services/organizerReviewApi";
+import { OrganizerBookingApi } from "../services/organizerBookingApi";
 
 export const store=configureStore(
     {
@@ -12,6 +13,8 @@ export const store=configureStore(
            [OrganizerEventApi.reducerPath]:OrganizerEventApi.reducer,
            [OrganizerImgApi.reducerPath]:OrganizerImgApi.reducer,
            [OrganizerReviewApi.reducerPath]:OrganizerReviewApi.reducer,
+           [OrganizerBookingApi.reducerPath]:OrganizerBookingApi.reducer,
+
 
 
 
@@ -22,6 +25,8 @@ export const store=configureStore(
                     OrganizerEventApi.middleware,
                     OrganizerImgApi.middleware,
                     OrganizerReviewApi.middleware,
+                    OrganizerBookingApi.middleware,
+
 
 
                 )
