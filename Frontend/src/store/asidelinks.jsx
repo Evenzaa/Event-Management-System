@@ -16,7 +16,7 @@ export const AsideLinks=[
     },
      {
         id:3,
-        to:"kk",
+        to:"booking",
         icon:<ScheduleOutlined style={{marginRight:"13px"}}/>,
         label:"Bookings"
     },
