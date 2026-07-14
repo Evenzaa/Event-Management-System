@@ -115,3 +115,15 @@ export const rejectEvent = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllEventsWithOrganizers = async (req, res) => {
+  const events = await Event.find()
+    .populate("organizerId", "name email")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    count: events.length,
+    data: events,
+  });
+};
