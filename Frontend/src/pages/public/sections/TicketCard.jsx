@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { bookTickets } from '../services/api';
-import Button from './common/Button';
+import { bookTickets } from '../../../services/api';
+import Button from '../../../components/common/Button';
 
 export default function TicketCard({ eventId, ticketData }) {
   const { remaining, options } = ticketData;

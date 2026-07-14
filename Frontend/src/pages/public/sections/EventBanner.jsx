@@ -1,6 +1,6 @@
-import electricDreamsBanner from '../assets/electric_dreams_banner.jpg';
-import techSummitBanner from '../assets/tech_summit_banner.jpg';
-import culinaryExpoBanner from '../assets/culinary_expo_banner.jpg';
+import electricDreamsBanner from '../../../assets/electric_dreams_banner.jpg';
+import techSummitBanner from '../../../assets/tech_summit_banner.jpg';
+import culinaryExpoBanner from '../../../assets/culinary_expo_banner.jpg';
 
 const imageMap = {
   'electric_dreams_banner.jpg': electricDreamsBanner,
