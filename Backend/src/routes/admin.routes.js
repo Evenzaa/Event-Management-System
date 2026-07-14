@@ -6,7 +6,7 @@ import {
   deleteUser,
   approveEvent,
   rejectEvent,
-} from "../controllers/admin.controller.js";
+getAllEventsWithOrganizers} from "../controllers/admin.controller.js";
 
 import {
   protect,
@@ -57,7 +57,79 @@ router.use(
  */
  
 router.get("/users", getAllUsers);
-
+/**
+ * @swagger
+ * /api/admin/events:
+ *   get:
+ *     tags: [Admin]
+ *     summary: Get all events with organizers
+ *     description: Retrieve all events in the system including organizer information.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 12
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     allOf:
+ *                       - $ref: '#/components/schemas/Event'
+ *                       - type: object
+ *                         properties:
+ *                           organizer:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                                 example: 685a7d4d0a123456789abcd1
+ *                               name:
+ *                                 type: string
+ *                                 example: Ahmed Mohamed
+ *                               email:
+ *                                 type: string
+ *                                 example: ahmed@gmail.com
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       403:
+ *         description: Admin access required.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get(
+  "/events",
+  protect,
+  authorize("admin"),
+  getAllEventsWithOrganizers
+);
+router.get(
+  "/events",
+  protect,
+  authorize("admin"),
+  getAllEventsWithOrganizers
+);
 /**
  * @swagger
  * /api/admin/users/{id}/role:
