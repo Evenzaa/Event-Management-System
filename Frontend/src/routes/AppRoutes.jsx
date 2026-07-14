@@ -38,8 +38,7 @@ import ErrorPage from '../pages/shared/errorpage';
 
 // // Admin
 // import AdminDashboard from '../pages/admin/AdminDashboard';
-// import AdminEventApproval from '../pages/admin/AdminEventApproval';
-
+import AdminEventApproval from '../pages/admin/AdminEventApproval';
 
 export default function AppRoutes() {
   return (
@@ -72,9 +71,15 @@ export default function AppRoutes() {
           <Route path="review" element={<Review />} />
 
         </Route>
+      {/* Admin */}
+      <Route path="/admin/approvals" element={<AdminEventApproval />} /> 
 
+      {/* 
       {/* error-page */}
       <Route path="*" element={<ErrorPage/>} />
+
+      {/* Admin */}
+      <Route path="/admin/approvals" element={<AdminEventApproval />} /> 
 
       {/* 
 
@@ -90,8 +95,7 @@ export default function AppRoutes() {
       <Route path="/organizer/my-events" element={<MyEvents />} />
 
 
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/approvals" element={<AdminEventApproval />} /> 
+      <Route path="/admin" element={<div>Admin Dashboard PlaceHolder</div>} />
       */}
 
     </Routes>
