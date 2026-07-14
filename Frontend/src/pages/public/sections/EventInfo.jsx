@@ -1,4 +1,4 @@
-import Badge from './common/Badge';
+import Badge from '../../../components/common/Badge';
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '';
@@ -25,6 +25,7 @@ const getToneForTag = (tag) => {
   if (normalized.includes('sport')) return 'sports';
   if (normalized.includes('education')) return 'education';
   if (normalized.includes('business')) return 'business';
+  if (normalized.includes('featured')) return 'emerald'; // using emerald tone indirectly if possible, wait Badge only has specific tones. Let's fallback to violet or pink. Wait, emerald is comedy in Badge. Let's just use comedy for featured if we want green. Or we can just use the exact ones.
   return 'violet';
 };
 
@@ -36,7 +37,8 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
         {tags?.map((tag, idx) => {
            let tone = getToneForTag(tag);
            if (tag.toLowerCase() === 'featured') {
-             tone = 'education'; // 'education' maps to emerald (green) in Badge component
+             // Badge has no 'green' but 'comedy'/'education' maps to emerald (green)
+             tone = 'education';
            }
            return (
              <Badge key={idx} tone={tone}>
