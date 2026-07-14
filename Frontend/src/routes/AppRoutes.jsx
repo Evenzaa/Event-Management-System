@@ -33,6 +33,7 @@ import Review from '../pages/organizer/review/review';
 
 // // ErrorPage
 import ErrorPage from '../pages/shared/errorpage';
+import Settings from '../pages/organizer/Settings/settings';
 
 
 
@@ -70,6 +71,7 @@ export default function AppRoutes() {
           <Route path="events" element={<Events />} />
           <Route path="booking" element={<Booking />} />
           <Route path="review" element={<Review />} />
+          <Route path="setting" element={<Settings />} />
 
         </Route>
 
@@ -84,10 +86,6 @@ export default function AppRoutes() {
       <Route path="/checkout" element={<BookingCheckout />} />
       <Route path="/confirmation" element={<PaymentConfirmation />} />
 
-
-      <Route path="/organizer" element={<OrganizerDashboard />} />
-      <Route path="/organizer/create-event" element={<CreateEvent />} />
-      <Route path="/organizer/my-events" element={<MyEvents />} />
 
 
       <Route path="/admin" element={<AdminDashboard />} />

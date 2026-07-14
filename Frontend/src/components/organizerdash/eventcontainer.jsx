@@ -1,11 +1,11 @@
-import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, RightOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, MoreOutlined, RightOutlined } from "@ant-design/icons";
 import MainTitle from "./maintitle";
 import TableRecentEvent from "./tablerecentevent";
 import { useDeleteEventMutation, useGetEventsQuery } from "../../services/organizerEventApi";
 import img from"../../assets/culinary_expo_banner.jpg"
 import Cell from "./cell";
 import {  useNavigate } from "react-router-dom";
-import { Modal } from "antd";
+import { Dropdown, Modal } from "antd";
 
 export default function EventContainer(){
       const navigate = useNavigate();
@@ -80,6 +80,20 @@ export default function EventContainer(){
             },
         });
         };
+
+        const items = (td)=>[
+        {
+            label: 'View',
+            key: 'view',
+            icon: <EyeOutlined style={{marginRight:"4px", color:"#3E7FF6", cursor:"pointer",fontSize:"18px",marginRight:"10px"}} />
+        },
+        {
+            label: 'Delete',
+            key: 'delete',
+            icon: <DeleteOutlined style={{color:"#EF4444",cursor:"pointer",fontSize:"18px",marginRight:"10px",}} />,
+            // danger: true,
+        },
+        ];
     
     return(
         <>
@@ -107,6 +121,7 @@ export default function EventContainer(){
                             
                                 <tr key={td._id} className="text-center">
                                     <Cell ui={"p-4"}>
+                                        
                                         <div className="flex  items-center ">
                                            <img
                                                 src={td.images[0]}
@@ -148,9 +163,22 @@ export default function EventContainer(){
                                         </span>
                                     </Cell>
                                     <Cell ui={"p-4"}>
-                                        <EyeOutlined  style={{marginRight:"7px", color:"#3E7FF6", cursor:"pointer"}}/>
-                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}
-                                        onClick={()=>delEvent(td._id)}/>
+                                        <Dropdown  menu={{
+                                                    items: items(td),
+                                                    onClick: ({ key }) => {
+                                                    if (key === "view") {
+                                                        console.log("view");
+                                                    }
+
+                                                    if (key === "delete") {
+                                                        delEvent(td._id);
+                                                    }
+                                                    },
+                                                }}
+                                                trigger={["click"]} placement="bottomLeft"
+                                            >
+                                                <MoreOutlined  style={{cursor:"pointer"}}/>
+                                            </Dropdown>
                                     </Cell>
 
 
