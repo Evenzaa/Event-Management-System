@@ -80,18 +80,42 @@ const options = {
               type: "string",
               example: "Cairo",
             },
-            price: {
-              type: "number",
-              example: 250,
-            },
-            capacity: {
-              type: "integer",
-              example: 100,
-            },
-            availableSeats: {
-              type: "integer",
-              example: 78,
-            },
+          capacity: {
+  type: "integer",
+  example: 150,
+},
+
+ticketTypes: {
+  type: "object",
+  properties: {
+    general: {
+      type: "object",
+      properties: {
+        price: {
+          type: "number",
+          example: 300,
+        },
+        availableSeats: {
+          type: "integer",
+          example: 100,
+        },
+      },
+    },
+    vip: {
+      type: "object",
+      properties: {
+        price: {
+          type: "number",
+          example: 700,
+        },
+        availableSeats: {
+          type: "integer",
+          example: 50,
+        },
+      },
+    },
+  },
+},
             images: {
               type: "array",
               items: {
@@ -117,29 +141,56 @@ const options = {
           },
         },
 
-        Booking: {
-          type: "object",
-          properties: {
-            _id: {
-              type: "string",
-              example: "685b11112222333344445555",
-            },
-            quantity: {
-              type: "integer",
-              example: 2,
-            },
-            totalPrice: {
-              type: "number",
-              example: 500,
-            },
-            status: {
-              type: "string",
-              example: "confirmed",
-            },
+       Booking: {
+  type: "object",
+  properties: {
+    _id: {
+      type: "string",
+      example: "685b11112222333344445555",
+    },
+
+    tickets: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          ticketType: {
+            type: "string",
+            enum: ["general", "vip"],
+            example: "general",
+          },
+          quantity: {
+            type: "integer",
+            example: 2,
+          },
+          price: {
+            type: "number",
+            example: 300,
+          },
+          subtotal: {
+            type: "number",
+            example: 600,
           },
         },
+      },
+    },
 
-  
+    totalPrice: {
+      type: "number",
+      example: 1300,
+    },
+
+    paymentStatus: {
+      type: "string",
+      example: "pending",
+    },
+
+    status: {
+      type: "string",
+      example: "confirmed",
+    },
+  },
+},
 
 Review: {
   type: "object",
