@@ -17,34 +17,27 @@ export default function SearchEvent({
   
     return(
         <>
-            <div className="flex  gap-20 mb-8">
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-20 mb-8">
+                <div className="flex-1">
+                    <Search
+                        placeholder="Seach Event By Title..."
+                        allowClear
+                        enterButton="Search"
+                        size="large"
+                        onSearch={runsearch}
+                        className="event-search w-full"
+                        onChange={(event)=>runsearch(event.target.value)}
+                    />
+                </div>
 
-                <Search
-                    placeholder="Seach Event By Title..."
-                    allowClear
-                    enterButton="Search"
-                    size="large"
-                    onSearch={runsearch}
-                    className="event-search"
-                    onChange={(event)=>runsearch(event.target.value)}
-                />
-
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                     <FilterOutlined style={{fontSize:"25px" ,color:"gray"}} />
-                    {/* <Select
-                        defaultValue="All status"
-                        style={{ width: 150 ,textAlign:"center",fontSize:"17px" ,fontWeight:"480"}}
-                        onChange={handleChange}
-                        options={[
-                            { value: 'pending', label: 'Pending' },
-                            { value: 'approved', label: 'Approved' },
-                            { value: 'ongoing', label: 'Ongoing'},
-                            { value: 'completed', label: 'Completed' },
-                        ]}
-                    /> */}
                     <Select
                         defaultValue=""
-                        style={{ width: 150 }}
+                        className="w-full lg:w-[150px]"
+                        size="large"
+
+                        // style={{ width: 150 }}
                         onChange={runStatus}
                         options={[
                             { value: "", label: "All Status" },

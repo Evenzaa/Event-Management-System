@@ -30,10 +30,13 @@ import DashHome from '../pages/organizer/dashHome';
 import Events from '../pages/organizer/events/events';
 import Booking from '../pages/organizer/booking/booking';
 import Review from '../pages/organizer/review/review';
+import Settings from '../pages/organizer/Settings/settings';
+import OrganizerDetails from '../pages/organizer/organizerdetails';
 
 // // ErrorPage
 import ErrorPage from '../pages/shared/errorpage';
-import Settings from '../pages/organizer/Settings/settings';
+
+
 
 
 
@@ -72,8 +75,13 @@ export default function AppRoutes() {
           <Route path="booking" element={<Booking />} />
           <Route path="review" element={<Review />} />
           <Route path="setting" element={<Settings />} />
-
+          <Route path="setting" element={<Settings />} />
         </Route>
+
+
+      {/* organizer-details */}
+        <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
+
 
       {/* error-page */}
       <Route path="*" element={<ErrorPage/>} />

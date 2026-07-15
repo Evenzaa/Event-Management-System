@@ -104,36 +104,36 @@ export default function BookingContainer({eventId,databooking,isLoading,isError,
                             .map((td) => (
                                     
                                 <tr key={td._id} className="text-center">
-                                    <Cell ui={"p-3"}>
+                                    <Cell ui={"p-2"}>
                                         
                                         <span className="text-sm font-semibold mb-0.5 whitespace-nowrap max-w-[180px]  truncate"> {td.ticketNumber}</span> 
                                            
                                        
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <span className="text-sm font-medium  whitespace-nowrap"> {td.userId.name}</span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <span className="text-sm font-medium  whitespace-nowrap"> {td.quantity}</span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <span className="text-sm font-medium  whitespace-nowrap"> {td.totalPrice} $</span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatus(td.paymentStatus).className}  whitespace-nowrap`}
                                             >
                                                 {getStatus(td.paymentStatus).text}
                                         </span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatus(td.status).className}  whitespace-nowrap`}
                                             >
                                                 {getStatus(td.status).text}
                                         </span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <div className="flex flex-col">
                                             <span className="font-semibold text-sm mb-0.5  whitespace-nowrap">{new Date(td.createdAt).toLocaleDateString()}</span>
                                             <span className="text-xs text-[#6b7280]  whitespace-nowrap">
@@ -144,7 +144,7 @@ export default function BookingContainer({eventId,databooking,isLoading,isError,
                                             </span>
                                             </div>                                                                
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-2"}>
                                         <EyeOutlined  style={{marginRight:"7px", color:"#3E7FF6", cursor:"pointer"}}
                                             onClick={()=>{
                                                  handleOpen(td)

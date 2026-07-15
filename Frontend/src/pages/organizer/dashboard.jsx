@@ -1,10 +1,7 @@
-import { Outlet } from "react-router-dom";
 import Container from "../../components/common/Container";
-import Footer from "../../layouts/Footer";
 import Aside from "../../layouts/organizerdash/aside";
 import DashContent from "../../layouts/organizerdash/dashcontent";
 import { useState } from "react";
-
 import NavOrganizerDash from "../../layouts/organizerdash/NavOrganizerDah";
 import UserContext from "../../store/context";
 import AddEditPage from "../../layouts/organizerdash/addeditpage";

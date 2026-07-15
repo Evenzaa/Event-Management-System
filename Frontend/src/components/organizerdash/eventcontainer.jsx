@@ -167,7 +167,7 @@ export default function EventContainer(){
                                                     items: items(td),
                                                     onClick: ({ key }) => {
                                                     if (key === "view") {
-                                                        console.log("view");
+                                                         navigate(`/organizerdetails/${td._id}`);
                                                     }
 
                                                     if (key === "delete") {
