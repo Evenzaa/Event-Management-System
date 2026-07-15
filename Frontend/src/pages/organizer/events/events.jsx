@@ -1,32 +1,30 @@
-import { DeleteOutlined, EditOutlined, EllipsisOutlined, EnvironmentOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, MoreOutlined, PlusOutlined, StarFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EnvironmentOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import ButtonDash from "../../../components/organizerdash/button";
 import MainTitle from "../../../components/organizerdash/maintitle";
 import TableEvent from "../../../components/organizerdash/tableevents";
 import { useDeleteEventMutation, useGetEventsQuery, useLazyGetEventSearchQuery } from "../../../services/organizerEventApi";
 import Cell from "../../../components/organizerdash/cell";
 import img from"../../../assets/culinary_expo_banner.jpg"
-import { Button, Dropdown, Modal, Spin } from "antd";
+import {  Dropdown, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
-import AddEditPage from "../../../layouts/organizerdash/addeditpage";
-
 import { useContext } from "react";
 import UserContext from "../../../store/context";
 import SearchEvent from "../../../components/organizerdash/eventsearch";
-// import eventaction from "../../../components/organizerdash/eventaction";
 import { useNavigate } from "react-router-dom";
+
 
 
 
 export default function Events(){
     const navigate=useNavigate()
     const {
-  showModal,
-  setShowModal,
-  modeModal,
-  setModeModal,
-  editId,
-  setEditId,
-} = useContext(UserContext);
+    showModal,
+    setShowModal,
+    modeModal,
+    setModeModal,
+    editId,
+    setEditId,
+    } = useContext(UserContext);
 
     const[deleteEvent]=useDeleteEventMutation()
      const[displayData,setDisplayData]=useState(null)
@@ -236,7 +234,7 @@ export default function Events(){
                                                     items: items(td),
                                                     onClick: ({ key }) => {
                                                     if (key === "view") {
-                                                        console.log("view");
+                                                        navigate(`/organizerdetails/${td._id}`);
                                                     }
 
                                                     if (key === "edit") {

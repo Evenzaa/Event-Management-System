@@ -66,6 +66,7 @@ export const OrganizerEventApi=createApi(
 export const {
     useGetEventsQuery,
     useLazyGetEventsbyIdQuery,
+    useGetEventsbyIdQuery,
     useUpdateEventsMutation,
     useCreateEventsMutation,
     useDeleteEventMutation,
