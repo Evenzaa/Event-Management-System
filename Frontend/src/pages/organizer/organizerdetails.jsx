@@ -71,7 +71,7 @@ export default function OrganizerDetails (){
                                             tags={data?.data?.tags}
                                             date={data?.data?.date}
                                             location={data?.data?.location}
-                                            organizer={data?.data?.organizerId}
+                                            organizer={data?.data?.organizerId.name}
                                         />
                                         <CountdownTimer targetDate={data?.data?.date} />
                                         <AboutSection content={data?.data?.description} />

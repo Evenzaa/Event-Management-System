@@ -10,7 +10,7 @@ import EventContainer from "../../components/organizerdash/eventcontainer";
 
 
 export default function DashHome(){
-     const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
     const name = user?.name;
 
      const{data,isLoading,isSuccess,isError}=useDashboardQuery()
