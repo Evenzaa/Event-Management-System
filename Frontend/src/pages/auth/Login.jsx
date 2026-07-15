@@ -1,19 +1,12 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
 import Button from "../../components/common/Button";
 import { authService } from "../../services/authService";
-import { Navigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("authToken");
-
-  if (token) {
-    return <Navigate to="/" replace />;
-  }
-
+  const [searchParams] = useSearchParams();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -35,14 +28,26 @@ export default function Login() {
     setError("");
     setNeedsVerification(false);
     setResendMessage("");
+
     try {
       const res = await authService.login(formData.email, formData.password);
       localStorage.setItem("authToken", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
-      const redirectPath =
-      res.user.role === "organizer" ? "/organizer-dashboard" : "/";
 
-    navigate(redirectPath, { replace: true });
+      // ✅ Role-based redirect after login:
+      //   admin      → /admin
+      //   organizer  → /organizer-dashboard
+      //   ?from=     → the protected page they were trying to visit
+      //   user       → / (home)
+      const role = res.user?.role;
+      if (role === "admin") {
+        navigate("/admin", { replace: true });
+      } else if (role === "organizer") {
+        navigate("/organizer-dashboard", { replace: true });
+      } else {
+        const from = searchParams.get("from") || "/";
+        navigate(from, { replace: true });
+      }
     } catch (err) {
       const msg = err.message || "Login failed";
       setError(msg);
@@ -57,7 +62,7 @@ export default function Login() {
     setResendMessage("");
     try {
       const res = await authService.forgotPassword(formData.email);
-      setResendMessage(res.message || "Verification email sent!");
+      setResendMessage(res.message || "Verification email sent! Check your inbox.");
     } catch {
       setResendMessage("Failed to resend. Please try again.");
     } finally {
@@ -71,7 +76,12 @@ export default function Login() {
         <h1 className="text-4xl font-bold text-gray-900">Welcome back</h1>
         <p className="mt-2 mb-8 text-gray-500 italic">Sign in to your account to continue</p>
 
-        {/* Verification warning */}
+        {error && !needsVerification && (
+          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         {needsVerification && (
           <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm">
             <p className="font-semibold text-amber-800">Please verify your email first</p>
@@ -90,20 +100,12 @@ export default function Login() {
           </div>
         )}
 
-        {error && !needsVerification && (
-          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-            {error}
-          </div>
-        )}
-
-        {/* Google */}
         <button type="button" onClick={() => authService.googleLogin()}
           className="mb-6 flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white py-3.5 font-medium text-gray-700 transition hover:bg-gray-50">
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5" />
           Google
         </button>
 
-        {/* Divider */}
         <div className="relative mb-6">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200" />
@@ -114,17 +116,13 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email */}
           <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-700">Email address</label>
-            <input
-              type="email" name="email" value={formData.email}
+            <input type="email" name="email" value={formData.email}
               onChange={handleChange} placeholder="you@example.com" required
-              className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100"
-            />
+              className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100" />
           </div>
 
-          {/* Password with show/hide */}
           <div>
             <div className="mb-1.5 flex items-center justify-between">
               <label className="text-sm font-medium text-gray-700">Password</label>
@@ -133,11 +131,10 @@ export default function Login() {
               </Link>
             </div>
             <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"} name="password" value={formData.password}
-                onChange={handleChange} placeholder="Enter your password" required
-                className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 pr-12 text-sm outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100"
-              />
+              <input type={showPassword ? "text" : "password"} name="password"
+                value={formData.password} onChange={handleChange}
+                placeholder="Enter your password" required
+                className="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 pr-12 text-sm outline-none transition focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100" />
               <button type="button" onClick={() => setShowPassword((s) => !s)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer">
                 {showPassword ? (
@@ -154,9 +151,9 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Remember me */}
           <label className="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}
+            <input type="checkbox" checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
               className="h-4 w-4 rounded accent-violet-600 cursor-pointer" />
             <span className="text-sm text-gray-600">Remember me for 30 days</span>
           </label>
@@ -167,7 +164,9 @@ export default function Login() {
 
           <p className="text-center text-sm text-gray-500 italic pt-1">
             Don't have an account?{" "}
-            <Link to="/signup" className="font-semibold text-violet-600 not-italic hover:underline">Sign up free</Link>
+            <Link to="/signup" className="font-semibold text-violet-600 not-italic hover:underline">
+              Sign up free
+            </Link>
           </p>
         </form>
       </div>
