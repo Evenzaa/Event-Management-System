@@ -3,9 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
 import Button from "../../components/common/Button";
 import { authService } from "../../services/authService";
+import { Navigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("authToken");
+
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
+
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +39,10 @@ export default function Login() {
       const res = await authService.login(formData.email, formData.password);
       localStorage.setItem("authToken", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
-      navigate("/");
+      const redirectPath =
+      res.user.role === "organizer" ? "/organizer-dashboard" : "/";
+
+    navigate(redirectPath, { replace: true });
     } catch (err) {
       const msg = err.message || "Login failed";
       setError(msg);
