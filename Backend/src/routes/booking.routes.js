@@ -59,6 +59,15 @@ const router = express.Router();
  *                 enum:
  *                   - card
  *                 example: card
+ *           example:
+ *             eventId: 685a7d4d0a123456789abcd1
+ *             tickets:
+ *               - ticketType: general
+ *                 quantity: 2
+ *               - ticketType: vip
+ *                 quantity: 1
+ *             couponCode: SUMMER20
+ *             paymentMethod: card
  *     responses:
  *       201:
  *         description: Booking created successfully.
@@ -69,6 +78,7 @@ const router = express.Router();
  *               message: Booking created successfully
  *               data:
  *                 _id: 6860d5f0a123456789abcd12
+ *                 userId: 685a7d4d0a123456789abcd2
  *                 eventId: 685a7d4d0a123456789abcd1
  *                 tickets:
  *                   - ticketType: general
@@ -80,16 +90,42 @@ const router = express.Router();
  *                     price: 700
  *                     subtotal: 700
  *                 totalPrice: 1300
+ *                 couponCode: SUMMER20
+ *                 paymentMethod: card
  *                 paymentStatus: pending
+ *                 ticketNumber: TKT-1753456789012
+ *                 qrCode: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...
  *                 status: confirmed
+ *                 createdAt: "2026-07-16T18:30:00.000Z"
+ *                 updatedAt: "2026-07-16T18:30:00.000Z"
  *       400:
- *         description: Invalid request, invalid coupon or not enough seats.
+ *         description: Invalid request, invalid coupon, invalid ticket type or not enough seats.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not enough vip seats
  *       401:
  *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
  *       404:
  *         description: Event not found.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Event not found
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Internal Server Error
  */
 router.post(
   "/",
@@ -117,6 +153,12 @@ router.post(
  *               count: 1
  *               data:
  *                 - _id: 6860d5f0a123456789abcd12
+ *                   userId: 685a7d4d0a123456789abcd2
+ *                   eventId:
+ *                     _id: 685a7d4d0a123456789abcd1
+ *                     title: Music Event
+ *                     location: Cairo
+ *                     date: "2026-08-01T18:00:00.000Z"
  *                   tickets:
  *                     - ticketType: general
  *                       quantity: 2
@@ -127,18 +169,34 @@ router.post(
  *                       price: 700
  *                       subtotal: 700
  *                   totalPrice: 1300
+ *                   couponCode: SUMMER20
+ *                   paymentMethod: card
+ *                   paymentStatus: pending
+ *                   ticketNumber: TKT-1753456789012
+ *                   qrCode: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...
  *                   status: confirmed
+ *                   createdAt: "2026-07-16T18:30:00.000Z"
+ *                   updatedAt: "2026-07-16T18:30:00.000Z"
  *       401:
  *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
  *       500:
  *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Internal Server Error
  */
 router.get(
   "/my",
   protect,
  getMyBookings
 );
-
 /**
  * @swagger
  * /api/bookings/{id}:
