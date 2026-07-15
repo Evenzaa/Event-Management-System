@@ -28,6 +28,8 @@ import DashHome  from '../pages/organizer/dashHome';
 import Events    from '../pages/organizer/events/events';
 import Booking   from '../pages/organizer/booking/booking';
 import Review    from '../pages/organizer/review/review';
+import Settings from '../pages/organizer/Settings/settings';
+import OrganizerDetails from '../pages/organizer/organizerdetails';
 
 // Admin
 import AdminDashboard  from '../pages/admin/AdminDashboard';
@@ -38,6 +40,7 @@ import AdminModeration from '../pages/admin/AdminModeration';
 
 // Error
 import ErrorPage from '../pages/shared/errorpage';
+
 
 export default function AppRoutes() {
   return (
@@ -69,6 +72,7 @@ export default function AppRoutes() {
       <Route path="/my-bookings" element={
         <ProtectedRoute><MyBookings /></ProtectedRoute>
       } />
+      
 
       {/* ── Organizer (organizer role only) ── */}
       <Route path="/organizer-dashboard" element={
@@ -78,7 +82,12 @@ export default function AppRoutes() {
         <Route path="events"  element={<Events />} />
         <Route path="booking" element={<Booking />} />
         <Route path="review"  element={<Review />} />
+        <Route path="setting" element={<Settings />} />
       </Route>
+      
+      {/* organizer-details */}
+      <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
+
 
       {/* ── Admin (admin role only) ── */}
       <Route path="/admin" element={
@@ -96,6 +105,11 @@ export default function AppRoutes() {
       <Route path="/admin/moderation" element={
         <ProtectedRoute requiredRole="admin"><AdminModeration /></ProtectedRoute>
       } />
+
+{/* 
+      <Route path="/book/:eventId/seats" element={<SeatSelection />} />
+      <Route path="/checkout" element={<BookingCheckout />} />
+      <Route path="/confirmation" element={<PaymentConfirmation />} /> */}
 
       {/* ── 404 ── */}
       <Route path="*" element={<ErrorPage />} />

@@ -28,13 +28,7 @@ export const AsideLinks=[
     },
      {
         id:5,
-        to:"mm",
-        icon:<TagOutlined style={{marginRight:"13px"}}/>,
-        label:"Coupons"
-    },
-     {
-        id:6,
-        to:"mm",
+        to:"setting",
         icon:<SettingOutlined style={{marginRight:"13px"}} />,
         label:"Settings"
     },

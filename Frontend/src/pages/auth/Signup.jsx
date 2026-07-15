@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
 import Button from "../../components/common/Button";
 import { authService } from "../../services/authService";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("authToken");
+
+if (token) {
+  return <Navigate to="/" replace />;
+}
 
   const [formData, setFormData] = useState({
     firstName: "", lastName: "", email: "", password: "",

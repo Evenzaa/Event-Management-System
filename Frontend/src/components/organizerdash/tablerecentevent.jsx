@@ -29,7 +29,7 @@ export default function TableRecentEvent({children}){
                                     key={th.id}
                                     className="
                                    
-                                    p-5 
+                                    p-4
                                     bg-[#F8F7FF]
                                     text-left
                                     text-sm font-medium                   

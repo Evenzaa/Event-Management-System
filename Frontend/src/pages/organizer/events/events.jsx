@@ -1,27 +1,30 @@
-import { DeleteOutlined, EditOutlined, EnvironmentOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, PlusOutlined, StarFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EnvironmentOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import ButtonDash from "../../../components/organizerdash/button";
 import MainTitle from "../../../components/organizerdash/maintitle";
 import TableEvent from "../../../components/organizerdash/tableevents";
 import { useDeleteEventMutation, useGetEventsQuery, useLazyGetEventSearchQuery } from "../../../services/organizerEventApi";
 import Cell from "../../../components/organizerdash/cell";
 import img from"../../../assets/culinary_expo_banner.jpg"
-import { Modal, Spin } from "antd";
+import {  Dropdown, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
-import AddEditPage from "../../../layouts/organizerdash/addeditpage";
-
 import { useContext } from "react";
 import UserContext from "../../../store/context";
 import SearchEvent from "../../../components/organizerdash/eventsearch";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 export default function Events(){
+    const navigate=useNavigate()
     const {
-  showModal,
-  setShowModal,
-  modeModal,
-  setModeModal,
-  editId,
-  setEditId,
-} = useContext(UserContext);
+    showModal,
+    setShowModal,
+    modeModal,
+    setModeModal,
+    editId,
+    setEditId,
+    } = useContext(UserContext);
 
     const[deleteEvent]=useDeleteEventMutation()
      const[displayData,setDisplayData]=useState(null)
@@ -131,6 +134,25 @@ export default function Events(){
             }
         };
 
+        const items = (td)=>[
+        {
+            label: 'View',
+            key: 'view',
+            icon: <EyeOutlined style={{marginRight:"4px", color:"#3E7FF6", cursor:"pointer",fontSize:"18px",marginRight:"10px"}} />
+        },
+        {
+            label: 'Edit',
+            key: 'edit',
+            icon: <EditOutlined style={{marginRight:"4px", color:"#10B981", cursor:"pointer",fontSize:"18px",marginRight:"10px"}}/>,
+        },
+        {
+            label: 'Delete',
+            key: 'delete',
+            icon: <DeleteOutlined style={{color:"#EF4444",cursor:"pointer",fontSize:"18px",marginRight:"10px",}} />,
+            // danger: true,
+        },
+        ];
+
     return(
         <>
             <div className="w-full">
@@ -208,15 +230,26 @@ export default function Events(){
                                         </span>
                                     </Cell>
                                     <Cell>
-                                        <EyeOutlined  style={{marginRight:"4px", color:"#3E7FF6", cursor:"pointer"}}
-                                         
-                                        />
-                                        <EditOutlined style={{marginRight:"4px", color:"#10B981", cursor:"pointer"}}
-                                            onClick={()=>editEvent(td._id)} 
-                                            
-                                         />
-                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}
-                                        onClick={()=>delEvent(td._id)}/>
+                                            <Dropdown  menu={{
+                                                    items: items(td),
+                                                    onClick: ({ key }) => {
+                                                    if (key === "view") {
+                                                        navigate(`/organizerdetails/${td._id}`);
+                                                    }
+
+                                                    if (key === "edit") {
+                                                        editEvent(td._id);
+                                                    }
+
+                                                    if (key === "delete") {
+                                                        delEvent(td._id);
+                                                    }
+                                                    },
+                                                }}
+                                                trigger={["click"]} placement="bottomLeft"
+                                            >
+                                                <MoreOutlined  style={{cursor:"pointer"}}/>
+                                            </Dropdown>
                                     </Cell> 
                                 </tr>
                             ))): (

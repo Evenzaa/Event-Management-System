@@ -117,12 +117,13 @@ export const getOrganizerEvents = async (req, res, next) => {
     next(error);
   }
 };
+
 export const getOrganizerEventById = async (req, res, next) => {
   try {
     const event = await Event.findOne({
       _id: req.params.id,
       organizerId: req.user.id,
-    });
+    }).populate("organizerId", "name email");
 
     if (!event) {
       return res.status(404).json({

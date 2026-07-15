@@ -40,8 +40,8 @@ export default function Booking(){
                 <div className="w-full bg-white border border-[#E5E7EB] rounded-xl p-6 mt-7 flex flex-col sm:flex-row sm:items-center gap-4">
                     <span className="font-medium">Select Event</span>
                     <Select
-                        className="w-full sm:w-[250px]"
-                        showSearch
+                        className="w-full sm:w-[250px] cursor-pointer"
+                        // showSearch
                         optionFilterProp="label"
                         onSearch={onSearch}
                         placeholder={ 

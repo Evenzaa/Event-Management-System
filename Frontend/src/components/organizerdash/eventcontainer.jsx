@@ -1,11 +1,11 @@
-import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, RightOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ExclamationCircleFilled, EyeOutlined, InboxOutlined, MoreOutlined, RightOutlined } from "@ant-design/icons";
 import MainTitle from "./maintitle";
 import TableRecentEvent from "./tablerecentevent";
 import { useDeleteEventMutation, useGetEventsQuery } from "../../services/organizerEventApi";
 import img from"../../assets/culinary_expo_banner.jpg"
 import Cell from "./cell";
 import {  useNavigate } from "react-router-dom";
-import { Modal } from "antd";
+import { Dropdown, Modal } from "antd";
 
 export default function EventContainer(){
       const navigate = useNavigate();
@@ -80,6 +80,20 @@ export default function EventContainer(){
             },
         });
         };
+
+        const items = (td)=>[
+        {
+            label: 'View',
+            key: 'view',
+            icon: <EyeOutlined style={{marginRight:"4px", color:"#3E7FF6", cursor:"pointer",fontSize:"18px",marginRight:"10px"}} />
+        },
+        {
+            label: 'Delete',
+            key: 'delete',
+            icon: <DeleteOutlined style={{color:"#EF4444",cursor:"pointer",fontSize:"18px",marginRight:"10px",}} />,
+            // danger: true,
+        },
+        ];
     
     return(
         <>
@@ -106,27 +120,29 @@ export default function EventContainer(){
                                  recentEvents.map((td) => (
                             
                                 <tr key={td._id} className="text-center">
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-3"}>
+                                        
                                         <div className="flex  items-center ">
                                            <img
                                                 src={td.images[0]}
                                                 alt={td.title}
-                                                className="w-12 h-12 rounded-lg object-cover mr-4 "
+                                                className="w-12 h-12 rounded-lg object-cover mr-3 "
                                                 onError={(e) => {
                                                     e.currentTarget.src = img;
                                                 }}
                                             />
                                             <div className="flex flex-col ">
-                                                <span className="text-sm font-semibold mb-0.5 whitespace-nowrap max-w-[180px]  truncate"> {td.title}</span>
-                                                <span className="text-xs ml-3 text-[#6b7280]  whitespace-nowrap max-w-[180px] truncate"> {td.description}</span>
+                                                <span className="text-sm font-semibold mb-0.5 ml-2 whitespace-nowrap max-w-[180px]  truncate"> {td.title}</span>
+                                                <span className="text-xs ml-2 text-[#6b7280]  whitespace-nowrap max-w-[180px] truncate"> {td.description}</span>
                                             </div>
                                            
                                         </div>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+
+                                    <Cell ui={"p-3"}>
                                         <span className="text-sm font-medium  whitespace-nowrap"> {td.category}</span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-3"}>
                                         <div className="flex flex-col">
                                             <span className="font-semibold text-sm mb-0.5  whitespace-nowrap">{new Date(td.date).toLocaleDateString()}</span>
                                             <span className="text-xs text-[#6b7280]  whitespace-nowrap">
@@ -137,20 +153,33 @@ export default function EventContainer(){
                                             </span>
                                             </div>                                                                
                                     </Cell>
-                                    <Cell ui={"p-4"}><span className="font-medium  whitespace-nowrap">{td.price} $</span></Cell>
-                                    <Cell ui={"p-4"}><span className="font-medium  whitespace-nowrap">{td.availableSeats}</span></Cell>
+                                    <Cell ui={"p-3"}><span className="font-medium  whitespace-nowrap">{td.price} $</span></Cell>
+                                    <Cell ui={"p-3"}><span className="font-medium  whitespace-nowrap">{td.availableSeats}</span></Cell>
                                     
-                                    <Cell ui={"p-4"}>
+                                    <Cell ui={"p-3"}>
                                         <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatus(td.status).className}  whitespace-nowrap`}
                                             >
                                                 {getStatus(td.status).text}
                                         </span>
                                     </Cell>
-                                    <Cell ui={"p-4"}>
-                                        <EyeOutlined  style={{marginRight:"7px", color:"#3E7FF6", cursor:"pointer"}}/>
-                                        <DeleteOutlined style={{color:"#EF4444",cursor:"pointer"}}
-                                        onClick={()=>delEvent(td._id)}/>
+                                    <Cell ui={"p-3"}>
+                                        <Dropdown  menu={{
+                                                    items: items(td),
+                                                    onClick: ({ key }) => {
+                                                    if (key === "view") {
+                                                         navigate(`/organizerdetails/${td._id}`);
+                                                    }
+
+                                                    if (key === "delete") {
+                                                        delEvent(td._id);
+                                                    }
+                                                    },
+                                                }}
+                                                trigger={["click"]} placement="bottomLeft"
+                                            >
+                                                <MoreOutlined  style={{cursor:"pointer"}}/>
+                                            </Dropdown>
                                     </Cell>
 
 
