@@ -1,10 +1,12 @@
 import Badge from '../../../components/common/Badge';
 import { useNavigate } from 'react-router-dom';
+import { addFavorite } from '../../../services/api';
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '';
 
   const dateObj = new Date(dateStr);
+
   const options = {
     weekday: 'long',
     year: 'numeric',
@@ -25,6 +27,7 @@ const formatDate = (dateStr) => {
 
   return `${formattedDate} - ${timeStr}`;
 };
+
 
 const getToneForTag = (tag) => {
   const normalized = tag.toLowerCase();
@@ -57,26 +60,47 @@ const getToneForTag = (tag) => {
 };
 
 
-export default function EventInfo({ title, tags, date, location, organizer }) {
+export default function EventInfo({
+  eventId,
+  title,
+  tags,
+  date,
+  location,
+  organizer
+}) {
+
   const navigate = useNavigate();
+
+
+  const handleAddFavorite = async () => {
+    try {
+      await addFavorite(eventId);
+      navigate('/favorites');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   return (
     <div className="mb-8">
 
+
       {/* Badges */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {tags?.map((tag, idx) => {
-          let tone = getToneForTag(tag);
-
-          return (
-            <Badge key={idx} tone={tone}>
-              {tag}
-            </Badge>
-          );
-        })}
+        {tags?.map((tag, idx) => (
+          <Badge 
+            key={idx}
+            tone={getToneForTag(tag)}
+          >
+            {tag}
+          </Badge>
+        ))}
       </div>
 
 
-      {/* Favorite Button */}
+
+      {/* Title + Favorite Button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
 
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
@@ -85,7 +109,7 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
 
 
         <button
-          onClick={() => navigate('/favorites')}
+          onClick={handleAddFavorite}
           className="
             flex items-center justify-center gap-2
             px-5 py-2.5
@@ -99,31 +123,21 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
             whitespace-nowrap
           "
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-
-          Add to Favorites
+          ❤️ Add to Favorites
         </button>
 
       </div>
 
 
+
+
       {/* Info Rows */}
       <div className="flex flex-col md:flex-row flex-wrap md:items-center gap-4 md:gap-6 text-sm text-slate-600 font-medium">
 
+
         {/* Date */}
         <div className="flex items-center gap-2">
+
           <svg
             className="w-5 h-5 text-violet-600"
             fill="none"
@@ -139,11 +153,14 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
           </svg>
 
           <span>{formatDate(date)}</span>
+
         </div>
+
 
 
         {/* Location */}
         <div className="flex items-center gap-2">
+
           <svg
             className="w-5 h-5 text-violet-600"
             fill="none"
@@ -163,14 +180,18 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
               strokeWidth={2}
               d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
             />
+
           </svg>
 
           <span>{location}</span>
+
         </div>
+
 
 
         {/* Organizer */}
         <div className="flex items-center gap-2">
+
           <svg
             className="w-5 h-5 text-violet-600"
             fill="none"
@@ -183,7 +204,9 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
               strokeWidth={2}
               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
             />
+
           </svg>
+
 
           <span>
             Organized by{' '}
@@ -191,9 +214,12 @@ export default function EventInfo({ title, tags, date, location, organizer }) {
               {organizer}
             </span>
           </span>
+
         </div>
 
+
       </div>
+
 
     </div>
   );
