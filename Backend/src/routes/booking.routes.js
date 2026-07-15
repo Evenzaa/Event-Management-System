@@ -18,7 +18,7 @@ const router = express.Router();
  *   post:
  *     tags: [Bookings]
  *     summary: Create a new booking
- *     description: Create a booking for an event with optional coupon and payment method.
+ *     description: Book one or more ticket types (General / VIP) in a single booking.
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -29,19 +29,35 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - eventId
- *               - quantity
+ *               - tickets
  *             properties:
  *               eventId:
  *                 type: string
  *                 example: 685a7d4d0a123456789abcd1
- *               quantity:
- *                 type: integer
- *                 example: 2
+ *               tickets:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - ticketType
+ *                     - quantity
+ *                   properties:
+ *                     ticketType:
+ *                       type: string
+ *                       enum:
+ *                         - general
+ *                         - vip
+ *                       example: general
+ *                     quantity:
+ *                       type: integer
+ *                       example: 2
  *               couponCode:
  *                 type: string
  *                 example: SUMMER20
  *               paymentMethod:
  *                 type: string
+ *                 enum:
+ *                   - card
  *                 example: card
  *     responses:
  *       201:
@@ -51,32 +67,27 @@ const router = express.Router();
  *             example:
  *               success: true
  *               message: Booking created successfully
- *               booking:
+ *               data:
  *                 _id: 6860d5f0a123456789abcd12
- *                 quantity: 2
- *                 totalPrice: 500
+ *                 eventId: 685a7d4d0a123456789abcd1
+ *                 tickets:
+ *                   - ticketType: general
+ *                     quantity: 2
+ *                     price: 300
+ *                     subtotal: 600
+ *                   - ticketType: vip
+ *                     quantity: 1
+ *                     price: 700
+ *                     subtotal: 700
+ *                 totalPrice: 1300
+ *                 paymentStatus: pending
  *                 status: confirmed
  *       400:
- *         description: Invalid coupon or not enough available seats.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Not enough available seats
+ *         description: Invalid request, invalid coupon or not enough seats.
  *       401:
  *         description: Unauthorized.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Not authorized
  *       404:
  *         description: Event not found.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Event not found
  *       500:
  *         description: Internal server error.
  */
@@ -103,24 +114,29 @@ router.post(
  *           application/json:
  *             example:
  *               success: true
- *               bookings:
+ *               count: 1
+ *               data:
  *                 - _id: 6860d5f0a123456789abcd12
- *                   quantity: 2
+ *                   tickets:
+ *                     - ticketType: general
+ *                       quantity: 2
+ *                       price: 300
+ *                       subtotal: 600
+ *                     - ticketType: vip
+ *                       quantity: 1
+ *                       price: 700
+ *                       subtotal: 700
+ *                   totalPrice: 1300
  *                   status: confirmed
  *       401:
  *         description: Unauthorized.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Not authorized
  *       500:
  *         description: Internal server error.
  */
 router.get(
   "/my",
   protect,
-  getMyBookings
+ getMyBookings
 );
 
 /**
@@ -148,18 +164,8 @@ router.get(
  *               message: Booking cancelled successfully
  *       401:
  *         description: Unauthorized.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Not authorized
  *       404:
  *         description: Booking not found.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Booking not found
  *       500:
  *         description: Internal server error.
  */
