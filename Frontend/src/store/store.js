@@ -5,6 +5,7 @@ import { OrganizerEventApi } from "../services/organizerEventApi";
 import { OrganizerImgApi } from "../services/organizerImgApi";
 import { OrganizerReviewApi } from "../services/organizerReviewApi";
 import { OrganizerBookingApi } from "../services/organizerBookingApi";
+import { ConfirmBookingApi } from "../services/confirmBookingApi";
 
 export const store=configureStore(
     {
@@ -14,6 +15,8 @@ export const store=configureStore(
            [OrganizerImgApi.reducerPath]:OrganizerImgApi.reducer,
            [OrganizerReviewApi.reducerPath]:OrganizerReviewApi.reducer,
            [OrganizerBookingApi.reducerPath]:OrganizerBookingApi.reducer,
+           [ConfirmBookingApi.reducerPath]:ConfirmBookingApi.reducer,
+
 
 
 
@@ -26,6 +29,8 @@ export const store=configureStore(
                     OrganizerImgApi.middleware,
                     OrganizerReviewApi.middleware,
                     OrganizerBookingApi.middleware,
+                    ConfirmBookingApi.middleware,
+
 
 
 

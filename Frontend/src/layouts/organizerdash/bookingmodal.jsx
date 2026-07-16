@@ -9,6 +9,7 @@ export default function BookingModal({show,changeShow,databooking}){
     
 
     const getStatus = (status) => {
+        
         if (!status) {
             return {
             text: "-",

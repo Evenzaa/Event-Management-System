@@ -136,14 +136,14 @@ export default function OrganizerDetails (){
                                                     title={"Created At"}
                                                     info= {   <>
                                                                 <span className="font-semibold text-sm mb-0.5 whitespace-nowrap">
-                                                                {new Date(data?.data?.createdAt).toLocaleDateString()}
+                                                                    {new Date(data?.data?.createdAt).toLocaleDateString()}
                                                                 </span>
 
                                                                 <span className="text-sm font-medium ml-2 text-[#6b7280] whitespace-nowrap">
-                                                                {new Date(data?.data?.createdAt).toLocaleTimeString("en-US", {
-                                                                    hour: "2-digit",
-                                                                    minute: "2-digit",
-                                                                })}
+                                                                    {new Date(data?.data?.createdAt).toLocaleTimeString("en-US", {
+                                                                        hour: "2-digit",
+                                                                        minute: "2-digit",
+                                                                    })}
                                                                 </span>
                                                         </>}
                                                     icon={ <ScheduleOutlined   style={{fontSize:"20px",color:"#793EED"}}/>}

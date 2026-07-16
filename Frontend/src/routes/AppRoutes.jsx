@@ -21,6 +21,7 @@ import GoogleCallback from '../pages/auth/GoogleCallback';
 import EditProfile from '../pages/user/EditProfile';
 import Favorites   from '../pages/user/Favorites';
 import MyBookings  from '../pages/user/MyBookings';
+import ConfirmedBooking from '../pages/confirmedbooking/confirmedbooking';
 
 // Organizer
 import Dashboard from '../pages/organizer/dashboard';
@@ -40,6 +41,7 @@ import AdminModeration from '../pages/admin/AdminModeration';
 
 // Error
 import ErrorPage from '../pages/shared/errorpage';
+
 
 
 export default function AppRoutes() {
@@ -106,6 +108,10 @@ export default function AppRoutes() {
         <ProtectedRoute requiredRole="admin"><AdminModeration /></ProtectedRoute>
       } />
 
+
+
+      {/* user booking */}
+      <Route path="/confirmed-booking" element={<ConfirmedBooking />} /> 
 {/* 
       <Route path="/book/:eventId/seats" element={<SeatSelection />} />
       <Route path="/checkout" element={<BookingCheckout />} />
