@@ -51,16 +51,26 @@ const bookingSchema = new mongoose.Schema(
     },
 
     paymentMethod: {
-      type: String,
-      enum: ["card"],
-      default: "card",
-    },
+  type: String,
+  enum: [
+    "card",
+    "wallet",
+    "bank_transfer",
+    "paypal"
+  ],
+  default: "card",
+},
 
-    paymentStatus: {
-      type: String,
-      enum: ["pending", "paid"],
-      default: "pending",
-    },
+paymentStatus: {
+  type: String,
+  enum: [
+ "pending",
+   "paid",
+   "failed",
+   "refunded"
+  ],
+  default: "pending",
+},
 
     ticketNumber: {
       type: String,
@@ -72,7 +82,7 @@ const bookingSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["confirmed", "cancelled"],
+      enum: ["confirmed", "cancelled","completed"],
       default: "confirmed",
     },
   },
