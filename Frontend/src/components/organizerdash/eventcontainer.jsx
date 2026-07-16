@@ -153,8 +153,7 @@ export default function EventContainer(){
                                             </span>
                                             </div>                                                                
                                     </Cell>
-                                    <Cell ui={"p-3"}><span className="font-medium  whitespace-nowrap">{td.price} $</span></Cell>
-                                    <Cell ui={"p-3"}><span className="font-medium  whitespace-nowrap">{td.availableSeats}</span></Cell>
+                                    <Cell ui={"p-3"}><span className="font-medium  whitespace-nowrap">{td.location}</span></Cell>
                                     
                                     <Cell ui={"p-3"}>
                                         <span

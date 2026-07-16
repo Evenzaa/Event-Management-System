@@ -83,7 +83,10 @@ export default function ConfirmedBooking({}){
                             <p className="text-[#6b7280] text-base md:text-lg mt-2">You have {data?.count} confirmed booking</p>
                         </div>
                         {isSuccess&&
-                            data?.data?.map((event)=>(
+                            
+                                 [...data?.data]
+                            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                            .map((event) => (
                             <div key={event._id}>
                                 <div 
                                    className="bg-white border border-[#E5E7EB] rounded-2xl p-5 mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center shadow-sm hover:shadow-md transition"

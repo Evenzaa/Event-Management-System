@@ -4,10 +4,9 @@ export default function TableRecentEvent({children}){
         {id:1, content:"Event"},
         {id:2, content:"Category"},
         {id:3, content:"Date"},
-        {id:4, content:"Price"},
-        {id:5, content:"Available Seats"},
-        {id:6, content:"Status"},
-        {id:7, content:"Actions"},
+        {id:4, content:"Location"},
+        {id:5, content:"Status"},
+        {id:6, content:"Actions"},
     ]
 
     return(

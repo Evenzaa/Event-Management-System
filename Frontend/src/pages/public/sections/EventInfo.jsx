@@ -107,7 +107,6 @@ export default function EventInfo({
           {title}
         </h1>
 
-
         <button
           onClick={handleAddFavorite}
           className="
