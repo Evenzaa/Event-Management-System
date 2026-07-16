@@ -19,8 +19,6 @@ export default function DashHome(){
         console.log(data.totalBookings);
         }
 
-        
-       
 
     return(
         <>

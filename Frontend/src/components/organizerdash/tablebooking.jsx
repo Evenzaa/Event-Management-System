@@ -3,12 +3,11 @@ export default function TableBooking({children}){
     const thlist=[
         {id:1, content:"Ticket Number"},
         {id:2, content:"Customer"},
-        {id:3, content:"Qty"},
-        {id:4, content:"Total Price"},
-        {id:5, content:"Payment Status"},
-        {id:6, content:"Booking Status"},
-        {id:7, content:"Booking Date"},
-        {id:8, content:"Actions"},
+        {id:3, content:"Total Price"},
+        {id:4, content:"Payment Status"},
+        {id:5, content:"Booking Status"},
+        {id:6, content:"Booking Date"},
+        {id:7, content:"Actions"},
     ]
 
     return(

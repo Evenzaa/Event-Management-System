@@ -114,9 +114,6 @@ export default function BookingContainer({eventId,databooking,isLoading,isError,
                                         <span className="text-sm font-medium  whitespace-nowrap"> {td.userId.name}</span>
                                     </Cell>
                                     <Cell ui={"p-2"}>
-                                        <span className="text-sm font-medium  whitespace-nowrap"> {td.quantity}</span>
-                                    </Cell>
-                                    <Cell ui={"p-2"}>
                                         <span className="text-sm font-medium  whitespace-nowrap"> {td.totalPrice} $</span>
                                     </Cell>
                                     <Cell ui={"p-2"}>

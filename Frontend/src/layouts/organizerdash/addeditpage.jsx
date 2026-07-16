@@ -30,18 +30,26 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                     const res=await getEventsbyId(eventId).unwrap()
                     console.log(res)
                     form.setFieldsValue({
-                        title:res.data.title,
-                        description:res.data.description,
-                        date: dayjs(res.data.date),
-                        time: dayjs(res.data.date),
-                        location:res.data.location,
-                        price:res.data.price,
-                        capacity:res.data.capacity,
-                        availableSeats:res.data.availableSeats,
-                        images:res.data.images,
-                        category:res.data.category,
-                        tags:res.data.tags,
-                    })
+                    title: res.data.title,
+                    description: res.data.description,
+                    date: dayjs(res.data.date),
+                    time: dayjs(res.data.date),
+                    location: res.data.location,
+                    capacity: res.data.capacity,
+                    category: res.data.category,
+                    tags: res.data.tags,
+
+                    ticketTypes: {
+                        general: {
+                            price: res.data.ticketTypes.general.price,
+                            availableSeats: res.data.ticketTypes.general.availableSeats,
+                        },
+                        vip: {
+                            price: res.data.ticketTypes.vip.price,
+                            availableSeats: res.data.ticketTypes.vip.availableSeats,
+                        },
+                    },
+                });
                     setFileList(
                         res.data.images.map((url, index) => ({
                             uid: `-${index}`,
@@ -68,14 +76,21 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
     const steps = [
         { title: "Event Information" },
         { title: "Category & Tags" },
-        { title: "Price & Capacity & Available Seats & date "},
-        { title: "Location & Images" },
+        { title: "Price && Available Seats & date "},
+        { title: "Location & Capacity & Images" },
     ];
-    const stepFields = [
-        ["title", "description"],
-        ["category", "tags"],
-        ["price", "capacity", "availableSeats", "date"],
-        ["location", "images"],
+   const stepFields = [
+    ["title", "description"],
+    ["category", "tags"],
+    [
+        ["ticketTypes", "general", "price"],
+        ["ticketTypes", "general", "availableSeats"],
+        ["ticketTypes", "vip", "price"],
+        ["ticketTypes", "vip", "availableSeats"],
+        "date",
+        "time",
+    ],
+    ["location", "capacity", "images"],
     ];
     const next = async () => {
           console.log("Next clicked", currentStep);
@@ -133,6 +148,8 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                         ...values,
                         images: fileList.map(file => file.response?.url || file.url),
                     };
+                    
+    
 
                     if (values.date && values.time) {
                         data.date = values.date
@@ -329,24 +346,35 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                             </div>
                             <div style={{ display: currentStep === 2 ? "block" : "none" }}>
                             
-                                    <div>
-                                        <span className="block mb-2 text-[15px] font-semibold">Price</span>
-                                        <Form.Item name="price"  rules={[{ required: true , message: "Please enter price"}]}>
-                                            <Input placeholder="e.g., 200 $"   className="!h-12 !rounded-xl placeholder:font-semibold"/>
-                                        </Form.Item>
+                                    <div className="flex flex-col md:flex-row gap-4">
+                                        <div className="w-full md:w-1/2">
+                                            <span className="block mb-2 text-[15px] font-semibold">General Price</span>
+                                            <Form.Item  name={["ticketTypes", "general", "price"]} rules={[{ required: true , message: "Please enter your price"}]}>
+                                                <Input placeholder="e.g., 200 $ "   className="!h-12 !w-full !rounded-xl placeholder:font-semibold"/>
+                                            </Form.Item>
+                                           
+                                        </div>
+
+                                        <div className="w-full md:w-1/2">
+                                            <span className="block mb-2 text-[15px] font-semibold">General Available Seats</span>
+                                            <Form.Item  name={["ticketTypes", "general", "availableSeats"]}  rules={[{ required: true , message: "Please enter Available Seats"}]}>
+                                                <Input placeholder="e.g., 100 "  className="!h-12 !w-full !rounded-xl placeholder:font-semibold" />
+                                            </Form.Item>
+                                        </div>
+
                                     </div>
                                     
                                     <div className="flex flex-col md:flex-row gap-4">
                                         <div className="w-full md:w-1/2">
-                                            <span className="block mb-2 text-[15px] font-semibold">Capacity</span>
-                                            <Form.Item name="capacity"  rules={[{ required: true , message: "Please enter your capacity"}]}>
-                                                <Input placeholder="e.g., 200 "   className="!h-12 !w-full !rounded-xl placeholder:font-semibold"/>
+                                            <span className="block mb-2 text-[15px] font-semibold">Vip Price</span>
+                                            <Form.Item  name={["ticketTypes", "vip", "price"]}  rules={[{ required: true , message: "Please enter your price"}]}>
+                                                <Input placeholder="e.g., 200 $"   className="!h-12 !w-full !rounded-xl placeholder:font-semibold"/>
                                             </Form.Item>
                                         </div>
 
                                         <div className="w-full md:w-1/2">
-                                            <span className="block mb-2 text-[15px] font-semibold">Available Seats</span>
-                                            <Form.Item name="availableSeats"  rules={[{ required: true , message: "Please enter Available Seats"}]}>
+                                            <span className="block mb-2 text-[15px] font-semibold">Vip Available Seats</span>
+                                            <Form.Item name={["ticketTypes", "vip", "availableSeats"]} rules={[{ required: true , message: "Please enter Available Seats"}]}>
                                                 <Input placeholder="e.g., 100 "  className="!h-12 !w-full !rounded-xl placeholder:font-semibold" />
                                             </Form.Item>
                                         </div>
@@ -415,6 +443,12 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                                                     rules={[{ required: true , message: "Please enter your location"}]}
                                                 >
                                                     <Input placeholder="Cairo"   className="!h-12 !rounded-xl placeholder:font-semibold" />
+                                                </Form.Item>
+                                            </div>
+                                            <div >
+                                                <span className="block mb-2 text-[15px] font-semibold">Capacity</span>
+                                                <Form.Item name="capacity"  rules={[{ required: true , message: "Please enter your capacity"}]}>
+                                                    <Input placeholder="e.g., 200 "   className="!h-12 !w-full !rounded-xl placeholder:font-semibold"/>
                                                 </Form.Item>
                                             </div>
                                         <Form.Item name="images"
