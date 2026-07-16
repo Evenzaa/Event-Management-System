@@ -5,6 +5,8 @@ import { OrganizerEventApi } from "../services/organizerEventApi";
 import { OrganizerImgApi } from "../services/organizerImgApi";
 import { OrganizerReviewApi } from "../services/organizerReviewApi";
 import { OrganizerBookingApi } from "../services/organizerBookingApi";
+import checkoutReducer from "./checkoutSlice"; // NEW
+
 
 export const store=configureStore(
     {
@@ -14,6 +16,7 @@ export const store=configureStore(
            [OrganizerImgApi.reducerPath]:OrganizerImgApi.reducer,
            [OrganizerReviewApi.reducerPath]:OrganizerReviewApi.reducer,
            [OrganizerBookingApi.reducerPath]:OrganizerBookingApi.reducer,
+           checkout: checkoutReducer, // NEW
 
 
 

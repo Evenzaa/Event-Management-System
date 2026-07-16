@@ -60,7 +60,8 @@ export const fetchEventDetails = async (eventId) => {
 
 
 export const bookTickets = async (eventId, quantities) => {
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   const quantity = Object.values(quantities).reduce(
     (sum, value) => sum + value,

@@ -10,10 +10,6 @@ export default function Login() {
 
   const token = localStorage.getItem("authToken");
 
-  if (token) {
-    return <Navigate to="/" replace />;
-  }
-
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +19,11 @@ export default function Login() {
   const [needsVerification, setNeedsVerification] = useState(false);
   const [resending, setResending] = useState(false);
   const [resendMessage, setResendMessage] = useState("");
+
+  
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

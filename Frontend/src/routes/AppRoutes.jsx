@@ -20,7 +20,7 @@ import Favorites from '../pages/user/Favorites';
 import MyBookings from '../pages/user/MyBookings';
 
 // // Checkout Flow
-// import SeatSelection from '../pages/checkout/SeatSelection';
+import SeatSelection from '../pages/checkout/SeatSelection';
 // import BookingCheckout from '../pages/checkout/BookingCheckout';
 // import PaymentConfirmation from '../pages/checkout/PaymentConfirmation';
 
@@ -86,11 +86,15 @@ export default function AppRoutes() {
       {/* error-page */}
       <Route path="*" element={<ErrorPage/>} />
 
+
+      
+      {/* Checkout Flow */}
+      <Route path="/book/:eventId/seats" element={<SeatSelection />} />
+
       {/* 
 
 
 
-      <Route path="/book/:eventId/seats" element={<SeatSelection />} />
       <Route path="/checkout" element={<BookingCheckout />} />
       <Route path="/confirmation" element={<PaymentConfirmation />} />
 
