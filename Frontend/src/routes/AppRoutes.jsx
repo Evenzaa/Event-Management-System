@@ -21,14 +21,12 @@ import GoogleCallback from '../pages/auth/GoogleCallback';
 import EditProfile from '../pages/user/EditProfile';
 import Favorites   from '../pages/user/Favorites';
 import MyBookings  from '../pages/user/MyBookings';
-import ConfirmedBooking from '../pages/confirmedbooking/confirmedbooking';
 
 // // Checkout Flow
 import SeatSelection from '../pages/checkout/SeatSelection';
-// import BookingCheckout from '../pages/checkout/BookingCheckout';
-// import PaymentConfirmation from '../pages/checkout/PaymentConfirmation';
+import ConfirmedBooking from '../pages/confirmedbooking/confirmedbooking';
 
-// // Organizer
+
 // Organizer
 import Dashboard from '../pages/organizer/dashboard';
 import DashHome  from '../pages/organizer/dashHome';
@@ -94,13 +92,12 @@ export default function AppRoutes() {
       </Route>
       
       {/* organizer-details */}
-        <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
+      <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
 
    
       {/* Checkout Flow */}
       <Route path="/book/:eventId/seats" element={<SeatSelection />} />
-
-      {/* 
+      <Route path="/confirmed-booking" element={<ConfirmedBooking />} /> 
 
 
       {/* ── Admin (admin role only) ── */}
@@ -120,14 +117,6 @@ export default function AppRoutes() {
         <ProtectedRoute requiredRole="admin"><AdminModeration /></ProtectedRoute>
       } />
 
-
-
-      {/* user booking */}
-      <Route path="/confirmed-booking" element={<ConfirmedBooking />} /> 
-{/* 
-      <Route path="/book/:eventId/seats" element={<SeatSelection />} />
-      <Route path="/checkout" element={<BookingCheckout />} />
-      <Route path="/confirmation" element={<PaymentConfirmation />} /> */}
 
       {/* ── 404 ── */}
       <Route path="*" element={<ErrorPage />} />
