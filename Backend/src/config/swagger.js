@@ -180,18 +180,55 @@ ticketTypes: {
       example: 1300,
     },
 
-    paymentStatus: {
-      type: "string",
-      example: "pending",
-    },
-
-    status: {
-      type: "string",
-      example: "confirmed",
-    },
-  },
+  paymentStatus: {
+  type: "string",
+  enum: [
+    "pending",
+    "paid",
+    "failed",
+    "refunded"
+  ],
+  example: "paid",
 },
 
+status: {
+  type: "string",
+  enum: [
+    "confirmed",
+    "cancelled",
+    "completed"
+  ],
+  example: "confirmed",
+},
+  },
+},
+PaymentRequest: {
+  type: "object",
+  required: [
+    "bookingId",
+    "paymentMethod"
+  ],
+
+  properties: {
+
+    bookingId: {
+      type: "string",
+      example: "6a589de1173b433626d3b62d",
+    },
+
+    paymentMethod: {
+      type: "string",
+      enum: [
+        "card",
+        "paypal",
+        "stripe",
+        "wallet"
+      ],
+      example: "card",
+    },
+
+  },
+},
 Review: {
   type: "object",
   properties: {
@@ -498,10 +535,15 @@ ReviewsResponse: {
         name: "Organizer Events",
         description: "Organizer Events APIs",
       },
-      {
-        name: "Bookings",
-        description: "Booking APIs",
-      },
+   {
+  name: "Bookings",
+  description: "Booking APIs",
+},
+
+{
+  name: "Payment",
+  description: "Payment APIs",
+},
       {
         name: "Reviews",
         description: "Review APIs",
