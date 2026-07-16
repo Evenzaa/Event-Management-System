@@ -23,6 +23,12 @@ import Favorites   from '../pages/user/Favorites';
 import MyBookings  from '../pages/user/MyBookings';
 import ConfirmedBooking from '../pages/confirmedbooking/confirmedbooking';
 
+// // Checkout Flow
+import SeatSelection from '../pages/checkout/SeatSelection';
+// import BookingCheckout from '../pages/checkout/BookingCheckout';
+// import PaymentConfirmation from '../pages/checkout/PaymentConfirmation';
+
+// // Organizer
 // Organizer
 import Dashboard from '../pages/organizer/dashboard';
 import DashHome  from '../pages/organizer/dashHome';
@@ -88,7 +94,13 @@ export default function AppRoutes() {
       </Route>
       
       {/* organizer-details */}
-      <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
+        <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
+
+   
+      {/* Checkout Flow */}
+      <Route path="/book/:eventId/seats" element={<SeatSelection />} />
+
+      {/* 
 
 
       {/* ── Admin (admin role only) ── */}

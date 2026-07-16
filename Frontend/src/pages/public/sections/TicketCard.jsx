@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { bookTickets } from '../../../services/api';
+import { useNavigate } from 'react-router-dom'; // ADD
+// import { bookTickets } from '../../../services/api'; => REMOVE
 import Button from '../../../components/common/Button';
 
 export default function TicketCard({ eventId, ticketData }) {
+  const navigate = useNavigate(); // ADD
   const { remaining, options } = ticketData;
   
   const [quantities, setQuantities] = useState({});
@@ -49,21 +51,34 @@ export default function TicketCard({ eventId, ticketData }) {
       return;
     }
     
-    setIsBooking(true);
-    setErrorMsg('');
-    try {
-      const response = await bookTickets(eventId, quantities);
-      setBookingResult(response);
-      const resetQuantities = {};
-      options.forEach(opt => {
-        resetQuantities[opt.id] = 0;
-      });
-      setQuantities(resetQuantities);
-    } catch (err) {
-      setErrorMsg(err.message || 'An error occurred during booking.');
-    } finally {
-      setIsBooking(false);
-    }
+    const ticketSelections = options
+    .filter((opt) => quantities[opt.id] > 0)
+    .map((opt) => ({
+      type: opt.id,
+      label: opt.name,
+      price: opt.price,
+      quantity: quantities[opt.id],
+    }));
+    
+    navigate(`/book/${eventId}/seats`, {
+      state: { eventId, ticketSelections },
+    });
+    
+    // setIsBooking(true); => REMOVE
+    // setErrorMsg('');
+    // try {
+    //   const response = await bookTickets(eventId, quantities);
+    //   setBookingResult(response);
+    //   const resetQuantities = {};
+    //   options.forEach(opt => {
+    //     resetQuantities[opt.id] = 0;
+    //   });
+    //   setQuantities(resetQuantities);
+    // } catch (err) {
+    //   setErrorMsg(err.message || 'An error occurred during booking.');
+    // } finally {
+    //   setIsBooking(false);
+    // }
   };
 
   return (
