@@ -4,19 +4,15 @@ import {
   createCoupon,
   getCoupons,
   deleteCoupon,
-} from "../controllers/coupon.controller.js";
+   validateCoupon
 
+} from "../controllers/coupon.controller.js";
 import {
   protect,
   authorize,
 } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
-
-router.use(
-  protect,
-  authorize("admin")
-);
 
 /**
  * @swagger
@@ -90,42 +86,9 @@ router.use(
  *       500:
  *         description: Internal server error.
  */
-router.post("/", createCoupon);
+router.post("/",protect,
+  authorize("admin"), createCoupon);
 
-/**
- * @swagger
- * /api/coupons:
- *   get:
- *     tags: [Coupons]
- *     summary: Get all coupons
- *     description: Retrieve all available coupons (Admin only).
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Coupons retrieved successfully.
- *         content:
- *           application/json:
- *             example:
- *               success: true
- *               coupons:
- *                 - _id: 6860d5f0a123456789abcd12
- *                   code: SUMMER20
- *                   discount: 20
- *                   isActive: true
- *       401:
- *         description: Unauthorized.
- *         content:
- *           application/json:
- *             example:
- *               success: false
- *               message: Not authorized
- *       403:
- *         description: Admin access required.
- *       500:
- *         description: Internal server error.
- */
-router.get("/", getCoupons);
 
 /**
  * @swagger
@@ -164,6 +127,90 @@ router.get("/", getCoupons);
  *       500:
  *         description: Internal server error.
  */
-router.delete("/:id", deleteCoupon);
-
+router.delete("/:id",protect,
+  authorize("admin"), deleteCoupon);
+/**
+ * @swagger
+ * /api/coupons:
+ *   get:
+ *     tags: [Coupons]
+ *     summary: Get all coupons
+ *     description: Retrieve all available coupons (Admin only).
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Coupons retrieved successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               coupons:
+ *                 - _id: 6860d5f0a123456789abcd12
+ *                   code: SUMMER20
+ *                   discount: 20
+ *                   isActive: true
+ *       401:
+ *         description: Unauthorized.
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: Not authorized
+ *       403:
+ *         description: Admin access required.
+ *       500:
+ *         description: Internal server error.
+ */
+router.get("/",protect,
+  authorize("admin"), getCoupons);
+/**
+ * @swagger
+ * /api/coupons/validate:
+ *   post:
+ *     tags:
+ *       - Coupons
+ *     summary: Validate coupon without authentication
+ *     description: Check coupon code and calculate discount before booking.
+ *
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - code
+ *               - eventId
+ *               - totalPrice
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: SUMMER15
+ *
+ *               eventId:
+ *                 type: string
+ *                 example: 6a42ad765c7d752339540404
+ *
+ *               totalPrice:
+ *                 type: number
+ *                 example: 1000
+ *
+ *     responses:
+ *       200:
+ *         description: Coupon applied successfully
+ *
+ *       400:
+ *         description: Coupon expired or inactive
+ *
+ *       404:
+ *         description: Coupon not found
+ *
+ *       500:
+ *         description: Server error
+ */
+router.post(
+ "/validate",
+ validateCoupon
+);
 export default router;
