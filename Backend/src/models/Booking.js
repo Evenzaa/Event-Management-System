@@ -14,49 +14,77 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
 
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1,
-      default: 1,
-    },
+    tickets: [
+      {
+        ticketType: {
+          type: String,
+          enum: ["general", "vip"],
+          required: true,
+        },
+
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+        },
+
+        price: {
+          type: Number,
+          required: true,
+        },
+
+        subtotal: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
 
     totalPrice: {
       type: Number,
       required: true,
     },
-    couponCode: {
-  type: String,
-  default: null,
-},
 
-paymentMethod: {
+    couponCode: {
+      type: String,
+      default: null,
+    },
+
+    paymentMethod: {
   type: String,
-  enum: ["card"],
+  enum: [
+    "card",
+    "wallet",
+    "bank_transfer",
+    "paypal"
+  ],
   default: "card",
 },
 
 paymentStatus: {
   type: String,
-  enum: ["pending", "paid"],
+  enum: [
+ "pending",
+   "paid",
+   "failed",
+   "refunded"
+  ],
   default: "pending",
 },
 
-ticketNumber: {
-  type: String,
-},
+    ticketNumber: {
+      type: String,
+    },
 
-qrCode: {
-  type: String,
-},
+    qrCode: {
+      type: String,
+    },
 
-status: {
-  type: String,
-  enum: ["confirmed", "cancelled"],
-  default: "confirmed",
-},
-
-    
+    status: {
+      type: String,
+      enum: ["confirmed", "cancelled","completed"],
+      default: "confirmed",
+    },
   },
   {
     timestamps: true,

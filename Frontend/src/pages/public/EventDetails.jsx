@@ -15,7 +15,7 @@ export default function EventDetails() {
   const { id: pathId } = useParams();
   const [searchParams] = useSearchParams();
   const queryId = searchParams.get('id') || searchParams.get('eventId');
-  
+
   const eventId = pathId || queryId;
 
   const { eventDetails, isLoading, error, retry } = useEventDetails(eventId);
@@ -49,7 +49,7 @@ export default function EventDetails() {
             </div>
             <h2 className="text-xl font-bold text-slate-900 mb-2">Something went wrong</h2>
             <p className="text-slate-500 mb-6">{error || 'Failed to load event details.'}</p>
-            <button 
+            <button
               onClick={retry}
               className="px-6 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-xl hover:bg-slate-200 transition-colors"
             >
@@ -65,7 +65,7 @@ export default function EventDetails() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <Navbar />
-      
+
       <main className="flex-grow pb-20">
         <EventBanner
           bannerImage={eventDetails.bannerImage}
@@ -75,10 +75,11 @@ export default function EventDetails() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-24 relative z-10">
           <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 lg:p-10">
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-              
+
               {/* Left Column */}
               <div className="flex-1 min-w-0">
                 <EventInfo
+                  eventId={eventDetails.id}
                   title={eventDetails.title}
                   tags={eventDetails.tags}
                   date={eventDetails.date}
@@ -109,7 +110,7 @@ export default function EventDetails() {
       <Footer />
 
       {/* Floating Action Back To Top Button */}
-      <button 
+      <button
         onClick={handleScrollToTop}
         className="fixed bottom-6 right-6 w-12 h-12 bg-white text-slate-600 rounded-full shadow-md border border-slate-100 flex items-center justify-center hover:bg-slate-50 hover:text-violet-600 transition-colors z-50"
         title="Scroll to Top"

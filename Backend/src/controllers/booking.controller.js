@@ -8,7 +8,7 @@ export const createBooking = async (req, res, next) => {
   try {
     const {
       eventId,
-      quantity,
+      tickets,
       couponCode,
       paymentMethod,
     } = req.body;
@@ -22,72 +22,115 @@ export const createBooking = async (req, res, next) => {
       });
     }
 
-    if (event.availableSeats < quantity) {
+    if (!tickets || !Array.isArray(tickets) || tickets.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Not enough available seats",
+        message: "Tickets are required",
       });
     }
 
-    
-    let totalPrice = event.price * quantity;
+    let bookingTickets = [];
+    let totalPrice = 0;
 
-    
+    for (const item of tickets) {
+      const { ticketType, quantity } = item;
+
+      if (!["general", "vip"].includes(ticketType)) {
+        return res.status(400).json({
+          success: false,
+          message: `Invalid ticket type: ${ticketType}`,
+        });
+      }
+
+      const eventTicket = event.ticketTypes[ticketType];
+
+      if (!eventTicket) {
+        return res.status(400).json({
+          success: false,
+          message: `${ticketType} ticket not found`,
+        });
+      }
+
+      if (eventTicket.availableSeats < quantity) {
+        return res.status(400).json({
+          success: false,
+          message: `Not enough ${ticketType} seats`,
+        });
+      }
+
+      const subtotal = eventTicket.price * quantity;
+      totalPrice += subtotal;
+
+      bookingTickets.push({
+        ticketType,
+        quantity,
+        price: eventTicket.price,
+        subtotal,
+      });
+    }
+
     let appliedCoupon = null;
 
-if (couponCode) {
-  appliedCoupon = await Coupon.findOne({
-    code: couponCode.toUpperCase(),
-    isActive: true,
-    expiresAt: { $gt: new Date() },
-  });
+    if (couponCode) {
+      appliedCoupon = await Coupon.findOne({
+        code: couponCode.toUpperCase(),
+        isActive: true,
+        expiresAt: { $gt: new Date() },
+      });
 
-  if (!appliedCoupon) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid or expired coupon",
-    });
-  }
+      if (!appliedCoupon) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid or expired coupon",
+        });
+      }
 
-  totalPrice =
-    totalPrice -
-    (totalPrice * appliedCoupon.discount) / 100;
-}
+      totalPrice -=
+        (totalPrice * appliedCoupon.discount) / 100;
+    }
 
-    
+    for (const item of tickets) {
+      event.ticketTypes[item.ticketType].availableSeats -= item.quantity;
+    }
+
+    await event.save();
+
     const ticketNumber = `TKT-${Date.now()}`;
+    const qrCode = await QRCode.toDataURL(ticketNumber);
 
-    const qrCode = await QRCode.toDataURL(
-      ticketNumber
-    );
-
-    
     const booking = await Booking.create({
       userId: req.user.id,
       eventId,
-      quantity,
+      tickets: bookingTickets,
       totalPrice,
-
-      couponCode: appliedCoupon? appliedCoupon.code: null,
-
-     paymentMethod:"card",
-
-paymentStatus: "pending",
-
+      couponCode: appliedCoupon
+        ? appliedCoupon.code
+        : null,
+      paymentMethod: paymentMethod || "card",
+      paymentStatus: "pending",
       ticketNumber,
       qrCode,
     });
 
-   
-    event.availableSeats -= quantity;
-    await event.save();
-
     if (req.user.email) {
+      let ticketDetails = bookingTickets
+        .map(
+          (t) =>
+            `${t.ticketType.toUpperCase()} x${t.quantity} = ${t.subtotal}`
+        )
+        .join("\n");
+
       await sendEmail(
         req.user.email,
         "Booking Confirmation",
         `Your booking has been confirmed.
-Ticket Number: ${ticketNumber}`
+
+Ticket Number: ${ticketNumber}
+
+Tickets:
+${ticketDetails}
+
+Total Price: ${totalPrice}`
       );
     }
 
@@ -107,7 +150,7 @@ export const getMyBookings = async (req, res, next) => {
       userId: req.user.id,
     }).populate("eventId");
 
-    res.json({
+    res.status(200).json({
       success: true,
       count: bookings.length,
       data: bookings,
@@ -138,18 +181,20 @@ export const cancelBooking = async (req, res, next) => {
       });
     }
 
-    
     const event = await Event.findById(booking.eventId);
 
     if (event) {
-      event.availableSeats += booking.quantity;
+      for (const item of booking.tickets) {
+        event.ticketTypes[item.ticketType].availableSeats += item.quantity;
+      }
+
       await event.save();
     }
 
     booking.status = "cancelled";
     await booking.save();
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Booking cancelled successfully",
     });

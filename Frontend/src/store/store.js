@@ -7,6 +7,7 @@ import { OrganizerReviewApi } from "../services/organizerReviewApi";
 import { OrganizerBookingApi } from "../services/organizerBookingApi";
 import checkoutReducer from "./checkoutSlice"; // NEW
 
+import { ConfirmBookingApi } from "../services/confirmBookingApi";
 
 export const store=configureStore(
     {
@@ -17,6 +18,8 @@ export const store=configureStore(
            [OrganizerReviewApi.reducerPath]:OrganizerReviewApi.reducer,
            [OrganizerBookingApi.reducerPath]:OrganizerBookingApi.reducer,
            checkout: checkoutReducer, // NEW
+           [ConfirmBookingApi.reducerPath]:ConfirmBookingApi.reducer,
+
 
 
 
@@ -29,6 +32,8 @@ export const store=configureStore(
                     OrganizerImgApi.middleware,
                     OrganizerReviewApi.middleware,
                     OrganizerBookingApi.middleware,
+                    ConfirmBookingApi.middleware,
+
 
 
 

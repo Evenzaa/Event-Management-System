@@ -9,6 +9,7 @@ export default function BookingModal({show,changeShow,databooking}){
     
 
     const getStatus = (status) => {
+        
         if (!status) {
             return {
             text: "-",
@@ -38,7 +39,17 @@ export default function BookingModal({show,changeShow,databooking}){
                 text: "Completed",
                 className: "bg-gray-100 text-gray-700",
             };
+            case "confirmed":
+                return {
+                    text: "Confirmed",
+                    className: "bg-green-100 text-green-700",
+                };
 
+            case "cancelled":
+                return {
+                    text: "Cancelled",
+                    className: "bg-red-100 text-red-700",
+                };
             default:
             return {
                 text: status,
@@ -89,9 +100,31 @@ export default function BookingModal({show,changeShow,databooking}){
                            ui="flex flex-col sm:flex-row sm:justify-between gap-2"
                         />
                         <InfoItem
-                            title={"Quantity"}
-                            info={databooking?.quantity} 
-                           ui="flex flex-col sm:flex-row sm:justify-between gap-2"
+                            title={"Tickets"}
+                            info={
+                                <div className="flex flex-col gap-2">
+                                    {databooking?.tickets?.map((ticket) => (
+                                        <div
+                                            key={ticket._id}
+                                            className="border rounded-lg p-2"
+                                        >
+                                            <p>
+                                                <strong>Type: </strong> {ticket.ticketType}
+                                            </p>
+                                            <p>
+                                                <strong>Quantity: </strong> {ticket.quantity}
+                                            </p>
+                                            <p>
+                                                <strong>Price: </strong> {ticket.price} $
+                                            </p>
+                                            <p>
+                                                <strong>Subtotal: </strong> ${ticket.subtotal}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                            ui="flex flex-col gap-2"
                         />
                         <InfoItem
                             title={"Total Price"}

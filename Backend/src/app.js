@@ -6,7 +6,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import passport from "./config/passport.js";
 import organizerRoutes from "./routes/organizer.routes.js";
-
+import paymentRoutes from "./routes/payment.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import couponRoutes from "./routes/coupon.routes.js";
@@ -23,6 +23,8 @@ import {
   notFound,
   errorHandler,
 } from "./middlewares/error.middleware.js";
+
+
 
 const app = express();
 
@@ -57,6 +59,12 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/organizer-events", organizerRoutes);
+
+
+app.use(
+ "/api/payment",
+ paymentRoutes
+);
 app.use(notFound);
 app.use(errorHandler);
 

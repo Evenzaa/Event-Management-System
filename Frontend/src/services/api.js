@@ -127,3 +127,21 @@ export const removeFavorite = async (eventId) => {
 
   return response.json();
 };
+// Add an event to favorites
+export const addFavorite = async (eventId) => {
+  const token = localStorage.getItem("authToken");
+
+  const response = await fetch(`${BASE_URL}/favorites/${eventId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add favorite");
+  }
+
+  return response.json();
+};

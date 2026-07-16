@@ -101,15 +101,27 @@ export default function OrganizerDetails (){
                                                     icon={ <TeamOutlined  style={{fontSize:"20px",color:"#793EED"}}/>}
                                                 />
                                                 <OrganizerDetailsForm
-                                                    title={"Available Seats"}
-                                                    info={data?.data?.availableSeats}
-                                                    icon={ <UsergroupAddOutlined  style={{fontSize:"20px",color:"#793EED"}}/>}
+                                                    title={"General Seats"}
+                                                    info={data?.data?.ticketTypes?.general?.availableSeats}
+                                                    icon={<UsergroupAddOutlined style={{fontSize:"20px",color:"#793EED"}}/>}
+                                                />
+
+                                                <OrganizerDetailsForm
+                                                    title={"VIP Seats"}
+                                                    info={data?.data?.ticketTypes?.vip?.availableSeats}
+                                                    icon={<UsergroupAddOutlined style={{fontSize:"20px",color:"#793EED"}}/>}
                                                 />
                                                     <OrganizerDetailsForm
-                                                    title={"Price"}
-                                                    info={`${data?.data?.price} $`}
-                                                    icon={ <DollarOutlined  style={{fontSize:"20px",color:"#793EED"}}/>}
-                                                />
+                                                        title={"General Price"}
+                                                        info={`${data?.data?.ticketTypes?.general?.price} $`}
+                                                        icon={<DollarOutlined style={{fontSize:"20px",color:"#793EED"}}/>}
+                                                    />
+
+                                                    <OrganizerDetailsForm
+                                                        title={"VIP Price"}
+                                                        info={`${data?.data?.ticketTypes?.vip?.price} $`}
+                                                        icon={<DollarOutlined style={{fontSize:"20px",color:"#793EED"}}/>}
+                                                    />
                                                 <OrganizerDetailsForm
                                                     title={"Discount Price"}
                                                     info={`${(data?.data?.discountPrice===null)?"_____":` ${data?.data?.discountPrice} $`} `}
@@ -136,14 +148,14 @@ export default function OrganizerDetails (){
                                                     title={"Created At"}
                                                     info= {   <>
                                                                 <span className="font-semibold text-sm mb-0.5 whitespace-nowrap">
-                                                                {new Date(data?.data?.createdAt).toLocaleDateString()}
+                                                                    {new Date(data?.data?.createdAt).toLocaleDateString()}
                                                                 </span>
 
                                                                 <span className="text-sm font-medium ml-2 text-[#6b7280] whitespace-nowrap">
-                                                                {new Date(data?.data?.createdAt).toLocaleTimeString("en-US", {
-                                                                    hour: "2-digit",
-                                                                    minute: "2-digit",
-                                                                })}
+                                                                    {new Date(data?.data?.createdAt).toLocaleTimeString("en-US", {
+                                                                        hour: "2-digit",
+                                                                        minute: "2-digit",
+                                                                    })}
                                                                 </span>
                                                         </>}
                                                     icon={ <ScheduleOutlined   style={{fontSize:"20px",color:"#793EED"}}/>}

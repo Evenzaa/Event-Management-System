@@ -1,23 +1,20 @@
-export default function TableRecentEvent({children}){
+export default function TableTicket({children}){
 
     const thlist=[
-        {id:1, content:"Event"},
-        {id:2, content:"Category"},
-        {id:3, content:"Date"},
-        {id:4, content:"Location"},
-        {id:5, content:"Status"},
-        {id:6, content:"Actions"},
+        {id:1, content:"Ticket Type"},
+        {id:2, content:"Quantity"},
+        {id:3, content:"Price"},
+        {id:4, content:"Subtotal"},
     ]
 
     return(
-        <div className="w-full overflow-x-auto">
+        <div className="w-full overflow-x-auto rounded-xl">
             <table
                 className="
                     min-w-max w-full
                     border-collapse
-                    border
-                    border-[#E5E7EB]
                    
+              
                     "
             >
                 <thead>
@@ -30,10 +27,10 @@ export default function TableRecentEvent({children}){
                                    
                                     p-4
                                     bg-[#F8F7FF]
-                                    text-left
+                                      text-center
                                     text-sm font-medium                   
                                      whitespace-nowrap
-                                     text-[#1A1033]
+                                     text-[#793EED]
                                     
                                     "
                                 >

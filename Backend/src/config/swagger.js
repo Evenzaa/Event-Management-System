@@ -80,18 +80,42 @@ const options = {
               type: "string",
               example: "Cairo",
             },
-            price: {
-              type: "number",
-              example: 250,
-            },
-            capacity: {
-              type: "integer",
-              example: 100,
-            },
-            availableSeats: {
-              type: "integer",
-              example: 78,
-            },
+          capacity: {
+  type: "integer",
+  example: 150,
+},
+
+ticketTypes: {
+  type: "object",
+  properties: {
+    general: {
+      type: "object",
+      properties: {
+        price: {
+          type: "number",
+          example: 300,
+        },
+        availableSeats: {
+          type: "integer",
+          example: 100,
+        },
+      },
+    },
+    vip: {
+      type: "object",
+      properties: {
+        price: {
+          type: "number",
+          example: 700,
+        },
+        availableSeats: {
+          type: "integer",
+          example: 50,
+        },
+      },
+    },
+  },
+},
             images: {
               type: "array",
               items: {
@@ -117,30 +141,94 @@ const options = {
           },
         },
 
-        Booking: {
-          type: "object",
-          properties: {
-            _id: {
-              type: "string",
-              example: "685b11112222333344445555",
-            },
-            quantity: {
-              type: "integer",
-              example: 2,
-            },
-            totalPrice: {
-              type: "number",
-              example: 500,
-            },
-            status: {
-              type: "string",
-              example: "confirmed",
-            },
+       Booking: {
+  type: "object",
+  properties: {
+    _id: {
+      type: "string",
+      example: "685b11112222333344445555",
+    },
+
+    tickets: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          ticketType: {
+            type: "string",
+            enum: ["general", "vip"],
+            example: "general",
+          },
+          quantity: {
+            type: "integer",
+            example: 2,
+          },
+          price: {
+            type: "number",
+            example: 300,
+          },
+          subtotal: {
+            type: "number",
+            example: 600,
           },
         },
+      },
+    },
 
-  
+    totalPrice: {
+      type: "number",
+      example: 1300,
+    },
 
+  paymentStatus: {
+  type: "string",
+  enum: [
+    "pending",
+    "paid",
+    "failed",
+    "refunded"
+  ],
+  example: "paid",
+},
+
+status: {
+  type: "string",
+  enum: [
+    "confirmed",
+    "cancelled",
+    "completed"
+  ],
+  example: "confirmed",
+},
+  },
+},
+PaymentRequest: {
+  type: "object",
+  required: [
+    "bookingId",
+    "paymentMethod"
+  ],
+
+  properties: {
+
+    bookingId: {
+      type: "string",
+      example: "6a589de1173b433626d3b62d",
+    },
+
+    paymentMethod: {
+      type: "string",
+      enum: [
+        "card",
+        "paypal",
+        "stripe",
+        "wallet"
+      ],
+      example: "card",
+    },
+
+  },
+},
 Review: {
   type: "object",
   properties: {
@@ -447,10 +535,15 @@ ReviewsResponse: {
         name: "Organizer Events",
         description: "Organizer Events APIs",
       },
-      {
-        name: "Bookings",
-        description: "Booking APIs",
-      },
+   {
+  name: "Bookings",
+  description: "Booking APIs",
+},
+
+{
+  name: "Payment",
+  description: "Payment APIs",
+},
       {
         name: "Reviews",
         description: "Review APIs",
