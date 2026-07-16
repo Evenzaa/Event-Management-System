@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const couponSchema = new mongoose.Schema(
@@ -8,17 +7,27 @@ const couponSchema = new mongoose.Schema(
       required: true,
       unique: true,
       uppercase: true,
+      trim: true,
     },
+
     discount: {
       type: Number,
       required: true,
       min: 1,
       max: 100,
     },
+
+    eventId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event",
+      default: null,
+    },
+
     expiresAt: {
       type: Date,
       required: true,
     },
+
     isActive: {
       type: Boolean,
       default: true,
