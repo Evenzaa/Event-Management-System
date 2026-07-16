@@ -229,6 +229,80 @@ PaymentRequest: {
 
   },
 },
+CouponValidateRequest: {
+  type: "object",
+  required: [
+    "code",
+    "eventId",
+    "totalPrice"
+  ],
+
+  properties: {
+
+    code: {
+      type: "string",
+      example: "SUMMER15"
+    },
+
+    eventId: {
+      type: "string",
+      example: "6a42ad765c7d752339540404"
+    },
+
+    totalPrice: {
+      type: "number",
+      example: 1000
+    }
+
+  }
+},
+
+
+CouponValidateResponse: {
+  type: "object",
+
+  properties: {
+
+    success: {
+      type: "boolean",
+      example: true
+    },
+
+    message: {
+      type: "string",
+      example: "Coupon applied successfully"
+    },
+
+    data: {
+      type: "object",
+
+      properties: {
+
+        couponCode: {
+          type: "string",
+          example: "SUMMER15"
+        },
+
+        discount: {
+          type: "number",
+          example: 15
+        },
+
+        discountAmount: {
+          type: "number",
+          example: 150
+        },
+
+        finalPrice: {
+          type: "number",
+          example: 850
+        }
+
+      }
+    }
+
+  }
+},
 Review: {
   type: "object",
   properties: {
