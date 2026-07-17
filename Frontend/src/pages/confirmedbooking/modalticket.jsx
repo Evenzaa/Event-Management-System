@@ -1,4 +1,4 @@
-import { EnvironmentOutlined, ScheduleOutlined,CalendarOutlined ,DownloadOutlined ,TagOutlined,NumberOutlined,StarOutlined,UserOutlined,QrcodeOutlined,ClockCircleOutlined,CheckCircleOutlined,CreditCardOutlined,CarryOutOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined,ScheduleOutlined,CalendarOutlined ,DownloadOutlined ,TagOutlined,NumberOutlined,StarOutlined,UserOutlined,QrcodeOutlined,ClockCircleOutlined,CheckCircleOutlined,CreditCardOutlined,CarryOutOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import OrganizerDetailsForm from "../../components/organizerdash/organizerdetailsform";
 import TableTicket from "../../components/tableticket";
@@ -8,6 +8,7 @@ import ButtonDash from "../../components/organizerdash/button";
 import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
+import TicketPDF from "./Ticket";
 
 export default function ModalTicket( {showModal,ChangeShow,data}){
     const ticketRef = useRef(null);
@@ -136,7 +137,7 @@ const downloadTicket = async () => {
                 }}
                 mask={{closable:false}}
             >
-              <div ref={ticketRef} className="max-w-full overflow-hidden">
+              <div className="max-w-full overflow-hidden">
                         <div 
                             className="bg-white border border-[#E5E7EB] rounded-2xl  mt-6 shadow-sm hover:shadow-md transition"
                         >
@@ -302,16 +303,48 @@ const downloadTicket = async () => {
                             />
                         </div> 
                 </div>        
-                           < ButtonDash 
-                                ui={"w-full sm:w-auto bg-[#FAF8FF] text-[#793EED] mt-6 text-base sm:text-lg font-medium border  border-[#F5F3FF] border-2"}
-                                icon={<DownloadOutlined  style={{marginRight:"7px"}}/> }
-                                content={"Download Ticket"} 
+                           
+                            <ButtonDash
+                                ui={`
+                                    w-full sm:w-auto
+                                    bg-[#793EED]
+                                    text-white
+                                    mt-6
+                                    text-base sm:text-lg
+                                    font-medium
+                                    border border-[#793EED]
+                                    rounded-xl
+                                    transition-all duration-300
+                                    hover:bg-[#6C35D8]
+                                    hover:shadow-lg
+                                    active:scale-95
+                                    disabled:opacity-60
+                                    disabled:cursor-not-allowed
+                                `}
+                                icon={
+                                    downloading ? (
+                                        <span className="animate-spin inline-block mr-2">⏳</span>
+                                    ) : (
+                                        <DownloadOutlined style={{ marginRight: "7px" }} />
+                                    )
+                                }
+                                content={downloading ? "Downloading..." : "Download Ticket"}
                                 onClick={downloadTicket}
-                                    
-                                
-                            >
-
-                            </ButtonDash>
+                                disabled={downloading}
+                        />
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    left: "-9999px",
+                                    top: 0,
+                                }}
+                                >
+                                <TicketPDF
+                                    data={data}
+                                    ticketRef={ticketRef}
+                                    getStatus={getStatus}
+                                />
+                            </div>
         
                 
             </Modal>

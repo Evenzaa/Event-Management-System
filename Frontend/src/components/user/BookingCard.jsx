@@ -18,6 +18,7 @@ export default function BookingCard({
   booking,
   onCancel,
   onLeaveReview,
+  onViewTicket,
 }) {
   const {
     _id,
@@ -92,7 +93,11 @@ export default function BookingCard({
         </p>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Button size="sm" variant="outline">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onViewTicket?.(booking)}
+          >
             View Ticket
           </Button>
 
