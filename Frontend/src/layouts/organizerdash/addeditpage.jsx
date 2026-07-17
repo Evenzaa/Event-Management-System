@@ -476,6 +476,7 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                                                 >
                                                 {fileList.length >= 8 ? null : uploadButton}
                                             </Upload>
+                                            </Form.Item>
                                             {previewImage && (
                                                 <Image
                                                     styles={{ root: { display: 'none' } }}
@@ -488,7 +489,7 @@ export default function AddEditPage({show,changeShow,mode,eventId}){
                                                 />
                                             )}
                                         
-                                    </Form.Item>
+                                    
                                     
                                 </>
                             </div>

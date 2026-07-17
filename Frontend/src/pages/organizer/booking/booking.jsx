@@ -41,7 +41,7 @@ export default function Booking(){
                     <span className="font-medium">Select Event</span>
                     <Select
                         className="w-full sm:w-[250px] cursor-pointer"
-                        // showSearch
+                        showSearch
                         optionFilterProp="label"
                         onSearch={onSearch}
                         placeholder={ 

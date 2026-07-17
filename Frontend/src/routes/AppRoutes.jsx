@@ -34,7 +34,6 @@ import DashHome  from '../pages/organizer/dashHome';
 import Events    from '../pages/organizer/events/events';
 import Booking   from '../pages/organizer/booking/booking';
 import Review    from '../pages/organizer/review/review';
-import Settings from '../pages/organizer/Settings/settings';
 import OrganizerDetails from '../pages/organizer/organizerdetails';
 
 // Admin
@@ -90,7 +89,7 @@ export default function AppRoutes() {
         <Route path="events"  element={<Events />} />
         <Route path="booking" element={<Booking />} />
         <Route path="review"  element={<Review />} />
-        <Route path="setting" element={<Settings />} />
+        
       </Route>
       
       {/* organizer-details */}

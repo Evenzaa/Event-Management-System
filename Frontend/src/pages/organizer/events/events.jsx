@@ -192,8 +192,8 @@ export default function Events(){
                                  recentEvents.map((td) => (
 
                                 <tr key={td._id} className="text-center bg-white">
-                                    <Cell ui={"p-2"}>
-                                        <div className="flex  items-center">
+                                    <Cell ui={"p-2 "}>
+                                        <div className="flex  items-center ">
                                            <img
                                                 src={td.images[0]}
                                                 alt={td.title}
@@ -221,7 +221,6 @@ export default function Events(){
                                     </Cell>
                                     <Cell> <EnvironmentOutlined style={{color:"#6b7280",fontSize:"15px"}} /> <span className="text-sm font-medium text-[#6b7280] whitespace-nowrap">{td.location}</span></Cell>
                                     <Cell><span className="font-medium whitespace-nowrap">{td.capacity}</span></Cell>
-                                    <Cell><span className="font-medium whitespace-nowrap">{td.availableSeats}</span></Cell>
                                     <Cell>
                                         <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatus(td.status).className} whitespace-nowrap`}
