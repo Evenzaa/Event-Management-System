@@ -6,9 +6,8 @@ export default function TableEvent({children}){
         {id:3, content:"Date"},
         {id:4, content:"Location"},
         {id:5, content:"Capacity"},
-        {id:6, content:"Available Seats"},
-        {id:7, content:"Status"},
-        {id:8, content:"Actions"},
+        {id:6, content:"Status"},
+        {id:7, content:"Actions"},
     ]
 
     return(
@@ -27,7 +26,7 @@ export default function TableEvent({children}){
                                    
                                     p-4
                                     bg-[#F8F7FF]
-                                    text-left
+                                    
                                     text-sm font-semibold                    
                                      whitespace-nowrap
                                      text-[#1A1033]

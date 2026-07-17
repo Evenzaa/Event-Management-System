@@ -43,7 +43,7 @@ export default function Review() {
           <span className="font-medium">Select Event</span>
           <Select
             className="w-full sm:w-[250px]"
-            // showSearch
+            showSearch
             optionFilterProp="label"
             onSearch={onSearch}
             placeholder={

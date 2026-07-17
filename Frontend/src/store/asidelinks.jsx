@@ -26,10 +26,10 @@ export const AsideLinks=[
         icon:<StarOutlined style={{marginRight:"13px"}}/>,
         label:"Reviews"
     },
-     {
-        id:5,
-        to:"setting",
-        icon:<SettingOutlined style={{marginRight:"13px"}} />,
-        label:"Settings"
-    },
+    //  {
+    //     id:5,
+    //     to:"setting",
+    //     icon:<SettingOutlined style={{marginRight:"13px"}} />,
+    //     label:"Settings"
+    // },
 ]

@@ -7,7 +7,7 @@ import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
 export default function Aside(){
     const [isOpen, setIsOpen] = useState(false);
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user") || "null");
     const name = user?.name;
     const email = user?.email;
 
