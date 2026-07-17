@@ -1,4 +1,5 @@
 import Badge from '../../../components/common/Badge';
+import Button from '../../../components/common/Button';
 import { useNavigate } from 'react-router-dom';
 import { addFavorite } from '../../../services/api';
 
@@ -107,23 +108,13 @@ export default function EventInfo({
           {title}
         </h1>
 
-        <button
+        <Button
           onClick={handleAddFavorite}
-          className="
-            flex items-center justify-center gap-2
-            px-5 py-2.5
-            rounded-xl
-            border border-violet-600
-            text-violet-600
-            font-semibold
-            hover:bg-violet-600
-            hover:text-white
-            transition-all duration-300
-            whitespace-nowrap
-          "
+          size="md" 
+          variant="outline"
         >
           ❤️ Add to Favorites
-        </button>
+        </Button>
 
       </div>
 

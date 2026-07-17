@@ -39,9 +39,22 @@ export default function MyBookings() {
 }, []);
 
   const filteredBookings =
-    activeTab === "all"
-      ? bookings
-      : bookings.filter((booking) => booking.status === activeTab);
+  activeTab === "all"
+    ? bookings
+    : bookings.filter((booking) => {
+        let displayStatus;
+
+        if (booking.status === "cancelled") {
+          displayStatus = "cancelled";
+        } else {
+          displayStatus =
+            new Date(booking.eventId.date) > new Date()
+              ? "upcoming"
+              : "past";
+        }
+
+        return displayStatus === activeTab;
+      });
 
   // TODO: Replace with DELETE /api/bookings/:id once the backend is wired up
   const handleCancel = async (id) => {
@@ -92,7 +105,7 @@ export default function MyBookings() {
             ) : (
               filteredBookings.map((booking) => (
                 <BookingCard
-                  key={booking.id}
+                  key={booking._id}
                   booking={booking}
                   onCancel={handleCancel}
                 />

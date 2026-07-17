@@ -63,49 +63,58 @@ export default function AdminEvents() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {filtered.map((e) => (
-                  <tr key={e._id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-slate-800 line-clamp-1">{e.title}</p>
-                      <p className="text-xs text-slate-400">{e.location}</p>
-                    </td>
-                    <td className="px-6 py-4">
-                      {/* organizerId can be a populated object { _id, name, email }
-                          or a plain string ID depending on the backend query */}
-                      <p className="text-sm text-slate-700 font-medium">
-                        {e.organizer?.name
-                          ?? (typeof e.organizerId === 'object' ? e.organizerId?.name : null)
-                          ?? '—'}
-                      </p>
-                      <p className="text-xs text-slate-400">
-                        {e.organizer?.email
-                          ?? (typeof e.organizerId === 'object' ? e.organizerId?.email : null)
-                          ?? ''}
-                      </p>
-                    </td>
-                    <td className="px-6 py-4 text-slate-500">{e.category}</td>
-                    <td className="px-6 py-4 text-slate-600">${e.price}</td>
-                    <td className="px-6 py-4">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${STATUS_STYLE[e.status] ?? 'bg-slate-100 text-slate-600'}`}>
-                        {e.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      {e.status === 'pending' && (
-                        <div className="flex gap-2">
-                          <button onClick={() => handleApproveEvent(e._id)}
-                            className="flex items-center gap-1 rounded-lg bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-100 cursor-pointer">
-                            <Check size={12} /> Approve
-                          </button>
-                          <button onClick={() => handleRejectEvent(e._id)}
-                            className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 cursor-pointer">
-                            <X size={12} /> Reject
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {filtered.map((e) => {
+                  
+                  // Safely calculate the starting price from ticketTypes
+                  let displayPrice = e.price; 
+                  if (displayPrice === undefined && e.ticketTypes) {
+                    const prices = Object.values(e.ticketTypes).map(t => t.price);
+                    displayPrice = prices.length > 0 ? Math.min(...prices) : 0;
+                  }
+
+                  return (
+                    <tr key={e._id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4">
+                        <p className="font-medium text-slate-800 line-clamp-1">{e.title}</p>
+                        <p className="text-xs text-slate-400">{e.location}</p>
+                      </td>
+                      <td className="px-6 py-4">
+                        <p className="text-sm text-slate-700 font-medium">
+                          {e.organizer?.name
+                            ?? (typeof e.organizerId === 'object' ? e.organizerId?.name : null)
+                            ?? '—'}
+                        </p>
+                        <p className="text-xs text-slate-400">
+                          {e.organizer?.email
+                            ?? (typeof e.organizerId === 'object' ? e.organizerId?.email : null)
+                            ?? ''}
+                        </p>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500">{e.category}</td>
+                      <td className="px-6 py-4 text-slate-600">${displayPrice ?? 0}</td>
+                      
+                      <td className="px-6 py-4">
+                        <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${STATUS_STYLE[e.status] ?? 'bg-slate-100 text-slate-600'}`}>
+                          {e.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        {e.status === 'pending' && (
+                          <div className="flex gap-2">
+                            <button onClick={() => handleApproveEvent(e._id)}
+                              className="flex items-center gap-1 rounded-lg bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-100 cursor-pointer">
+                              <Check size={12} /> Approve
+                            </button>
+                            <button onClick={() => handleRejectEvent(e._id)}
+                              className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 cursor-pointer">
+                              <X size={12} /> Reject
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             {filtered.length === 0 && (

@@ -54,3 +54,29 @@ export async function rejectEvent(id) {
   const json = await apiClient.put(`/admin/events/${id}/reject`, {});
   return unwrap(json);
 }
+
+// GET /api/coupons
+export async function getCoupons() {
+  const json = await apiClient.get('/coupons');
+  const payload = unwrap(json);
+  // Safely locate the array whether the API nests it in .coupons, .data, or returns it directly
+  const couponsArray = payload.coupons || payload.data || payload;
+  // Guarantee an array is returned so .map() never crashes[cite: 11]
+  return Array.isArray(couponsArray) ? couponsArray : [];
+}
+
+// POST /api/coupons
+export async function createCoupon(data) {
+  const response = await apiClient.post('/coupons', data);
+  // Safely extract the payload whether apiClient uses an interceptor or raw Axios
+  const payload = response.data || response;
+  unwrap(payload);
+  // Return the nested coupon object specifically
+  return payload.coupon;
+}
+
+// DELETE /api/coupons/:id
+export async function deleteCoupon(id) {
+  const json = await apiClient.delete(`/coupons/${id}`);
+  return unwrap(json);
+}

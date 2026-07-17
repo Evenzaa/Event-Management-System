@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   getAdminStats, getAdminUsers, getAdminEvents,
   updateUserRole, deleteUser, approveEvent, rejectEvent,
+  getCoupons, createCoupon, deleteCoupon
 } from '../services/adminService';
 
 /**
@@ -16,10 +17,12 @@ export function useAdminData() {
   const [stats, setStats]   = useState(null);
   const [users, setUsers]   = useState([]);
   const [events, setEvents] = useState([]);
-
+  const [coupons, setCoupons] = useState([]);
+  
   const [loadingStats,  setLoadingStats]  = useState(true);
   const [loadingUsers,  setLoadingUsers]  = useState(true);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [loadingCoupons, setLoadingCoupons] = useState(true);
   const [error, setError] = useState(null);
 
   // Load all on mount
@@ -49,6 +52,11 @@ export function useAdminData() {
       })
       .catch(setError)
       .finally(() => setLoadingEvents(false));
+
+    getCoupons()
+    .then(setCoupons)
+    .catch(setError)
+    .finally(() => setLoadingCoupons(false));
   }, []);
 
   // Derived counts
@@ -82,13 +90,40 @@ export function useAdminData() {
     catch { getAdminEvents().then(setEvents); }
   }, []);
 
+  const handleCreateCoupon = useCallback(async (data) => {
+    try {
+      const newCoupon = await createCoupon(data);
+      
+      // Safety check: Only append if newCoupon is a valid object
+      if (newCoupon && newCoupon.code) {
+        setCoupons((prev) => [...prev, newCoupon]);
+      } else {
+        // Fallback: If the API response structure behaves unexpectedly, just refetch the list
+        getCoupons().then(setCoupons);
+      }
+      
+      return { success: true };
+    } catch (err) {
+      setError(err);
+      return { success: false, message: err.message };
+    }
+  }, []);
+
+  const handleDeleteCoupon = useCallback(async (couponId) => {
+    setCoupons((prev) => prev.filter((c) => c._id !== couponId));
+    try { 
+      await deleteCoupon(couponId); 
+    } catch (err) {
+      getCoupons().then(setCoupons); // Rollback on fail
+    }
+  }, []);
+
   return {
-    stats, users, events, pendingEvents,
-    loadingStats, loadingUsers, loadingEvents,
-    error,
-    handleUpdateRole,
-    handleDeleteUser,
-    handleApproveEvent,
-    handleRejectEvent,
+  stats, users, events, pendingEvents, coupons,
+  loadingStats, loadingUsers, loadingEvents, loadingCoupons,
+  error,
+  handleUpdateRole, handleDeleteUser, handleApproveEvent, handleRejectEvent,
+  handleCreateCoupon, handleDeleteCoupon
   };
+
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, CalendarDays,
-  CheckSquare, ShieldAlert, LogOut, Menu, X,
+  CheckSquare, ShieldAlert, LogOut, Menu, X, Ticket
 } from 'lucide-react';
 
 const NAV = [
@@ -10,6 +10,7 @@ const NAV = [
   { label: 'Users',      to: '/admin/users',       icon: Users },
   { label: 'Events',     to: '/admin/events',      icon: CalendarDays },
   { label: 'Approvals',  to: '/admin/approvals',   icon: CheckSquare },
+  { label: 'Coupons',    to: '/admin/coupons',     icon: Ticket },
   { label: 'Moderation', to: '/admin/moderation',  icon: ShieldAlert },
 ];
 

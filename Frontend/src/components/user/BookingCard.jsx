@@ -14,19 +14,51 @@ const STATUS_LABEL = {
   cancelled: "Cancelled",
 };
 
-export default function BookingCard({ booking, onCancel, onLeaveReview }) {
+export default function BookingCard({
+  booking,
+  onCancel,
+  onLeaveReview,
+}) {
   const {
-    id,
-    eventTitle,
-    eventImage,
-    date,
-    venue,
-    quantity,
-    ticketType,
-    bookingId,
+    _id,
+    eventId,
+    tickets,
+    ticketNumber,
     totalPrice,
     status,
   } = booking;
+
+  const eventTitle = eventId?.title;
+  const eventImage = eventId?.images?.[0];
+  const date = eventId?.date;
+  const venue = eventId?.location;
+
+  // Total number of tickets
+  const quantity = tickets.reduce(
+    (total, ticket) => total + ticket.quantity,
+    0
+  );
+
+  // Example: "1× VIP, 2× General"
+  const ticketType = tickets
+    .map(
+      (ticket) =>
+        `${ticket.quantity}× ${
+          ticket.ticketType.charAt(0).toUpperCase() +
+          ticket.ticketType.slice(1)
+        }`
+    )
+    .join(", ");
+
+  // Determine display status
+  let displayStatus;
+
+  if (status === "cancelled") {
+    displayStatus = "cancelled";
+  } else {
+    displayStatus =
+      new Date(date) > new Date() ? "upcoming" : "past";
+  }
 
   return (
     <article className="flex flex-col gap-4 overflow-hidden rounded-2xl bg-white p-4 shadow-sm sm:flex-row sm:items-center">
@@ -39,36 +71,48 @@ export default function BookingCard({ booking, onCancel, onLeaveReview }) {
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-semibold text-slate-900 line-clamp-1">
+          <h3 className="line-clamp-1 font-semibold text-slate-900">
             {eventTitle}
           </h3>
-          <Badge tone={STATUS_TONE[status]} className="shrink-0">
-            {STATUS_LABEL[status]}
+
+          <Badge
+            tone={STATUS_TONE[displayStatus]}
+            className="shrink-0"
+          >
+            {STATUS_LABEL[displayStatus]}
           </Badge>
         </div>
+
         <p className="mt-1 text-sm text-slate-500">
           {formatDateLabel(date)} &middot; {venue}
         </p>
+
         <p className="text-sm text-slate-500">
-          {quantity}x {ticketType} &middot; Booking ID: {bookingId}
+          {ticketType} &middot; Ticket No: {ticketNumber}
         </p>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button size="sm" variant="outline">
             View Ticket
           </Button>
-          {status === "upcoming" && (
+
+          {displayStatus === "upcoming" && (
             <Button
               size="sm"
               variant="ghost"
               className="!bg-red-50 !text-red-600 hover:!bg-red-100"
-              onClick={() => onCancel?.(id)}
+              onClick={() => onCancel?.(_id)}
             >
               Cancel
             </Button>
           )}
-          {status === "past" && (
-            <Button size="sm" variant="ghost" onClick={() => onLeaveReview?.(id)}>
+
+          {displayStatus === "past" && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onLeaveReview?.(_id)}
+            >
               Leave Review
             </Button>
           )}

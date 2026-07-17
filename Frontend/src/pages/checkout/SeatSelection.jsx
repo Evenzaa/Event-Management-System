@@ -1,6 +1,4 @@
-
 import { useParams, useLocation } from 'react-router-dom';
-// import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useMemo } from 'react';
 import Container from '../../components/common/Container';
@@ -12,28 +10,27 @@ import { setEvent, toggleSeat, setAllowedSelections } from '../../store/checkout
 
 const LEGEND = [
   { label: 'Available', className: 'bg-blue-500' },
-  { label: 'Sold Out', className: 'bg-gray-400' },
-  { label: 'VIP', className: 'bg-orange-400' },
-  { label: 'Selected', className: 'bg-emerald-500' },
+  { label: 'Sold Out',  className: 'bg-gray-400' },
+  { label: 'VIP',       className: 'bg-orange-400' },
+  { label: 'Selected',  className: 'bg-emerald-500' },
 ];
 
 export default function SeatSelection() {
-  const { eventId } = useParams();
-  const location = useLocation(); // NEW
-  const dispatch = useDispatch();
-  const selectedSeats = useSelector((state) => state.checkout.selectedSeats);
-  const allowedSelections = useSelector((state) => state.checkout.allowedSelections); // NEW
-//   const location = useLocation();
-  
-  console.log(useLocation().state);
+  const { eventId }  = useParams();
+  const location     = useLocation();
+  const dispatch     = useDispatch();
 
-  // Reset selection if the user lands on a different event's seat page
+  const selectedSeats     = useSelector((s) => s.checkout.selectedSeats);
+  const allowedSelections = useSelector((s) => s.checkout.allowedSelections);
+
+  // EventDetails passes: { ticketSelections, event }
+  const event = location.state?.event ?? null;
+
   useEffect(() => {
-  dispatch(setEvent(eventId));
-  dispatch(setAllowedSelections(location.state?.ticketSelections ?? []));
-}, [eventId, dispatch, location.state]);
+    dispatch(setEvent(eventId));
+    dispatch(setAllowedSelections(location.state?.ticketSelections ?? []));
+  }, [eventId, dispatch, location.state]);
 
-  // Mock data for now — see "Backend Requirements" for the real endpoint needed
   const seatData = useMemo(() => getSeatMapForEvent(eventId), [eventId]);
 
   return (
@@ -41,7 +38,7 @@ export default function SeatSelection() {
       <div className="bg-white">
         <Container className="flex items-center justify-between py-4">
           <h1 className="text-lg font-semibold text-gray-900">
-            Select Your Seats — Electric Dreams Festival 2025
+            Select Your Seats{event?.title ? ` — ${event.title}` : ''}
           </h1>
           <CheckoutStepper currentStep={1} />
         </Container>
@@ -52,7 +49,7 @@ export default function SeatSelection() {
           <SeatMap
             rows={seatData.rows}
             selectedSeats={selectedSeats}
-            allowedSelections={allowedSelections}  // NEW
+            allowedSelections={allowedSelections}
             onToggleSeat={(seat) => dispatch(toggleSeat(seat))}
           />
           <div className="flex gap-6 flex-wrap justify-center">
@@ -65,11 +62,10 @@ export default function SeatSelection() {
           </div>
         </div>
 
+        {/* ✅ Pass event down so SelectionSummary can forward it to checkout */}
         <SelectionSummary
           selectedSeats={selectedSeats}
-          onContinue={() => {
-            // Route to /checkout — will be wired up when BookingCheckout.jsx exists
-          }}
+          event={event}
         />
       </Container>
     </div>

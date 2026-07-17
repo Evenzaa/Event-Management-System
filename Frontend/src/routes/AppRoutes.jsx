@@ -24,6 +24,7 @@ import MyBookings  from '../pages/user/MyBookings';
 
 // // Checkout Flow
 import SeatSelection from '../pages/checkout/SeatSelection';
+import BookingCheckout from '../pages/checkout/BookingCheckout'; // NEW
 import ConfirmedBooking from '../pages/confirmedbooking/confirmedbooking';
 
 
@@ -41,6 +42,7 @@ import AdminDashboard  from '../pages/admin/AdminDashboard';
 import AdminUsers      from '../pages/admin/AdminUsers';
 import AdminEvents     from '../pages/admin/AdminEvents';
 import AdminApprovals  from '../pages/admin/AdminApprovals';
+import AdminCoupons from '../pages/admin/AdminCoupons';
 import AdminModeration from '../pages/admin/AdminModeration';
 
 // Error
@@ -95,9 +97,16 @@ export default function AppRoutes() {
       <Route path="organizerdetails/:id" element={<OrganizerDetails />} />
 
    
-      {/* Checkout Flow */}
-      <Route path="/book/:eventId/seats" element={<SeatSelection />} />
-      <Route path="/confirmed-booking" element={<ConfirmedBooking />} /> 
+      {/* ── Checkout (must be logged in) ── */}
+      <Route path="/book/:eventId/seats" element={
+        <ProtectedRoute><SeatSelection /></ProtectedRoute>
+      } />
+      <Route path="/checkout" element={
+        <ProtectedRoute><BookingCheckout /></ProtectedRoute>
+      } />
+      <Route path="/confirmed-booking" element={
+        <ProtectedRoute><ConfirmedBooking /></ProtectedRoute>
+      } />
 
 
       {/* ── Admin (admin role only) ── */}
@@ -112,6 +121,9 @@ export default function AppRoutes() {
       } />
       <Route path="/admin/approvals" element={
         <ProtectedRoute requiredRole="admin"><AdminApprovals /></ProtectedRoute>
+      } />
+      <Route path="/admin/coupons" element={
+        <ProtectedRoute requiredRole="admin"><AdminCoupons /></ProtectedRoute>
       } />
       <Route path="/admin/moderation" element={
         <ProtectedRoute requiredRole="admin"><AdminModeration /></ProtectedRoute>
