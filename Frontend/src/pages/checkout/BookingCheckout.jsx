@@ -118,10 +118,10 @@ export default function BookingCheckout() {
 
       // Step 4: clear Redux + navigate to confirmed
       dispatch(clearSelection());
-      navigate('/confirmed-booking', {
-        state: { booking, event },
-        replace: true,
-      });
+      navigate(`/confirmed-booking/${eventId}`, {
+      state: { booking, event },
+      replace: true,
+    });
     } catch (err) {
       setErrorMsg(err.message || 'Payment failed. Please try again.');
     } finally {

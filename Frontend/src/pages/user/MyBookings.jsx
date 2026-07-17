@@ -8,6 +8,7 @@ import Footer from "../../layouts/Footer";
 import Container from "../../components/common/Container";
 // import UserSidebar from "../../layouts/userdash/UserSidebar";
 import BookingCard from "../../components/user/BookingCard";
+import ModalTicket from "../confirmedbooking/modalticket";
 
 const TABS = [
   { id: "all", label: "All Bookings" },
@@ -25,6 +26,18 @@ const TABS = [
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedBooking, setSelectedBooking] = useState(null);
+
+const handleViewTicket = (booking) => {
+  setSelectedBooking(booking);
+  setIsModalOpen(true);
+};
+
+const handleCloseModal = () => {
+  setIsModalOpen(false);
+  setSelectedBooking(null);
+};
   useEffect(() => {
   async function loadBookings() {
     try {
@@ -108,12 +121,19 @@ export default function MyBookings() {
                   key={booking._id}
                   booking={booking}
                   onCancel={handleCancel}
+                  onViewTicket={handleViewTicket}
                 />
               ))
             )}
           </div>
         </main>
       </Container>
+
+        <ModalTicket
+            showModal={isModalOpen}
+            ChangeShow={handleCloseModal}
+            data={selectedBooking}
+        />
 
       <Footer />
     </div>

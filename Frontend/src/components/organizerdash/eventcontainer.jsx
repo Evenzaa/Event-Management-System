@@ -120,9 +120,9 @@ export default function EventContainer(){
                                  recentEvents.map((td) => (
                             
                                 <tr key={td._id} className="text-center">
-                                    <Cell ui={"p-3"}>
+                                    <Cell ui={"p-3 align-middle"}>
                                         
-                                        <div className="flex  items-center ">
+                                        <div className="flex items-center gap-3 h-full">
                                            <img
                                                 src={td.images[0]}
                                                 alt={td.title}

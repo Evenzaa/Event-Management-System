@@ -8,6 +8,7 @@ import OrganizerDetailsForm from "../../components/organizerdash/organizerdetail
 import Ca from "zod/v4/locales/ca.cjs";
 import ModalTicket from "./modalticket";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function ConfirmedBooking({}){
     const{data,isSuccess}=useConfirmbookingQuery()
@@ -15,6 +16,7 @@ export default function ConfirmedBooking({}){
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
+    const { eventId } = useParams();
     const showModal = (booking) => {
         setSelectedBooking(booking)
         setIsModalOpen(true);
@@ -71,8 +73,13 @@ export default function ConfirmedBooking({}){
             };
         }
         };
+        const confirmedBookings =
+        data?.data
+            ?.filter((booking) => booking.eventId?._id === eventId)
+            ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || [];
 
-    return(
+        const booking = confirmedBookings[0];
+            return(
         <>
             
                 <>
@@ -80,91 +87,84 @@ export default function ConfirmedBooking({}){
                     <Container className="">
                         <div className="  pt-12   w-full">
                             <h1 className="text-2xl md:text-3xl font-bold">My Confirmed Booking</h1>
-                            <p className="text-[#6b7280] text-base md:text-lg mt-2">You have {data?.count} confirmed booking</p>
-                        </div>
-                        {isSuccess&&
-                            
-                                 [...data?.data]
-                            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                            .map((event) => (
-                            <div key={event._id}>
-                                <div 
-                                   className="bg-white border border-[#E5E7EB] rounded-2xl p-5 mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center shadow-sm hover:shadow-md transition"
-                                    
-                                >
+                         </div>
+                       
+                        {isSuccess && booking && (
+                            <div >
+                                <div className="bg-white h-[300px] border border-[#E5E7EB] rounded-2xl p-5 mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center shadow-sm hover:shadow-md transition">
 
-                                    <div className="">
-                                        {event.eventId.images?.length > 0 && (
-                                            <img
-                                                src={event.eventId.images[0]}
-                                                alt={event.eventId.title}
-                                                className="w-full h-56 md:h-64 lg:h-full object-cover rounded-lg"
-                                            />
-                                            )}
-                                        
-                                    </div>
-                                    <div className=" flex flex-col gap-4">
-                                        <h2 className="text-lg font-medium text-[#0F0A1E]">{event.eventId.title}</h2>
-                                        <p className="text-[#6b7280]"><EnvironmentOutlined style={{color:"#6b7280",marginRight:"10px"}} />{event.eventId.location}</p>
-                                        <p className="text-[#6b7280]"><ScheduleOutlined style={{color:"#6b7280",marginRight:"10px"} }/>
-                                            {new Date(event.eventId.date).toLocaleDateString("en-GB", {
-                                                day: "2-digit",
-                                                month: "short",
-                                                year: "numeric",
-                                            })}{" "}
-                                            at{" "}
-                                            {new Date(event.eventId.date).toLocaleTimeString("en-US", {
-                                                hour: "numeric",
-                                                minute: "2-digit",
-                                                hour12: true,
-                                            })}
-                                        </p>
-                                        <p
-                                           className={`inline-flex w-fit self-start items-center px-3 py-1 rounded-full text-sm font-medium ${getStatus(event.status).className}`}
-                                            >
-                                            <CheckCircleOutlined className="mr-2" />
-                                            {getStatus(event.status).text}
-                                        </p>
-                                        <p
-                                            className={`inline-flex w-fit self-start items-center px-3 py-1 rounded-full text-sm font-medium ${getStatus(event.paymentStatus).className}`}
-                                            >
-                                            <CreditCardOutlined className="mr-2" />
-                                            Payment: {getStatus(event.paymentStatus).text}
-                                        </p>
-                                    </div>
-                                    <div className="flex flex-col gap-3 lg:items-start">
-                                            <div className="mt-2">
-                                                <p className="text-[#6b7280] text-lg">Total</p>
-                                                <p className="text-lg font-medium text-[#0F0A1E]">
-                                                    {event.totalPrice} $
-                                                </p>
-                                            </div>
-                                            <div className="mt-2">
-                                                <p className="text-[#793EED] text-lg">Ticket No.</p>
-                                                <p className="text-lg  text-[#0F0A1E]">
-                                                    {event.ticketNumber} 
-                                                </p>
-                                            </div>
-                                            <button 
-                                                className="w-full lg:w-auto bg-[#793EED] px-5 py-3 text-white font-medium rounded-xl cursor-pointer flex items-center justify-center"
-                                                onClick={()=>showModal(event)}
-                                                >
-                                                
-                                                <CarryOutOutlined className="mr-3" />
-                                                    View Ticket
-                                                <RightOutlined className="ml-auto lg:ml-6" />
-                                            </button>
-                                    </div>
+                                <div>
+                                    {booking?.eventId?.images?.length > 0 && (
+                                    <img
+                                        src={booking.eventId.images[0]}
+                                        alt={booking.eventId.title}
+                                        className="w-full h-56 md:h-64 lg:h-64 object-cover rounded-lg"
+                                    />
+                                    )}
                                 </div>
 
-        
-                                
-                            </div>  
-                            )
-                                
-                            )
-                            
-                        }
+                                <div className="flex flex-col gap-4">
+                                    <h2 className="text-lg font-medium">{booking.eventId.title}</h2>
+
+                                    <p className="text-[#6b7280]">
+                                    <EnvironmentOutlined style={{ marginRight: 10 }} />
+                                    {booking.eventId.location}
+                                    </p>
+
+                                    <p className="text-[#6b7280]">
+                                    <ScheduleOutlined style={{ marginRight: 10 }} />
+                                    {new Date(booking.eventId.date).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}{" "}
+                                    at{" "}
+                                    {new Date(booking.eventId.date).toLocaleTimeString("en-US", {
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                        hour12: true,
+                                    })}
+                                    </p>
+
+                                    <p
+                                    className={`inline-flex w-fit self-start items-center px-3 py-1 rounded-full text-sm font-medium ${getStatus(booking.status).className}`}
+                                    >
+                                    <CheckCircleOutlined className="mr-2" />
+                                    {getStatus(booking.status).text}
+                                    </p>
+
+                                    <p
+                                    className={`inline-flex w-fit self-start items-center px-3 py-1 rounded-full text-sm font-medium ${getStatus(booking.paymentStatus).className}`}
+                                    >
+                                    <CreditCardOutlined className="mr-2" />
+                                    Payment: {getStatus(booking.paymentStatus).text}
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-col gap-3">
+                                    <div>
+                                    <p className="text-[#6b7280]">Total</p>
+                                    <p className="text-lg font-medium">{booking.totalPrice} $</p>
+                                    </div>
+
+                                    <div>
+                                    <p className="text-[#793EED]">Ticket No.</p>
+                                    <p className="text-lg">{booking.ticketNumber}</p>
+                                    </div>
+
+                                    <button
+                                        className="self-start inline-flex items-center gap-2 bg-[#793EED] px-5 py-3 text-white font-medium rounded-xl hover:bg-[#6C35D8] transition cursor-pointer"
+                                        onClick={() => showModal(booking)}
+                                        >
+                                        <CarryOutOutlined />
+                                        View Ticket
+                                        <RightOutlined />
+                                    </button>
+                                </div>
+
+                                </div>
+                            </div>
+                        )}
 
                         <ModalTicket
                             showModal={isModalOpen}

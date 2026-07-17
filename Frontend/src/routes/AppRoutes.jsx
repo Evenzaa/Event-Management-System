@@ -103,7 +103,7 @@ export default function AppRoutes() {
       <Route path="/checkout" element={
         <ProtectedRoute><BookingCheckout /></ProtectedRoute>
       } />
-      <Route path="/confirmed-booking" element={
+      <Route path="/confirmed-booking/:eventId"  element={
         <ProtectedRoute><ConfirmedBooking /></ProtectedRoute>
       } />
 
