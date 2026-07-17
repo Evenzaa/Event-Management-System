@@ -1,11 +1,31 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 
 const SERVICE_FEE_RATE = 0.08;
 
-export default function SelectionSummary({ selectedSeats, onContinue }) {
-  const subtotal = selectedSeats.reduce((sum, s) => sum + s.price, 0);
+/**
+ * SelectionSummary
+ * ---------------------------------------------------------------
+ * Shown in SeatSelection. When user clicks Continue, navigates
+ * to /checkout passing event info via location.state so
+ * BookingCheckout can show the Order Summary correctly.
+ *
+ * Props:
+ *   selectedSeats — from Redux
+ *   event         — event object passed down from SeatSelection
+ *                   (received via location.state.event from EventDetails)
+ * ---------------------------------------------------------------
+ */
+export default function SelectionSummary({ selectedSeats, event }) {
+  const navigate = useNavigate();
+
+  const subtotal   = selectedSeats.reduce((sum, s) => sum + s.price, 0);
   const serviceFee = subtotal * SERVICE_FEE_RATE;
-  const total = subtotal + serviceFee;
+  const total      = subtotal + serviceFee;
+
+  function handleContinue() {
+    navigate('/checkout', { state: { event } });
+  }
 
   return (
     <div className="w-full max-w-xs bg-white rounded-2xl p-6 shadow-sm">
@@ -48,7 +68,7 @@ export default function SelectionSummary({ selectedSeats, onContinue }) {
       <Button
         className="w-full mt-5"
         disabled={selectedSeats.length === 0}
-        onClick={onContinue}
+        onClick={handleContinue}
       >
         Continue to Checkout →
       </Button>

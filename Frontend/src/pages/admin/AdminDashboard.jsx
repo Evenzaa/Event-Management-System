@@ -29,7 +29,7 @@ export default function AdminDashboard() {
   const { stats, pendingEvents, loadingStats } = useAdminData();
 
   const CARDS = [
-    { icon: Users,       value: fmt(stats?.totalUsers),    label: 'Total Users',    highlight: true  },
+    { icon: Users,       value: fmt((stats?.users) + (stats?.organizers) + (stats?.admins)),    label: 'Total Users',    highlight: true  },
     { icon: CalendarDays,value: fmt(stats?.totalEvents),   label: 'Total Events',   iconColor: 'text-blue-500'   },
     { icon: Ticket,      value: fmt(stats?.totalBookings), label: 'Total Bookings', iconColor: 'text-emerald-500' },
     { icon: DollarSign,  value: stats?.totalRevenue ? `$${fmt(stats.totalRevenue)}` : '—',

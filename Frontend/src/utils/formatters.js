@@ -22,6 +22,14 @@ export function getDiscountPercent(original, current) {
 }
 
 export function normalizeEvent(raw) {
+  // Extract all prices from the ticketTypes object, fallback to 0
+  const ticketPrices = raw.ticketTypes 
+    ? Object.values(raw.ticketTypes).map(ticket => ticket.price)
+    : [];
+    
+  // Find the lowest price to use for the "From $X" display
+  const startingPrice = ticketPrices.length > 0 ? Math.min(...ticketPrices) : 0;
+
   return {
     // Identity
     id:            raw._id,
@@ -33,9 +41,9 @@ export function normalizeEvent(raw) {
     rawDate:       raw.date,
     dateLabel:     formatDateLabel(raw.date),
 
-    // Pricing
-    price:         raw.price,
-    priceFrom:     raw.price,                     
+    // Pricing - mapped to the new calculated startingPrice
+    price:         startingPrice,
+    priceFrom:     startingPrice,                     
     originalPrice: raw.discountPrice ?? null,     
     timeLabel:     deriveTimeLabel(raw.date),     
 

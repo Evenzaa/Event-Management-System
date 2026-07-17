@@ -29,7 +29,16 @@ export default function AdminApprovals() {
           </div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {pendingEvents.map((e) => (
+            {pendingEvents.map((e) => {
+
+
+              let displayPrice = e.price; 
+                  if (displayPrice === undefined && e.ticketTypes) {
+                    const prices = Object.values(e.ticketTypes).map(t => t.price);
+                    displayPrice = prices.length > 0 ? Math.min(...prices) : 0;
+                  }
+
+              return (
               <div key={e._id} className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
                 {e.images?.[0] && (
                   <img src={e.images[0]} alt={e.title}
@@ -48,7 +57,7 @@ export default function AdminApprovals() {
                       {e.date ? new Date(e.date).toLocaleDateString() : '—'}
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <DollarSign size={12} />${e.price}
+                      <DollarSign size={12} />{displayPrice ?? 0}
                     </div>
                   </div>
 
@@ -64,7 +73,7 @@ export default function AdminApprovals() {
                   </div>
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         )}
       </div>

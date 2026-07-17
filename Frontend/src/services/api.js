@@ -13,44 +13,44 @@ export const fetchEventDetails = async (eventId) => {
 
   const { data } = await api.get(`/events/${eventId}`);
 
+  // Safely calculate total remaining seats from the new ticketTypes object
+  const totalRemaining = data.ticketTypes
+    ? Object.values(data.ticketTypes).reduce((sum, ticket) => sum + (ticket.availableSeats || 0), 0)
+    : 0;
+
   return {
     id: data._id,
-
     title: data.title,
-
     bannerImage:
       data.images && data.images.length > 0
         ? data.images[0]
         : "",
-
     gallery: data.images || [],
-
     tags: data.tags || [],
-
     date: data.date,
-
     location: data.location,
-
     organizer: data.organizerId?.name,
-
     about: data.description,
 
     tickets: {
-      remaining: data.availableSeats,
+      // Use the newly calculated total remaining seats
+      remaining: totalRemaining,
 
       options: [
         {
           id: "general",
           name: "General",
           description: "Standard Admission",
-          price: data.discountPrice || data.price,
+          // Extract general price directly from the nested object
+          price: data.ticketTypes?.general?.price || 0,
           isHot: true,
         },
         {
           id: "vip",
           name: "VIP",
           description: "VIP Access",
-          price: data.price,
+          // Extract vip price directly from the nested object
+          price: data.ticketTypes?.vip?.price || 0,
           isHot: false,
         },
       ],

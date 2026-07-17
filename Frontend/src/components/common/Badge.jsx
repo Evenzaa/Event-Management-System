@@ -6,7 +6,8 @@ const TONE_CLASSES = {
   // Category tones — match normalizeEvent()'s category (lowercased)
   music:      'bg-violet-100 text-violet-700',
   technology: 'bg-blue-100 text-blue-700',
-  sports:     'bg-amber-100 text-amber-700',
+  sports:     'bg-amber-100 text-blue-700',
+  sport:     'bg-amber-100 text-blue-700',
   art:        'bg-pink-100 text-pink-700',
   education:  'bg-emerald-100 text-emerald-700',
   business:   'bg-indigo-100 text-indigo-700',
